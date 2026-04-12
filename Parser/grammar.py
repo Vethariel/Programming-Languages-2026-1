@@ -1,24 +1,24 @@
 GRAMMAR = {
     "S": [
-        { "rule": ["A", "uno", "B", "C"] },
-        { "rule": ["S", "dos"] }
+        ["A", "uno", "B", "C"],
+        ["S", "dos"]
     ],
     "A": [
-        { "rule": ["B", "C", "D"] },
-        { "rule": ["A", "tres"] },
-        { "rule": ["epsylon"] }
+        ["B", "C", "D"],
+        ["A", "tres"],
+        ["epsylon"]
     ],
     "B": [
-        { "rule": ["D", "cuatro", "C", "tres"] },
-        { "rule": ["epsylon"] }
+        ["D", "cuatro", "C", "tres"],
+        ["epsylon"]
     ],
     "C": [
-        { "rule": ["cinco", "D", "B"] },
-        { "rule": ["epsylon"] }
+        ["cinco", "D", "B"],
+        ["epsylon"]
     ],
     "D": [
-        { "rule": ["seis"] },
-        { "rule": ["epsylon"] }
+        ["seis"],
+        ["epsylon"]
     ]
 }
 
@@ -26,12 +26,20 @@ import time
 
 class Grammar:
     def __init__(self):
-        self.grammar = GRAMMAR
+        self.grammar = self.construct_grammar(GRAMMAR)
         self.start_symbol = "S"
         self.first_set = {}
         self.first()
         self.follow_set = self.follow()
         self.conflicts = self.pred_sets()
+        self.no_terminal_pred_set()
+    
+    def construct_grammar(self, grammar):
+        for no_terminal, rules in grammar.items():
+            for i, rule in enumerate(rules):
+                rules[i] = {"rule":rule,"pred_set":set()}
+            grammar[no_terminal] = {"rules":grammar[no_terminal],"total_pred_set":set()}
+        return grammar
         
     def first_of_sequence(self, symbols):
         """Reutilizable por first() y follow()"""
@@ -59,7 +67,8 @@ class Grammar:
         changed = True
         while changed:
             changed = False
-            for no_terminal, rules in self.grammar.items():
+            for no_terminal, values in self.grammar.items():
+                rules = values["rules"]
                 for rule in rules:
                     new_firsts = self.first_of_sequence(rule["rule"])
                     if not new_firsts.issubset(self.first_set[no_terminal]):
@@ -97,7 +106,8 @@ class Grammar:
         changed = True
         while changed:
             changed = False
-            for origin, rules in self.grammar.items():
+            for origin, values in self.grammar.items():
+                rules = values["rules"]
                 for rule in rules:
                     for no_terminal in follow_set:
                         new_follows = follow_of_nt_in_rule(rule["rule"], no_terminal, origin)
@@ -127,8 +137,10 @@ class Grammar:
         """
         conflicts = {}
         
-        for no_terminal, rules in self.grammar.items():
+        for no_terminal, values in self.grammar.items():
             seen = set()  # Unión de todos los PRED de las reglas de este no terminal
+            
+            rules = values["rules"]
             
             for rule in rules:
                 symbols = rule["rule"]
@@ -141,12 +153,24 @@ class Grammar:
                 seen |= rule["pred_set"]
         
         return conflicts  # Vacío = gramática LL(1) ✓
+    
+    def no_terminal_pred_set(self):
+        for values in self.grammar.values():
+            total_pred_set = values["total_pred_set"]
+            rules = values["rules"]
+            for rule in rules:
+                total_pred_set.update(rule["pred_set"])
 
 def main():
     grammar = Grammar()
     for key, value in grammar.grammar.items():
-        for rule in value:
+        rules = value["rules"]
+        for rule in rules:
             print(key," ->",rule["rule"], "-> ",rule["pred_set"])
+    print("\n")
+    for key, value in grammar.grammar.items():
+        pred = value["total_pred_set"]
+        print(key, "->", pred)
     print("primeros: ",grammar.first_set)
     print("siguientes:", grammar.follow_set)
     print("conflictos:", grammar.conflicts)

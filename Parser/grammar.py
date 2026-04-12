@@ -22,12 +22,10 @@ GRAMMAR = {
     ]
 }
 
-import time
-
 class Grammar:
     def __init__(self):
         self.grammar = self.construct_grammar(GRAMMAR)
-        self.start_symbol = "S"
+        self.start_symbol = next(iter(self.grammar))
         self.first_set = {}
         self.first()
         self.follow_set = self.follow()

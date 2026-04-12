@@ -6,6 +6,135 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from Lexer.lexer import Lexer
 
+TOKEN_KIND_REPR = {
+    # ── Literales ──────────────────────────────────────────
+    "NUMBER":           "valor_numerico",
+    "STR":              "cadena_de_caracteres",
+    "REGEX":            "regex",
+
+    # ── Operadores 3 chars ─────────────────────────────────
+    "NEEQ":             "!==",
+    "EEQ":              "===",
+    "SPREAD":           "...",
+    "POWER_ASSIGN":     "**=",
+
+    # ── Operadores 2 chars ─────────────────────────────────
+    "EQ":               "==",
+    "NEQ":              "!=",
+    "LE":               "<=",
+    "GE":               ">=",
+    "ARROW":            "=>",
+    "AND":              "&&",
+    "OR":               "||",
+    "NULLISH":          "??",
+    "INCREMENT":        "++",
+    "DECREMENT":        "--",
+    "POWER":            "**",
+    "PLUS_ASSIGN":      "+=",
+    "MINUS_ASSIGN":     "-=",
+    "TIMES_ASSIGN":     "*=",
+    "DIV_ASSIGN":       "/=",
+    "MOD_ASSIGN":       "%=",
+    "PERIOD2":          "..",
+
+    # ── Operadores 1 char ──────────────────────────────────
+    "PLUS":             "+",
+    "MINUS":            "-",
+    "TIMES":            "*",
+    "DIV":              "/",
+    "ASSIGN":           "=",
+    "LT":               "<",
+    "GT":               ">",
+    "MOD":              "%",
+    "NOT":              "!",
+    "TERNARY":          "?",
+    "LPAREN":           "(",
+    "RPAREN":           ")",
+    "LBRACE":           "{",
+    "RBRACE":           "}",
+    "LBRACKET":         "[",
+    "RBRACKET":         "]",
+    "SEMI":             ";",
+    "COMMA":            ",",
+    "COLON":            ":",
+    "PERIOD":           ".",
+
+    # ── Especiales ─────────────────────────────────────────
+    "IDENT":            "id",
+    "EOF":              "final de archivo",
+    "COMMENT_SL":       "comment_sl",
+    "COMMENT_ML":       "comment_ml",
+    "COMMENT_ML_UNCLOSED": "comment_ml_unclosed",
+
+    # ── Keywords de control ────────────────────────────────
+    "capturar":         "capturar",
+    "caso":             "caso",
+    "con":              "con",
+    "continuar":        "continuar",
+    "crear":            "crear",
+    "elegir":           "elegir",
+    "esperar":          "esperar",
+    "hacer":            "hacer",
+    "mientras":         "mientras",
+    "para":             "para",
+    "retornar":         "retornar",
+    "sino":             "sino",
+    "si":               "si",
+    "constructor":      "constructor",
+    "eliminar":         "eliminar",
+    "extiende":         "extiende",
+    "finalmente":       "finalmente",
+    "instanciaDe":      "instanciaDe",
+    "intentar":         "intentar",
+    "lanzar":           "lanzar",
+    "longitud":         "longitud",
+    "romper":           "romper",
+    "simbolo":          "simbolo",
+    "subcad":           "subcad",
+    "tipoDe":           "tipoDe",
+    "vacio":            "vacio",
+    "ambiente":         "ambiente",
+    "super":            "super",
+    "de":               "de",
+    "en":               "en",
+    "clase":            "clase",
+    "const":            "const",
+    "var":              "var",
+    "mut":              "mut",
+    "porDefecto":       "porDefecto",
+    "funcion":          "funcion",
+
+    # ── Constantes del lenguaje ────────────────────────────
+    "falso":            "falso",
+    "nulo":             "nulo",
+    "verdadero":        "verdadero",
+    "indefinido":       "indefinido",
+    "Infinito":         "Infinito",
+    "NuN":              "NuN",
+
+    # ── Funciones/objetos de soporte ───────────────────────
+    "consola":          "consola",
+    "Fecha":            "Fecha",
+    "Numero":           "Numero",
+    "Mate":             "Mate",
+    "Matriz":           "Matriz",
+    "Arreglo":          "Arreglo",
+    "Booleano":         "Booleano",
+    "Cadena":           "Cadena",
+    "Funcion":          "Funcion",
+
+    # ── Métodos de consola ─────────────────────────────────
+    "afirmar":          "afirmar",
+    "limpiar":          "limpiar",
+    "listar":           "listar",
+    "error":            "error",
+    "agrupar":          "agrupar",
+    "info":             "info",
+    "escribir":         "escribir",
+    "tabla":            "tabla",
+    "repetir":          "repetir",
+}
+
 class SintaxError(Exception):
     pass
 
@@ -46,7 +175,10 @@ class Parser:
             self.sintax_error(expected_token)
             
     def sintax_error(self, expected_token):
+        if self.token.kind == "EOF": self.token.lexeme = "final de archivo"
         if isinstance(expected_token, list):
+            expected_token = [TOKEN_KIND_REPR[e] if e in TOKEN_KIND_REPR else e for e in expected_token]
+            expected_token.sort()
             expected_token = [f"\"{t}\"" for t in expected_token]
             expected_token = ", ".join(expected_token)
         else:

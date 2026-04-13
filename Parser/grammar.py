@@ -155,8 +155,22 @@ GRAMMAR = {
     "expr_access_or_call": [
         ["expr_group", "expr_access_or_call_tail"],
     ],
+    
+    "method_name": [
+        ["IDENT"],
+        ["escribir"],
+        ["error"],
+        ["afirmar"],
+        ["limpiar"],
+        ["listar"],
+        ["agrupar"],
+        ["info"],
+        ["tabla"],
+        ["repetir"],
+        # agrega los que necesites
+    ],
     "expr_access_or_call_tail": [
-        ["PERIOD", "IDENT", "expr_access_or_call_tail"],
+        ["PERIOD", "method_name", "expr_access_or_call_tail"],
         ["LBRACKET", "expr", "RBRACKET", "expr_access_or_call_tail"],
         ["LPAREN", "call_args", "RPAREN", "expr_access_or_call_tail"],
         ["epsylon"]
@@ -191,6 +205,18 @@ GRAMMAR = {
         ["falso"],
         ["nulo"],
         ["indefinido"],
+        ["console"],
+        ["Fecha"],
+        ["Numero"],
+        ["Mate"],
+        ["Matriz"],
+        ["Arreglo"],
+        ["Booleano"],
+        ["Cadena"],
+        ["Funcion"],
+    ],
+    "console": [
+        ["consola","PERIOD", "method_name", "LPAREN","expr_or_params", "RPAREN"],
     ],
     "arr_declare": [
         ["LBRACKET", "expr", "arr_declare_tail", "RBRACKET"],
@@ -263,7 +289,7 @@ GRAMMAR = {
         ["LBRACE", "code_block", "RBRACE"],
     ],
     "function": [
-        ["funcion", "IDENT", "LPAREN", "params", "RPAREN", "simple_block", "return_stmt"],
+        ["funcion", "IDENT", "LPAREN", "params", "RPAREN", "simple_block_return"],
     ],
     "return_stmt": [
         ["retornar", "return_stmt_tail"],
@@ -272,6 +298,9 @@ GRAMMAR = {
     "return_stmt_tail": [
         ["expr", "SEMI"],
         ["SEMI"]
+    ],
+    "simple_block_return": [
+        ["LBRACE", "code_block","return_stmt", "RBRACE"],
     ],
     "params": [
         ["IDENT", "params_tail"],

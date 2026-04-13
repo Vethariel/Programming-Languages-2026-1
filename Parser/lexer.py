@@ -119,7 +119,6 @@ ASI_TRIGGERS = {
     "IDENT", "NUMBER", "STR", "REGEX",
     "RPAREN",    # )
     "RBRACKET",  # ]
-    "RBRACE",    # }
     "INCREMENT", # ++
     "DECREMENT", # --
 }

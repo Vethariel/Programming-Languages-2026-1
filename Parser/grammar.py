@@ -25,8 +25,8 @@ GRAMMAR = {
         ["const"],
     ],
     "assign": [
-        ["SEMI"],
-        ["assign_type", "expr", "SEMI"]
+        ["SEMICOLON"],
+        ["assign_type", "expr", "SEMICOLON"]
     ],
     "assign_type": [
         ["ASSIGN"],
@@ -35,15 +35,19 @@ GRAMMAR = {
         ["TIMES_ASSIGN"],
         ["DIV_ASSIGN"],
         ["MOD_ASSIGN"],
+        ["POWER_ASSIGN"],
+        ["ARROW"],
     ],
     "expr": [
         ["expr_assign"],
     ],
     "expr_assign": [
         ["expr_or_nullish", "expr_assign_tail"],
+        ["SPREAD", "expr_or_nullish", "expr_assign_tail"],  # spread
     ],
     "expr_assign_tail": [
         ["assign_type", "expr_assign"],   # si hay operador, continúa
+        ["TERNARY", "expr_assign", "COLON", "expr_assign"],
         ["epsylon"]                        # si no, termina
     ],
     "expr_or_nullish": [
@@ -72,10 +76,10 @@ GRAMMAR = {
         ["epsylon"]
     ],
     "equality": [
-        ["EQ"],
+        ["EQUAL"],
         ["NEQ"],
-        ["EEQ"],
-        ["NEEQ"],
+        ["STRICT_EQUAL"],
+        ["STRICT_NEQ"],
     ],
     "expr_rel": [
         ["expr_add", "expr_rel_tail"],
@@ -85,10 +89,10 @@ GRAMMAR = {
         ["epsylon"]
     ],
     "relational": [
-        ["LT"],
-        ["LE"],
-        ["GT"],
-        ["GE"],
+        ["LESS"],
+        ["LEQ"],
+        ["GREATER"],
+        ["GEQ"],
         ["en"],
         ["instanciaDe"],
     ],
@@ -171,8 +175,8 @@ GRAMMAR = {
     ],
     "expr_access_or_call_tail": [
         ["PERIOD", "method_name", "expr_access_or_call_tail"],
-        ["LBRACKET", "expr", "RBRACKET", "expr_access_or_call_tail"],
-        ["LPAREN", "call_args", "RPAREN", "expr_access_or_call_tail"],
+        ["OPENING_BRA", "expr", "CLOSING_BRA", "expr_access_or_call_tail"],
+        ["OPENING_PAR", "call_args", "CLOSING_PAR", "expr_access_or_call_tail"],
         ["epsylon"]
     ],
     "call_args": [
@@ -184,7 +188,7 @@ GRAMMAR = {
         ["epsylon"]
     ],
     "expr_group": [
-        ["LPAREN", "expr_or_params", "RPAREN"],
+        ["OPENING_PAR", "expr_or_params", "CLOSING_PAR"],
         ["element"],
     ],
     "expr_or_params": [
@@ -216,17 +220,17 @@ GRAMMAR = {
         ["Funcion"],
     ],
     "console": [
-        ["consola","PERIOD", "method_name", "LPAREN","expr_or_params", "RPAREN"],
+        ["consola","PERIOD", "method_name", "OPENING_PAR","expr_or_params", "CLOSING_PAR"],
     ],
     "arr_declare": [
-        ["LBRACKET", "expr", "arr_declare_tail", "RBRACKET"],
+        ["OPENING_BRA", "expr", "arr_declare_tail", "CLOSING_BRA"],
     ],
     "arr_declare_tail": [
         ["COMMA", "expr", "arr_declare_tail"],
         ["epsylon"]
     ],
     "create_object": [
-        ["LBRACE", "fields", "RBRACE"],
+        ["OPENING_KEY", "fields", "CLOSING_KEY"],
     ],
     "fields": [
         ["IDENT", "COLON", "expr", "fields_tail"],
@@ -237,18 +241,18 @@ GRAMMAR = {
         ["epsylon"]
     ],
    "conditional": [
-        ["si", "LPAREN", "expr", "RPAREN", "simple_block", "conditional_alter"],
+        ["si", "OPENING_PAR", "expr", "CLOSING_PAR", "simple_block", "conditional_alter"],
     ],
     "conditional_alter": [
         ["sino", "conditional_alter_tail"],
         ["epsylon"]
     ],
     "conditional_alter_tail": [
-        ["si", "LPAREN", "expr", "RPAREN", "simple_block", "conditional_alter"],  # sino si ...
+        ["si", "OPENING_PAR", "expr", "CLOSING_PAR", "simple_block", "conditional_alter"],  # sino si ...
         ["simple_block"],  # sino { ... }
     ],
     "switch": [
-        ["elegir", "LPAREN", "expr", "RPAREN", "LBRACE", "cases", "default_case", "RBRACE"],
+        ["elegir", "OPENING_PAR", "expr", "CLOSING_PAR", "OPENING_KEY", "cases", "default_case", "CLOSING_KEY"],
     ],
     "cases": [
         ["caso", "expr", "simple_block_break_continue", "cases"],
@@ -259,19 +263,19 @@ GRAMMAR = {
         ["epsylon"]
     ],
     "for_loop": [
-        ["para", "LPAREN", "expr", "SEMI", "expr", "SEMI", "expr", "RPAREN", "simple_block_break_continue"],
+        ["para", "OPENING_PAR", "expr", "SEMICOLON", "expr", "SEMICOLON", "expr", "CLOSING_PAR", "simple_block_break_continue"],
     ],
     "while_loop": [
-        ["mientras", "LPAREN", "expr", "RPAREN", "simple_block_break_continue"],
+        ["mientras", "OPENING_PAR", "expr", "CLOSING_PAR", "simple_block_break_continue"],
     ],
     "do_while_loop": [
-        ["hacer", "simple_block_break_continue", "mientras", "LPAREN", "expr", "RPAREN", "SEMI"],
+        ["hacer", "simple_block_break_continue", "mientras", "OPENING_PAR", "expr", "CLOSING_PAR", "SEMICOLON"],
     ],
     "break": [
-        ["romper", "SEMI"],
+        ["romper", "SEMICOLON"],
     ],
     "continue": [
-        ["continuar", "SEMI"],
+        ["continuar", "SEMICOLON"],
     ],
     "code_line_break_continue": [
         ["code_line"],
@@ -283,24 +287,24 @@ GRAMMAR = {
         ["epsylon"]
     ],
     "simple_block_break_continue": [
-        ["LBRACE", "code_block_break_continue", "RBRACE"],
+        ["OPENING_KEY", "code_block_break_continue", "CLOSING_KEY"],
     ],
     "simple_block": [
-        ["LBRACE", "code_block", "RBRACE"],
+        ["OPENING_KEY", "code_block", "CLOSING_KEY"],
     ],
     "function": [
-        ["funcion", "IDENT", "LPAREN", "params", "RPAREN", "simple_block_return"],
+        ["funcion", "IDENT", "OPENING_PAR", "params", "CLOSING_PAR", "simple_block_return"],
     ],
     "return_stmt": [
         ["retornar", "return_stmt_tail"],
         ["epsylon"]
     ],
     "return_stmt_tail": [
-        ["expr", "SEMI"],
-        ["SEMI"]
+        ["expr", "SEMICOLON"],
+        ["SEMICOLON"]
     ],
     "simple_block_return": [
-        ["LBRACE", "code_block","return_stmt", "RBRACE"],
+        ["OPENING_KEY", "code_block","return_stmt", "CLOSING_KEY"],
     ],
     "params": [
         ["IDENT", "params_tail"],
@@ -311,7 +315,7 @@ GRAMMAR = {
         ["epsylon"]
     ],
     "simple_expr": [
-        ["expr", "SEMI"],
+        ["expr", "SEMICOLON"],
     ],
 }
 

@@ -9,16 +9,16 @@ TOKEN_KIND_REPR = {
     "REGEX":            "regex",
 
     # ── Operadores 3 chars ─────────────────────────────────
-    "NEEQ":             "!==",
-    "EEQ":              "===",
+    "STRICT_NEQ":       "!==",
+    "STRICT_EQUAL":     "===",
     "SPREAD":           "...",
     "POWER_ASSIGN":     "**=",
 
     # ── Operadores 2 chars ─────────────────────────────────
-    "EQ":               "==",
+    "EQUAL":            "==",
     "NEQ":              "!=",
-    "LE":               "<=",
-    "GE":               ">=",
+    "LEQ":              "<=",
+    "GEQ":              ">=",
     "ARROW":            "=>",
     "AND":              "&&",
     "OR":               "||",
@@ -31,6 +31,7 @@ TOKEN_KIND_REPR = {
     "TIMES_ASSIGN":     "*=",
     "DIV_ASSIGN":       "/=",
     "MOD_ASSIGN":       "%=",
+    "POWER_ASSIGN":     "**=",
     "PERIOD2":          "..",
 
     # ── Operadores 1 char ──────────────────────────────────
@@ -39,18 +40,18 @@ TOKEN_KIND_REPR = {
     "TIMES":            "*",
     "DIV":              "/",
     "ASSIGN":           "=",
-    "LT":               "<",
-    "GT":               ">",
+    "LESS":             "<",
+    "GREATER":          ">",
     "MOD":              "%",
     "NOT":              "!",
     "TERNARY":          "?",
-    "LPAREN":           "(",
-    "RPAREN":           ")",
-    "LBRACE":           "{",
-    "RBRACE":           "}",
-    "LBRACKET":         "[",
-    "RBRACKET":         "]",
-    "SEMI":             ";",
+    "OPENING_PAR":      "(",
+    "CLOSING_PAR":      ")",
+    "OPENING_KEY":      "{",
+    "CLOSING_KEY":      "}",
+    "OPENING_BRA":      "[",
+    "CLOSING_BRA":      "]",
+    "SEMICOLON":        ";",
     "COMMA":            ",",
     "COLON":            ":",
     "PERIOD":           ".",
@@ -143,24 +144,36 @@ class Parser:
         self.lexer = Lexer(src)
         self.token = self.lexer.nextToken()
         
-    def assign_symbol(self, symbol):
+    def assign_symbol(self, symbol, follow=None):
         if symbol in self.grammar.grammar:
-            self.parse_no_terminal(symbol)
+            self.parse_no_terminal(symbol, follow=follow)
         else:
             self.pair_terminals(symbol)
             
-    def parse_no_terminal(self, no_terminal):
+    def parse_no_terminal(self, no_terminal, follow=None):
         no_terminal_values = self.grammar.grammar[no_terminal]
         
         for rule in no_terminal_values["rules"]:
             if self.token.kind in rule["pred_set"]:
-                for symbol in rule["rule"]:
-                    if symbol == "epsylon": continue
-                    self.assign_symbol(symbol)
-                return  # ← importante salir tras aplicar la regla
+                symbols = [s for s in rule["rule"] if s != "epsylon"]
+                
+                for i, symbol in enumerate(symbols):
+                    # Lo que viene después de este símbolo en esta regla
+                    rest = symbols[i+1:]
+                    first_rest = self.grammar.first_of_sequence(rest) if rest else {"epsylon"}
+                    
+                    if "epsylon" in first_rest:
+                        # Si el resto puede ser vacío, el follow local incluye
+                        # el follow que nos pasó el llamador
+                        local_follow = (first_rest - {"epsylon"}) | (follow or set())
+                    else:
+                        local_follow = first_rest
+                    
+                    self.assign_symbol(symbol, follow=local_follow)
+                return
         
-        # Solo si ninguna regla coincidió
-        self.sintax_error(list(no_terminal_values["total_pred_set"]))
+        error_set = follow if follow is not None else no_terminal_values["total_pred_set"]
+        self.sintax_error(list(error_set))
     
     def pair_terminals(self, expected_token):
         if self.token.kind == expected_token:

@@ -49,16 +49,16 @@ TOKEN_PATTERNS = [
     ("IDENT",      r"[a-zA-Z_$\u00C0-\uFFFF][a-zA-Z0-9_$\u00C0-\uFFFF]*"),
 
     # Operadores 3 chars
-    ("NEEQ",       r"!=="),
-    ("EEQ",        r"==="),
+    ("STRICT_NEQ",  r"!=="),
+    ("STRICT_EQUAL",r"==="),
     ("SPREAD",     r"\.\.\."),
     ("POWER_ASSIGN", r"\*\*="),
 
     # Operadores 2 chars
-    ("EQ",         r"=="),
+    ("EQUAL",      r"=="),
     ("NEQ",        r"!="),
-    ("LE",         r"<="),
-    ("GE",         r">="),
+    ("LEQ",        r"<="),
+    ("GEQ",        r">="),
     ("ARROW",      r"=>"),
     ("AND",        r"&&"),
     ("OR",         r"\|\|"),
@@ -71,6 +71,7 @@ TOKEN_PATTERNS = [
     ("TIMES_ASSIGN", r"\*="),
     ("DIV_ASSIGN",   r"/="),
     ("MOD_ASSIGN",   r"%="),
+    ("POWER_ASSIGN", r"\*\*="),
     ("PERIOD2",    r"\.\."),   # dos puntos seguidos sin tercero
 
     # Operadores 1 char
@@ -79,18 +80,18 @@ TOKEN_PATTERNS = [
     ("TIMES",      r"\*"),
     ("DIV",        r"/"),
     ("ASSIGN",     r"="),
-    ("LT",         r"<"),
-    ("GT",         r">"),
+    ("LESS",       r"<"),
+    ("GREATER",    r">"),
     ("MOD",        r"%"),
     ("NOT",        r"!"),
     ("TERNARY",    r"\?"),
-    ("LPAREN",     r"\("),
-    ("RPAREN",     r"\)"),
-    ("LBRACE",     r"\{"),
-    ("RBRACE",     r"\}"),
-    ("LBRACKET",   r"\["),
-    ("RBRACKET",   r"\]"),
-    ("SEMI",       r";"),
+    ("OPENING_PAR",r"\("),
+    ("CLOSING_PAR",r"\)"),
+    ("OPENING_KEY",r"\{"),
+    ("CLOSING_KEY",r"\}"),
+    ("OPENING_BRA",r"\["),
+    ("CLOSING_BRA",r"\]"),
+    ("SEMICOLON",  r";"),
     ("COMMA",      r","),
     ("COLON",      r":"),
     ("PERIOD",     r"\."),
@@ -111,14 +112,14 @@ DIVISION_CONTEXT = {
     "NUMBER",
     "INCREMENT",
     "DECREMENT",
-    "RPAREN",
-    "RBRACKET",
+    "CLOSING_PAR",
+    "CLOSING_BRA",
 }
 
 ASI_TRIGGERS = {
     "IDENT", "NUMBER", "STR", "REGEX",
-    "RPAREN",    # )
-    "RBRACKET",  # ]
+    "CLOSING_PAR",    # )
+    "CLOSING_BRA",  # ]
     "INCREMENT", # ++
     "DECREMENT", # --
 }
@@ -127,7 +128,7 @@ ASI_TRIGGERS = {
 ASI_KEYWORD_TRIGGERS = {"retornar", "romper", "continuar", "lanzar"}
 
 # Si el SIGUIENTE token es uno de estos, el newline NO es ';'
-ASI_BLOCKERS = {"LPAREN", "LBRACKET", "PLUS", "MINUS", "SLASH", "PERIOD"}
+ASI_BLOCKERS = {"OPENING_PAR", "OPENING_BRA", "PLUS", "MINUS", "SLASH", "PERIOD"}
 
 class Token:
     def __init__(self, kind: str, lexeme: str, line: int, col: int):
@@ -268,14 +269,14 @@ class Lexer:
                     
                     if next_tok is None:
                         # EOF tras trigger → sí aplica ASI
-                        return Token("SEMI", ";", line, col)
+                        return Token("SEMICOLON", ";", line, col)
 
                     if next_tok.kind in ASI_BLOCKERS:
                         # El siguiente token bloquea ASI → no insertar ';'
                         return self._peeked.pop(0)
                     else:
                         # Sí aplica ASI → emitir ';' y guardar el siguiente
-                        return Token("SEMI", ";", line, col)
+                        return Token("SEMICOLON", ";", line, col)
                 continue
 
             # ── keyword vs identificador ──────────────────────────────

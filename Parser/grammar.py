@@ -1,25 +1,289 @@
 GRAMMAR = {
-    "S": [
-        ["A", "uno", "B", "C"],
-        ["S", "dos"]
+    "start": [
+        ["code_block", "EOF"],
     ],
-    "A": [
-        ["B", "C", "D"],
-        ["A", "tres"],
+    "code_line": [
+        ["declare_or_assign"],
+        ["conditional"],
+        ["switch"],
+        ["for_loop"],
+        ["while_loop"],
+        ["do_while_loop"],
+        ["function"],
+        ["simple_expr"],
+    ],
+    "code_block": [
+        ["code_line", "code_block"],
         ["epsylon"]
     ],
-    "B": [
-        ["D", "cuatro", "C", "tres"],
+    "declare_or_assign": [
+        ["var_type", "IDENT", "assign"],
+    ],
+    "var_type": [
+        ["mut"],
+        ["var"],
+        ["const"],
+    ],
+    "assign": [
+        ["SEMI"],
+        ["assign_type", "expr", "SEMI"]
+    ],
+    "assign_type": [
+        ["ASSIGN"],
+        ["PLUS_ASSIGN"],
+        ["MINUS_ASSIGN"],
+        ["TIMES_ASSIGN"],
+        ["DIV_ASSIGN"],
+        ["MOD_ASSIGN"],
+    ],
+    "expr": [
+        ["expr_assign"],
+    ],
+    "expr_assign": [
+        ["expr_or_nullish", "expr_assign_tail"],
+    ],
+    "expr_assign_tail": [
+        ["assign_type", "expr_assign"],   # si hay operador, continúa
+        ["epsylon"]                        # si no, termina
+    ],
+    "expr_or_nullish": [
+        ["expr_and", "expr_or_nullish_tail"],
+    ],
+    "expr_or_nullish_tail": [
+        ["or_nullish", "expr_and", "expr_or_nullish_tail"],
         ["epsylon"]
     ],
-    "C": [
-        ["cinco", "D", "B"],
+    "or_nullish": [
+        ["OR"],
+        ["NULLISH"],
+    ],
+    "expr_and": [
+        ["expr_equality", "expr_and_tail"],
+    ],
+    "expr_and_tail": [
+        ["AND", "expr_equality", "expr_and_tail"],
         ["epsylon"]
     ],
-    "D": [
-        ["seis"],
+    "expr_equality": [
+        ["expr_rel", "expr_equality_tail"],
+    ],
+    "expr_equality_tail": [
+        ["equality", "expr_rel", "expr_equality_tail"],
         ["epsylon"]
-    ]
+    ],
+    "equality": [
+        ["EQ"],
+        ["NEQ"],
+        ["EEQ"],
+        ["NEEQ"],
+    ],
+    "expr_rel": [
+        ["expr_add", "expr_rel_tail"],
+    ],
+    "expr_rel_tail": [
+        ["relational", "expr_add", "expr_rel_tail"],
+        ["epsylon"]
+    ],
+    "relational": [
+        ["LT"],
+        ["LE"],
+        ["GT"],
+        ["GE"],
+        ["en"],
+        ["instanciaDe"],
+    ],
+    "expr_add": [
+        ["expr_mul", "expr_add_tail"],
+    ],
+    "expr_add_tail": [
+        ["additive", "expr_mul", "expr_add_tail"],
+        ["epsylon"]
+    ],
+    "additive": [
+        ["PLUS"],
+        ["MINUS"],
+    ],
+    "expr_mul": [
+        ["expr_power", "expr_mul_tail"],
+    ],
+    "expr_mul_tail": [
+        ["multiplicative", "expr_power", "expr_mul_tail"],
+        ["epsylon"]
+    ],
+    "multiplicative": [
+        ["TIMES"],
+        ["DIV"],
+        ["MOD"],
+    ],
+    "expr_power": [
+        ["expr_prefix", "expr_power_tail"],
+    ],
+    "expr_power_tail": [
+        ["POWER", "expr_power"],   # right-associative → recursa en expr_power
+        ["epsylon"]
+    ],
+    "expr_prefix": [
+        ["prefix", "expr_prefix"],
+        ["expr_postfix"],
+    ],
+    "prefix": [
+        ["NOT"],
+        ["MINUS"],
+        ["PLUS"],
+        ["INCREMENT"],
+        ["DECREMENT"],
+        ["tipoDe"],
+        ["eliminar"],
+        ["vacio"],
+        ["esperar"],
+    ],
+    "expr_postfix": [
+        ["expr_new", "expr_postfix_tail"],
+    ],
+    "expr_postfix_tail": [
+        ["postfix", "expr_postfix_tail"],
+        ["epsylon"]
+    ],
+    "postfix": [
+        ["INCREMENT"],
+        ["DECREMENT"],
+    ],
+    "expr_new": [
+        ["crear", "expr_access_or_call"],
+        ["expr_access_or_call"],
+    ],
+    "expr_access_or_call": [
+        ["expr_group", "expr_access_or_call_tail"],
+    ],
+    "expr_access_or_call_tail": [
+        ["PERIOD", "IDENT", "expr_access_or_call_tail"],
+        ["LBRACKET", "expr", "RBRACKET", "expr_access_or_call_tail"],
+        ["LPAREN", "call_args", "RPAREN", "expr_access_or_call_tail"],
+        ["epsylon"]
+    ],
+    "call_args": [
+        ["expr", "call_args_tail"],
+        ["epsylon"]
+    ],
+    "call_args_tail": [
+        ["COMMA", "expr", "call_args_tail"],
+        ["epsylon"]
+    ],
+    "expr_group": [
+        ["LPAREN", "expr_or_params", "RPAREN"],
+        ["element"],
+    ],
+    "expr_or_params": [
+        ["expr", "expr_or_params_tail"],
+    ],
+    "expr_or_params_tail": [
+        ["COMMA", "expr", "expr_or_params_tail"],
+        ["epsylon"]
+    ],
+    "element": [
+        ["IDENT"],
+        ["NUMBER"],
+        ["STR"],
+        ["REGEX"],
+        ["arr_declare"],
+        ["create_object"],
+        ["verdadero"],
+        ["falso"],
+        ["nulo"],
+        ["indefinido"],
+    ],
+    "arr_declare": [
+        ["LBRACKET", "expr", "arr_declare_tail", "RBRACKET"],
+    ],
+    "arr_declare_tail": [
+        ["COMMA", "expr", "arr_declare_tail"],
+        ["epsylon"]
+    ],
+    "create_object": [
+        ["LBRACE", "fields", "RBRACE"],
+    ],
+    "fields": [
+        ["IDENT", "COLON", "expr", "fields_tail"],
+        ["epsylon"]
+    ],
+    "fields_tail": [
+        ["COMMA", "IDENT", "COLON", "expr", "fields_tail"],
+        ["epsylon"]
+    ],
+   "conditional": [
+        ["si", "LPAREN", "expr", "RPAREN", "simple_block", "conditional_alter"],
+    ],
+    "conditional_alter": [
+        ["sino", "conditional_alter_tail"],
+        ["epsylon"]
+    ],
+    "conditional_alter_tail": [
+        ["si", "LPAREN", "expr", "RPAREN", "simple_block", "conditional_alter"],  # sino si ...
+        ["simple_block"],  # sino { ... }
+    ],
+    "switch": [
+        ["elegir", "LPAREN", "expr", "RPAREN", "LBRACE", "cases", "default_case", "RBRACE"],
+    ],
+    "cases": [
+        ["caso", "expr", "simple_block_break_continue", "cases"],
+        ["epsylon"]
+    ],
+    "default_case": [
+        ["porDefecto", "simple_block_break_continue"],
+        ["epsylon"]
+    ],
+    "for_loop": [
+        ["para", "LPAREN", "expr", "SEMI", "expr", "SEMI", "expr", "RPAREN", "simple_block_break_continue"],
+    ],
+    "while_loop": [
+        ["mientras", "LPAREN", "expr", "RPAREN", "simple_block_break_continue"],
+    ],
+    "do_while_loop": [
+        ["hacer", "simple_block_break_continue", "mientras", "LPAREN", "expr", "RPAREN", "SEMI"],
+    ],
+    "break": [
+        ["romper", "SEMI"],
+    ],
+    "continue": [
+        ["continuar", "SEMI"],
+    ],
+    "code_line_break_continue": [
+        ["code_line"],
+        ["break"],
+        ["continue"],
+    ],
+    "code_block_break_continue": [
+        ["code_line_break_continue", "code_block_break_continue"],
+        ["epsylon"]
+    ],
+    "simple_block_break_continue": [
+        ["LBRACE", "code_block_break_continue", "RBRACE"],
+    ],
+    "simple_block": [
+        ["LBRACE", "code_block", "RBRACE"],
+    ],
+    "function": [
+        ["funcion", "IDENT", "LPAREN", "params", "RPAREN", "simple_block", "return_stmt"],
+    ],
+    "return_stmt": [
+        ["retornar", "return_stmt_tail"],
+        ["epsylon"]
+    ],
+    "return_stmt_tail": [
+        ["expr", "SEMI"],
+        ["SEMI"]
+    ],
+    "params": [
+        ["IDENT", "params_tail"],
+        ["epsylon"]
+    ],
+    "params_tail": [
+        ["COMMA", "IDENT", "params_tail"],
+        ["epsylon"]
+    ],
+    "simple_expr": [
+        ["expr", "SEMI"],
+    ],
 }
 
 class Grammar:
@@ -165,13 +429,13 @@ def main():
         rules = value["rules"]
         for rule in rules:
             print(key," ->",rule["rule"], "-> ",rule["pred_set"])
-    print("\n")
+    print("\nprediccion de no terminales\n")
     for key, value in grammar.grammar.items():
         pred = value["total_pred_set"]
         print(key, "->", pred)
-    print("primeros: ",grammar.first_set)
-    print("siguientes:", grammar.follow_set)
-    print("conflictos:", grammar.conflicts)
+    print("\nprimeros: ",grammar.first_set)
+    print("\nsiguientes:", grammar.follow_set)
+    print("\nconflictos:", grammar.conflicts)
     
 if __name__ == "__main__":
     main()

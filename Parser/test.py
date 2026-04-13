@@ -4,7 +4,7 @@ import os
 # Añade la carpeta padre al "camino" de búsqueda de Python
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from Lexer.lexer import Lexer, LexerError, Token
+from Parser.lexer import Lexer, LexerError, Token
 
 src = """
 // Código ESJS

@@ -2,3 +2,5 @@
 */.venv
 Lexer/.~lock.transitions.csv#
 */__pycache__
+*/np.txt
+*/main.py

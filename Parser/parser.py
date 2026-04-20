@@ -171,6 +171,8 @@ class Parser:
                     
                     self.assign_symbol(symbol, follow=local_follow)
                 return
+            else:
+                follow = rule["pred_set"]
         
         error_set = follow if follow is not None else no_terminal_values["total_pred_set"]
         self.sintax_error(list(error_set))

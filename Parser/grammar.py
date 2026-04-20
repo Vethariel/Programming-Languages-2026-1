@@ -11,13 +11,22 @@ GRAMMAR = {
         ["do_while_loop"],
         ["function"],
         ["simple_expr"],
+        ["try_catch"],
     ],
     "code_block": [
         ["code_line", "code_block"],
         ["epsylon"]
     ],
     "declare_or_assign": [
-        ["var_type", "IDENT", "assign"],
+        ["var_type", "IDENT", "more_declare","declare_or_assign_tail", "SEMICOLON"],
+    ],
+    "declare_or_assign_tail": [
+        ["simple_assign", "expr"],
+        ["epsylon"]
+    ],
+    "more_declare": [
+        ["COMMA", "IDENT", "more_declare"],
+        ["epsylon"]
     ],
     "var_type": [
         ["mut"],
@@ -27,6 +36,9 @@ GRAMMAR = {
     "assign": [
         ["SEMICOLON"],
         ["assign_type", "expr", "SEMICOLON"]
+    ],
+    "simple_assign": [
+        ["ASSIGN"],
     ],
     "assign_type": [
         ["ASSIGN"],
@@ -210,14 +222,6 @@ GRAMMAR = {
         ["nulo"],
         ["indefinido"],
         ["console"],
-        ["Fecha"],
-        ["Numero"],
-        ["Mate"],
-        ["Matriz"],
-        ["Arreglo"],
-        ["Booleano"],
-        ["Cadena"],
-        ["Funcion"],
     ],
     "console": [
         ["consola","PERIOD", "method_name", "OPENING_PAR","expr_or_params", "CLOSING_PAR"],
@@ -317,6 +321,12 @@ GRAMMAR = {
     "simple_expr": [
         ["expr", "SEMICOLON"],
     ],
+    "try_catch": [
+        ["intentar", "simple_block", "catch"],
+    ],
+    "catch": [
+        ["capturar", "OPENING_PAR", "IDENT", "CLOSING_PAR", "simple_block"],
+    ]
 }
 
 class Grammar:

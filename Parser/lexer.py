@@ -176,7 +176,7 @@ class Lexer:
             return self._peeked.pop(0)
         tok = self._scan()
         if tok is None:
-            return Token("EOF", "", self.line, 0)
+            return Token("EOF", "", self.line +1 , 1)
         return tok
 
     def peek(self, offset: int = 1) -> Token | None:

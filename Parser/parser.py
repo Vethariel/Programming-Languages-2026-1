@@ -171,9 +171,10 @@ class Parser:
                     
                     self.assign_symbol(symbol, follow=local_follow)
                 return
-            else:
-                follow = rule["pred_set"]
         
+        follow = set()
+        for rule in no_terminal_values["rules"]:
+            follow.update(rule["pred_set"])
         error_set = follow if follow is not None else no_terminal_values["total_pred_set"]
         self.sintax_error(list(error_set))
     
@@ -188,8 +189,8 @@ class Parser:
     def sintax_error(self, expected_token):
         if self.token.kind == "EOF": self.token.lexeme = "final de archivo"
         if isinstance(expected_token, list):
-            expected_token.sort()
             expected_token = [TOKEN_KIND_REPR[e] if e in TOKEN_KIND_REPR else e for e in expected_token]
+            expected_token.sort()
             expected_token = [f"\"{t}\"" for t in expected_token]
             expected_token = ", ".join(expected_token)
         else:

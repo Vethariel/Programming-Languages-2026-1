@@ -33,10 +33,6 @@ GRAMMAR = {
         ["var"],
         ["const"],
     ],
-    "assign": [
-        ["SEMICOLON"],
-        ["assign_type", "expr", "SEMICOLON"]
-    ],
     "simple_assign": [
         ["ASSIGN"],
     ],
@@ -58,7 +54,6 @@ GRAMMAR = {
         ["SPREAD", "expr_or_nullish", "expr_assign_tail"],  # spread
     ],
     "expr_assign_tail": [
-        ["assign_type", "expr_assign"],   # si hay operador, continúa
         ["TERNARY", "expr_assign", "COLON", "expr_assign"],
         ["epsylon"]                        # si no, termina
     ],
@@ -148,13 +143,9 @@ GRAMMAR = {
         ["PLUS"],
         ["INCREMENT"],
         ["DECREMENT"],
-        ["tipoDe"],
-        ["eliminar"],
-        ["vacio"],
-        ["esperar"],
     ],
     "expr_postfix": [
-        ["expr_new", "expr_postfix_tail"],
+        ["expr_group", "expr_postfix_tail"]
     ],
     "expr_postfix_tail": [
         ["postfix", "expr_postfix_tail"],
@@ -164,54 +155,35 @@ GRAMMAR = {
         ["INCREMENT"],
         ["DECREMENT"],
     ],
-    "expr_new": [
-        ["crear", "expr_access_or_call"],
-        ["expr_access_or_call"],
-    ],
-    "expr_access_or_call": [
-        ["expr_group", "expr_access_or_call_tail"],
-    ],
-    
-    "method_name": [
-        ["IDENT"],
-        ["escribir"],
-        ["error"],
-        ["afirmar"],
-        ["limpiar"],
-        ["listar"],
-        ["agrupar"],
-        ["info"],
-        ["tabla"],
-        ["repetir"],
-        # agrega los que necesites
-    ],
-    "expr_access_or_call_tail": [
-        ["PERIOD", "method_name", "expr_access_or_call_tail"],
-        ["OPENING_BRA", "expr", "CLOSING_BRA", "expr_access_or_call_tail"],
-        ["OPENING_PAR", "call_args", "CLOSING_PAR", "expr_access_or_call_tail"],
-        ["epsylon"]
+    "expr_group": [
+        ["OPENING_PAR", "expr", "CLOSING_PAR"],
+        ["element"],
     ],
     "call_args": [
-        ["expr", "call_args_tail"],
-        ["epsylon"]
+        ["OPENING_PAR", "call_empty_args"],
+    ],
+    "call_empty_args": [
+        ["CLOSING_PAR"],
+        ["expr", "call_args_tail", "CLOSING_PAR"]
     ],
     "call_args_tail": [
         ["COMMA", "expr", "call_args_tail"],
         ["epsylon"]
     ],
-    "expr_group": [
-        ["OPENING_PAR", "expr_or_params", "CLOSING_PAR"],
-        ["element"],
+    # Solo lo que puede recibir asignación (izquierda del =)
+    "assignable": [
+        ["IDENT", "assignable_tail"],
     ],
-    "expr_or_params": [
-        ["expr", "expr_or_params_tail"],
-    ],
-    "expr_or_params_tail": [
-        ["COMMA", "expr", "expr_or_params_tail"],
+    "assignable_tail": [
+        ["PERIOD", "IDENT", "assignable_tail"],                      # obj.prop
+        ["OPENING_BRA", "expr", "CLOSING_BRA", "assignable_tail"],  # arr[0]
         ["epsylon"]
     ],
+
+    # Todo lo que puede ser elemento (incluye llamadas)
     "element": [
-        ["IDENT"],
+        ["console_use"],
+        ["IDENT", "element_access_tail"],   # cubre acceso, llamada y asignación
         ["NUMBER"],
         ["STR"],
         ["REGEX"],
@@ -221,10 +193,18 @@ GRAMMAR = {
         ["falso"],
         ["nulo"],
         ["indefinido"],
-        ["console"],
     ],
-    "console": [
-        ["consola","PERIOD", "method_name", "OPENING_PAR","expr_or_params", "CLOSING_PAR"],
+    "element_access_tail": [
+        ["PERIOD", "IDENT", "element_access_tail"],                      # obj.prop
+        ["OPENING_BRA", "expr", "CLOSING_BRA", "element_access_tail"],  # arr[0]
+        ["call_args", "element_access_tail"],  # func()
+        ["assign_type", "assignment_or_expr"],                           # x = ...
+        ["epsylon"]                                                      # solo ident
+    ],
+    # Lado derecho de una asignación
+    "assignment_or_expr": [
+        ["assignable", "assignment_or_expr_tail"],  # si hay assignable, puede asignar
+        ["expr"],                                   # si no, expresión normal
     ],
     "arr_declare": [
         ["OPENING_BRA", "expr", "arr_declare_tail", "CLOSING_BRA"],
@@ -232,6 +212,10 @@ GRAMMAR = {
     "arr_declare_tail": [
         ["COMMA", "expr", "arr_declare_tail"],
         ["epsylon"]
+    ],
+    "assignment_or_expr_tail": [
+        ["assign_type", "assignment_or_expr"],  # encadena
+        ["epsylon"]                             # termina
     ],
     "create_object": [
         ["OPENING_KEY", "fields", "CLOSING_KEY"],
@@ -243,6 +227,19 @@ GRAMMAR = {
     "fields_tail": [
         ["COMMA", "IDENT", "COLON", "expr", "fields_tail"],
         ["epsylon"]
+    ],
+    "console_use": [
+        ["consola", "PERIOD", "console_method", "call_args"],
+    ],
+    "console_method": [
+        ["escribir"],
+        ["error"],
+        ["afirmar"],
+        ["limpiar"],
+        ["agrupar"],
+        ["info"],
+        ["tabla"],
+        # agrega los que necesites
     ],
    "conditional": [
         ["si", "OPENING_PAR", "expr", "CLOSING_PAR", "simple_block", "conditional_alter"],

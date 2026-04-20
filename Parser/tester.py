@@ -168,8 +168,7 @@ consola.escribir( n1+ ' '+n2)""",
 "input": """\
 funcion my_function()[
    consola.info("asi no era *smile in full pain")
-]
-""",
+]""",
 "expected": '<1:22> Error sintactico: se encontro: "["; se esperaba: "{".',
     },
     {
@@ -177,8 +176,7 @@ funcion my_function()[
 "input": """\
 /* I forgot what was the
 main purpose of the commas over there */
-mut mistake,
-""",
+mut mistake,""",
 "expected": '<4:1> Error sintactico: se encontro: "final de archivo"; se esperaba: "id".',
     },
     {
@@ -187,8 +185,7 @@ mut mistake,
 // un try catch latinizado
 intentar{
 
-} // no faltará algo?
-""",
+} // no faltará algo?""",
 "expected": '<5:1> Error sintactico: se encontro: "final de archivo"; se esperaba: "capturar".',
     },
     {
@@ -197,8 +194,7 @@ intentar{
 funcion(random){
    consola.escribir("función bien definida")
 }
-/* así no se definian las funciones anónimas*/
-""",
+/* así no se definian las funciones anónimas*/""",
 "expected": '<1:8> Error sintactico: se encontro: "("; se esperaba: "id".',
     },
     {
@@ -218,8 +214,7 @@ funcion afuera() {
   retornar adentro;
 }
 
-afuera()(10);
-""",
+afuera()(10);""",
 "expected": 'El analisis sintactico ha finalizado exitosamente.',
     },
     {
@@ -231,15 +226,13 @@ consola.escribir(miMatriz[0]); // 1
 consola.escribir(miMatriz[1]); // 2
 consola.escribir(miMatriz[2]); // 3
 /* :v */
-// (ups, tengo que indicar el comentario :v)
-""",
+// (ups, tengo que indicar el comentario :v)""",
 "expected": 'El analisis sintactico ha finalizado exitosamente.',
     },
     {
 "name": "Test 8",
 "input": """\
-consola.invento()
-""",
+consola.invento()""",
 "expected": '<1:9> Error sintactico: se encontro: "invento"; se esperaba: "afirmar", "agrupar", "error", "escribir", "info", "limpiar", "tabla".',
     },
     {
@@ -251,8 +244,7 @@ si (entrada === indefinido) {
   consola.error('Valor indefinido');
 } sino {
   consola.escribir('Valor definido');
-}
-""",
+}""",
 "expected": 'El analisis sintactico ha finalizado exitosamente.',
     },
     {
@@ -260,7 +252,7 @@ si (entrada === indefinido) {
 "input": """\
 1>2 ? ? consola.escribir("a") : 1;
 """,
-"expected": ' "falso", "id", "indefinido", "Infinito", "Mate", "Matriz", "NuN", "nulo", "Numero", "-", "!", "[", "{", "(", "+", "valor_numérico", "verdadero".',
+"expected": '<1:7> Error sintactico: se encontro: "?"; se esperaba: "Arreglo", "Booleano", "Cadena", "cadena_de_caracteres", "consola", "falso", "id", "indefinido", "Infinito", "Mate", "Matriz", "NuN", "nulo", "Numero", "-", "!", "[", "{", "(", "+", "valor_numérico", "verdadero".',
     },
     {
 "name": "Test 14",
@@ -270,15 +262,13 @@ mut i = 0;
 hacer {
     consola.escribir(i);
     i = i + 1;
-} mientras i < 5;
-""",
+} mientras i < 5;""",
 "expected": '<6:12> Error sintactico: se encontro: "i"; se esperaba: "(".',
     },
     {
 "name": "Test 17",
 "input": """\
-consola.escribir(45"this")
-""",
+consola.escribir(45"this")""",
 "expected": '<1:20> Error sintactico: se encontro: "this"; se esperaba: "&&", ")", "/", "==", ">=", ">", "<=", "<", "-", "%", "!=", "||", "+", "**", "===", "!==", "?", "*".',
     },
     {
@@ -289,8 +279,7 @@ mut i = 0;
 mientras (i < 5) {
     consola escribir(i);
     i = i + 1;
-}
-""",
+}""",
 "expected": '<4:13> Error sintactico: se encontro: "escribir"; se esperaba: ".".',
     },
     {
@@ -312,8 +301,7 @@ mut miObjeto = {
 
 consola.escribir(miObjeto.propiedad); // 'valor'
 
-consola.escribir(miObjeto['propiedad']); // 'valor'
-""",
+consola.escribir(miObjeto['propiedad']); // 'valor'""",
 "expected": 'El analisis sintactico ha finalizado exitosamente.',
     },
     {
@@ -322,15 +310,13 @@ consola.escribir(miObjeto['propiedad']); // 'valor'
 {
   consola.escribir(x);
   x = x + 1; // Aumenta el valor de "x" para la siguiente iteración
-}
-""",
+}""",
 "expected": 'El analisis sintactico ha finalizado exitosamente.',
     },
     {
 "name": "Test 23",
 "input": """\
-var 1;
-""",
+var 1;""",
 "expected": '<1:5> Error sintactico: se encontro: "1"; se esperaba: "id".',
     },
     {
@@ -348,15 +334,13 @@ si (condicion) {
 "name": "Test 25",
 "input": """\
 // No es lo mismo declarar que actualizar
-const variable += 70;
-""",
+const variable += 70;""",
 "expected": '<2:16> Error sintactico: se encontro: "+="; se esperaba: "Arreglo", "Booleano", "Cadena", "cadena_de_caracteres", "consola", "const", "continuar", "elegir", "falso", "final de archivo", "funcion", "hacer", "id", "indefinido", "Infinito", "intentar", "Mate", "Matriz", "mientras", "mut", "NuN", "nulo", "Numero", "para", "retornar", "romper", "si", "=", ",", "-", "!", "[", "{", "(", "+", ";", "valor_numérico", "var", "verdadero".',
     },
     {
 "name": "Test 26",
 "input": """\
-si(){}
-""",
+si(){}""",
 "expected": '<1:4> Error sintactico: se encontro: ")"; se esperaba: "Arreglo", "Booleano", "Cadena", "cadena_de_caracteres", "falso", "id", "indefinido", "Infinito", "Mate", "Matriz", "NuN", "nulo", "Numero", "-", "!", "[", "{", "(", "+", "valor_numérico", "verdadero".',
     },
     {
@@ -370,8 +354,7 @@ const operaciones = {
 
 const tipo = "suma";
 
-funcion_.inventada(operaciones[tipo](10, 5));
-""",
+funcion_.inventada(operaciones[tipo](10, 5));""",
 "expected": 'El analisis sintactico ha finalizado exitosamente.',
     },
 ]

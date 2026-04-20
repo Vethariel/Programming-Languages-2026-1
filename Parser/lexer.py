@@ -176,7 +176,17 @@ class Lexer:
             return self._peeked.pop(0)
         tok = self._scan()
         if tok is None:
-            return Token("EOF", "", self.line +1 , 1)
+            # ASI en EOF: si el último token puede cerrar sentencia, emitir ';'
+            # antes de emitir EOF, igual que haría un salto de línea.
+            if self.last_token is not None and (
+                self.last_token.kind in ASI_TRIGGERS
+                or self.last_token.kind in ASI_KEYWORD_TRIGGERS
+            ):
+                eof_line = self.line
+                self._peeked.append(Token("EOF", "", eof_line, 1))
+                self.last_token = None   # para no re-emitir ';' en la próxima llamada
+                return Token("SEMICOLON", ";", eof_line+1, 1)
+            return Token("EOF", "", self.line+1, 1)
         return tok
 
     def peek(self, offset: int = 1) -> Token | None:

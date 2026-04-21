@@ -12,6 +12,7 @@ GRAMMAR = {
         ["function"],
         ["simple_expr"],
         ["try_catch"],
+        ["simple_block"],
     ],
     "code_block": [
         ["code_line", "code_block"],
@@ -21,8 +22,12 @@ GRAMMAR = {
         ["var_type", "IDENT", "more_declare","declare_or_assign_tail", "SEMICOLON"],
     ],
     "declare_or_assign_tail": [
-        ["simple_assign", "expr"],
+        ["simple_assign", "expr_or_object"],
         ["epsylon"]
+    ],
+    "expr_or_object": [
+        ["create_object"],
+        ["expr"]
     ],
     "more_declare": [
         ["COMMA", "IDENT", "more_declare"],
@@ -188,7 +193,6 @@ GRAMMAR = {
         ["STR"],
         ["REGEX"],
         ["arr_declare"],
-        ["create_object"],
         ["verdadero"],
         ["falso"],
         ["nulo"],
@@ -205,6 +209,7 @@ GRAMMAR = {
     "assignment_or_expr": [
         ["assignable", "assignment_or_expr_tail"],  # si hay assignable, puede asignar
         ["expr"],                                   # si no, expresión normal
+        ["create_object"],
     ],
     "arr_declare": [
         ["OPENING_BRA", "expr", "arr_declare_tail", "CLOSING_BRA"],
@@ -220,12 +225,21 @@ GRAMMAR = {
     "create_object": [
         ["OPENING_KEY", "fields", "CLOSING_KEY"],
     ],
+
     "fields": [
-        ["IDENT", "COLON", "expr", "fields_tail"],
+        ["IDENT", "field_body", "fields_tail"],
         ["epsylon"]
     ],
+
+    "field_body": [
+        # Propiedad normal:  key: value
+        ["COLON", "expr"],
+        # Método:  key(params) { ... }
+        ["OPENING_PAR", "params", "CLOSING_PAR", "simple_block_return"],
+    ],
+
     "fields_tail": [
-        ["COMMA", "IDENT", "COLON", "expr", "fields_tail"],
+        ["COMMA", "IDENT", "field_body", "fields_tail"],
         ["epsylon"]
     ],
     "console_use": [
@@ -463,19 +477,70 @@ class Grammar:
             for rule in rules:
                 total_pred_set.update(rule["pred_set"])
 
+
+from datetime import datetime
+
+
+def write_grammar_report(grammar, filepath="grammar_report.txt"):
+    """
+    Escribe el reporte de la gramática en un archivo .txt,
+    sobreescribiéndolo cada vez que se llame.
+    """
+    lines = []
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # ─── Encabezado ───────────────────────────────────────────────
+    lines.append("=" * 60)
+    lines.append(f"  REPORTE DE GRAMÁTICA  —  {now}")
+    lines.append("=" * 60)
+
+    # ─── Reglas y conjuntos de predicción por producción ──────────
+    lines.append("\n[1] REGLAS Y CONJUNTOS DE PREDICCIÓN\n")
+    lines.append(f"  {'No terminal':<20} {'Producción':<30} {'Pred. Set'}")
+    lines.append(f"  {'-'*20} {'-'*30} {'-'*20}")
+
+    for key, value in grammar.grammar.items():
+        for rule in value["rules"]:
+            prod  = " ".join(rule["rule"]) if isinstance(rule["rule"], list) else str(rule["rule"])
+            preds = str(rule["pred_set"])
+            lines.append(f"  {key:<20} {prod:<30} {preds}")
+
+    # ─── Predicción total por no terminal ─────────────────────────
+    lines.append("\n[2] PREDICCIÓN TOTAL POR NO TERMINAL\n")
+    lines.append(f"  {'No terminal':<20} {'Pred. Set total'}")
+    lines.append(f"  {'-'*20} {'-'*30}")
+
+    for key, value in grammar.grammar.items():
+        lines.append(f"  {key:<20} {value['total_pred_set']}")
+
+    # ─── Primeros ─────────────────────────────────────────────────
+    lines.append("\n[3] CONJUNTOS PRIMEROS (FIRST)\n")
+    for symbol, first in grammar.first_set.items():
+        lines.append(f"  FIRST({symbol:<18}) = {first}")
+
+    # ─── Siguientes ───────────────────────────────────────────────
+    lines.append("\n[4] CONJUNTOS SIGUIENTES (FOLLOW)\n")
+    for symbol, follow in grammar.follow_set.items():
+        lines.append(f"  FOLLOW({symbol:<17}) = {follow}")
+
+    # ─── Conflictos ───────────────────────────────────────────────
+    lines.append("\n[5] CONFLICTOS\n")
+    if grammar.conflicts:
+        for conflict in grammar.conflicts:
+            lines.append(f"  ⚠  {conflict}")
+    else:
+        lines.append("  ✔  Sin conflictos detectados.")
+
+    lines.append("\n" + "=" * 60 + "\n")
+
+    # ─── Escritura ────────────────────────────────────────────────
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
+
+
 def main():
     grammar = Grammar()
-    for key, value in grammar.grammar.items():
-        rules = value["rules"]
-        for rule in rules:
-            print(key," ->",rule["rule"], "-> ",rule["pred_set"])
-    print("\nprediccion de no terminales\n")
-    for key, value in grammar.grammar.items():
-        pred = value["total_pred_set"]
-        print(key, "->", pred)
-    print("\nprimeros: ",grammar.first_set)
-    print("\nsiguientes:", grammar.follow_set)
-    print("\nconflictos:", grammar.conflicts)
+    write_grammar_report(grammar, filepath="grammar_report.txt")
     
 if __name__ == "__main__":
     main()

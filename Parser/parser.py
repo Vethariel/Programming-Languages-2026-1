@@ -1,5 +1,5 @@
-from grammar import Grammar
 import sys
+from grammar import Grammar
 from lexer import Lexer
 
 TOKEN_KIND_REPR = {

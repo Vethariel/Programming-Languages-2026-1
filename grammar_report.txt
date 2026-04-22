@@ -1,140 +1,26 @@
 ============================================================
-  REPORTE DE GRAMÁTICA  —  2026-04-20 19:38:24
+  REPORTE DE GRAMÁTICA  —  2026-04-22 17:32:26
 ============================================================
 
 [1] REGLAS Y CONJUNTOS DE PREDICCIÓN
 
   No terminal          Producción                     Pred. Set
   -------------------- ------------------------------ --------------------
-  start                code_block EOF                 {'verdadero', 'mut', 'IDENT', 'const', 'hacer', 'STR', 'NUMBER', 'var', 'DECREMENT', 'elegir', 'MINUS', 'OPENING_BRA', 'indefinido', 'PLUS', 'INCREMENT', 'intentar', 'mientras', 'funcion', 'consola', 'EOF', 'falso', 'SPREAD', 'OPENING_KEY', 'nulo', 'para', 'NOT', 'si', 'REGEX', 'OPENING_PAR'}
-  code_line            declare_or_assign              {'const', 'mut', 'var'}
+  start                code_block EOF                 {'Infinito', 'EOF', 'indefinido', 'elegir', 'falso', 'mut', 'NuN', 'intentar', 'funcion', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  code_block           code_line code_block           {'Infinito', 'indefinido', 'elegir', 'falso', 'intentar', 'funcion', 'mut', 'NuN', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  code_block           epsylon                        {'EOF', 'CLOSING_KEY'}
+  code_line            console_use                    {'consola'}
+  code_line            simple_block                   {'OPENING_KEY'}
+  code_line            declare_or_assign              {'mut', 'var', 'const'}
   code_line            conditional                    {'si'}
   code_line            switch                         {'elegir'}
   code_line            for_loop                       {'para'}
   code_line            while_loop                     {'mientras'}
   code_line            do_while_loop                  {'hacer'}
   code_line            function                       {'funcion'}
-  code_line            simple_expr                    {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
   code_line            try_catch                      {'intentar'}
-  code_line            simple_block                   {'OPENING_KEY'}
-  code_block           code_line code_block           {'verdadero', 'mut', 'IDENT', 'const', 'hacer', 'STR', 'NUMBER', 'var', 'DECREMENT', 'elegir', 'MINUS', 'OPENING_BRA', 'indefinido', 'PLUS', 'INCREMENT', 'mientras', 'intentar', 'consola', 'falso', 'SPREAD', 'OPENING_KEY', 'nulo', 'para', 'funcion', 'NOT', 'si', 'REGEX', 'OPENING_PAR'}
-  code_block           epsylon                        {'retornar', 'EOF', 'CLOSING_KEY'}
-  declare_or_assign    var_type IDENT more_declare declare_or_assign_tail SEMICOLON {'const', 'mut', 'var'}
-  declare_or_assign_tail simple_assign expr_or_object   {'ASSIGN'}
-  declare_or_assign_tail epsylon                        {'SEMICOLON'}
-  expr_or_object       create_object                  {'OPENING_KEY'}
-  expr_or_object       expr                           {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  more_declare         COMMA IDENT more_declare       {'COMMA'}
-  more_declare         epsylon                        {'ASSIGN', 'SEMICOLON'}
-  var_type             mut                            {'mut'}
-  var_type             var                            {'var'}
-  var_type             const                          {'const'}
-  simple_assign        ASSIGN                         {'ASSIGN'}
-  assign_type          ASSIGN                         {'ASSIGN'}
-  assign_type          PLUS_ASSIGN                    {'PLUS_ASSIGN'}
-  assign_type          MINUS_ASSIGN                   {'MINUS_ASSIGN'}
-  assign_type          TIMES_ASSIGN                   {'TIMES_ASSIGN'}
-  assign_type          DIV_ASSIGN                     {'DIV_ASSIGN'}
-  assign_type          MOD_ASSIGN                     {'MOD_ASSIGN'}
-  assign_type          POWER_ASSIGN                   {'POWER_ASSIGN'}
-  assign_type          ARROW                          {'ARROW'}
-  expr                 expr_assign                    {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  expr_assign          expr_or_nullish expr_assign_tail {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  expr_assign          SPREAD expr_or_nullish expr_assign_tail {'SPREAD'}
-  expr_assign_tail     TERNARY expr_assign COLON expr_assign {'TERNARY'}
-  expr_assign_tail     epsylon                        {'CLOSING_BRA', 'en', 'COMMA', 'OR', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'CLOSING_PAR', 'SEMICOLON', 'MINUS', 'PLUS', 'GREATER', 'TERNARY', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'AND', 'DIV', 'MOD', 'EQUAL', 'LESS', 'POWER', 'NEQ'}
-  expr_or_nullish      expr_and expr_or_nullish_tail  {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  expr_or_nullish_tail or_nullish expr_and expr_or_nullish_tail {'OR', 'NULLISH'}
-  expr_or_nullish_tail epsylon                        {'CLOSING_BRA', 'en', 'COMMA', 'OR', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'TERNARY', 'SEMICOLON', 'CLOSING_PAR', 'MINUS', 'PLUS', 'GREATER', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'AND', 'DIV', 'MOD', 'EQUAL', 'LESS', 'POWER', 'NEQ'}
-  or_nullish           OR                             {'OR'}
-  or_nullish           NULLISH                        {'NULLISH'}
-  expr_and             expr_equality expr_and_tail    {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  expr_and_tail        AND expr_equality expr_and_tail {'AND'}
-  expr_and_tail        epsylon                        {'CLOSING_BRA', 'en', 'OR', 'COMMA', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'MINUS', 'SEMICOLON', 'GREATER', 'TERNARY', 'CLOSING_PAR', 'PLUS', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'AND', 'DIV', 'MOD', 'EQUAL', 'LESS', 'POWER', 'NEQ'}
-  expr_equality        expr_rel expr_equality_tail    {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  expr_equality_tail   equality expr_rel expr_equality_tail {'STRICT_NEQ', 'STRICT_EQUAL', 'EQUAL', 'NEQ'}
-  expr_equality_tail   epsylon                        {'CLOSING_BRA', 'en', 'OR', 'COMMA', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'MINUS', 'SEMICOLON', 'GREATER', 'TERNARY', 'CLOSING_PAR', 'PLUS', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'AND', 'DIV', 'MOD', 'EQUAL', 'LESS', 'POWER', 'NEQ'}
-  equality             EQUAL                          {'EQUAL'}
-  equality             NEQ                            {'NEQ'}
-  equality             STRICT_EQUAL                   {'STRICT_EQUAL'}
-  equality             STRICT_NEQ                     {'STRICT_NEQ'}
-  expr_rel             expr_add expr_rel_tail         {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  expr_rel_tail        relational expr_add expr_rel_tail {'GEQ', 'en', 'GREATER', 'instanciaDe', 'LESS', 'LEQ'}
-  expr_rel_tail        epsylon                        {'CLOSING_BRA', 'en', 'OR', 'COMMA', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'MINUS', 'SEMICOLON', 'GREATER', 'TERNARY', 'CLOSING_PAR', 'PLUS', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'AND', 'DIV', 'MOD', 'EQUAL', 'LESS', 'POWER', 'NEQ'}
-  relational           LESS                           {'LESS'}
-  relational           LEQ                            {'LEQ'}
-  relational           GREATER                        {'GREATER'}
-  relational           GEQ                            {'GEQ'}
-  relational           en                             {'en'}
-  relational           instanciaDe                    {'instanciaDe'}
-  expr_add             expr_mul expr_add_tail         {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  expr_add_tail        additive expr_mul expr_add_tail {'MINUS', 'PLUS'}
-  expr_add_tail        epsylon                        {'CLOSING_BRA', 'en', 'OR', 'COMMA', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'MINUS', 'SEMICOLON', 'GREATER', 'TERNARY', 'CLOSING_PAR', 'PLUS', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'AND', 'DIV', 'MOD', 'EQUAL', 'LESS', 'POWER', 'NEQ'}
-  additive             PLUS                           {'PLUS'}
-  additive             MINUS                          {'MINUS'}
-  expr_mul             expr_power expr_mul_tail       {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  expr_mul_tail        multiplicative expr_power expr_mul_tail {'DIV', 'MOD', 'TIMES'}
-  expr_mul_tail        epsylon                        {'CLOSING_BRA', 'en', 'OR', 'COMMA', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'MINUS', 'SEMICOLON', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'AND', 'DIV', 'MOD', 'EQUAL', 'LESS', 'POWER', 'NEQ'}
-  multiplicative       TIMES                          {'TIMES'}
-  multiplicative       DIV                            {'DIV'}
-  multiplicative       MOD                            {'MOD'}
-  expr_power           expr_prefix expr_power_tail    {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  expr_power_tail      POWER expr_power               {'POWER'}
-  expr_power_tail      epsylon                        {'CLOSING_BRA', 'en', 'OR', 'COMMA', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'MINUS', 'SEMICOLON', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'AND', 'DIV', 'MOD', 'EQUAL', 'LESS', 'POWER', 'NEQ'}
-  expr_prefix          prefix expr_prefix             {'DECREMENT', 'MINUS', 'PLUS', 'NOT', 'INCREMENT'}
-  expr_prefix          expr_postfix                   {'verdadero', 'consola', 'IDENT', 'STR', 'NUMBER', 'falso', 'nulo', 'OPENING_BRA', 'indefinido', 'REGEX', 'OPENING_PAR'}
-  prefix               NOT                            {'NOT'}
-  prefix               MINUS                          {'MINUS'}
-  prefix               PLUS                           {'PLUS'}
-  prefix               INCREMENT                      {'INCREMENT'}
-  prefix               DECREMENT                      {'DECREMENT'}
-  expr_postfix         expr_group expr_postfix_tail   {'verdadero', 'consola', 'IDENT', 'STR', 'NUMBER', 'falso', 'nulo', 'OPENING_BRA', 'indefinido', 'REGEX', 'OPENING_PAR'}
-  expr_postfix_tail    postfix expr_postfix_tail      {'DECREMENT', 'INCREMENT'}
-  expr_postfix_tail    epsylon                        {'CLOSING_BRA', 'en', 'OR', 'COMMA', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'MINUS', 'SEMICOLON', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'AND', 'DIV', 'MOD', 'EQUAL', 'LESS', 'POWER', 'NEQ'}
-  postfix              INCREMENT                      {'INCREMENT'}
-  postfix              DECREMENT                      {'DECREMENT'}
-  expr_group           OPENING_PAR expr CLOSING_PAR   {'OPENING_PAR'}
-  expr_group           element                        {'verdadero', 'consola', 'IDENT', 'STR', 'falso', 'NUMBER', 'nulo', 'OPENING_BRA', 'indefinido', 'REGEX'}
-  call_args            OPENING_PAR call_empty_args    {'OPENING_PAR'}
-  call_empty_args      CLOSING_PAR                    {'CLOSING_PAR'}
-  call_empty_args      expr call_args_tail CLOSING_PAR {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  call_args_tail       COMMA expr call_args_tail      {'COMMA'}
-  call_args_tail       epsylon                        {'CLOSING_PAR'}
-  assignable           IDENT assignable_tail          {'IDENT'}
-  assignable_tail      PERIOD IDENT assignable_tail   {'PERIOD'}
-  assignable_tail      OPENING_BRA expr CLOSING_BRA assignable_tail {'OPENING_BRA'}
-  assignable_tail      epsylon                        {'MOD_ASSIGN', 'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'TIMES_ASSIGN', 'ARROW', 'CLOSING_KEY', 'LEQ', 'COLON', 'MINUS_ASSIGN', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'DIV_ASSIGN', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS_ASSIGN', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'ASSIGN', 'INCREMENT', 'POWER_ASSIGN', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  element              console_use                    {'consola'}
-  element              IDENT element_access_tail      {'IDENT'}
-  element              NUMBER                         {'NUMBER'}
-  element              STR                            {'STR'}
-  element              REGEX                          {'REGEX'}
-  element              arr_declare                    {'OPENING_BRA'}
-  element              verdadero                      {'verdadero'}
-  element              falso                          {'falso'}
-  element              nulo                           {'nulo'}
-  element              indefinido                     {'indefinido'}
-  element_access_tail  PERIOD IDENT element_access_tail {'PERIOD'}
-  element_access_tail  OPENING_BRA expr CLOSING_BRA element_access_tail {'OPENING_BRA'}
-  element_access_tail  call_args element_access_tail  {'OPENING_PAR'}
-  element_access_tail  assign_type assignment_or_expr {'ARROW', 'MOD_ASSIGN', 'MINUS_ASSIGN', 'PLUS_ASSIGN', 'TIMES_ASSIGN', 'ASSIGN', 'DIV_ASSIGN', 'POWER_ASSIGN'}
-  element_access_tail  epsylon                        {'CLOSING_BRA', 'en', 'OR', 'COMMA', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'MINUS', 'SEMICOLON', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'AND', 'DIV', 'MOD', 'EQUAL', 'LESS', 'POWER', 'NEQ'}
-  assignment_or_expr   assignable assignment_or_expr_tail {'IDENT'}
-  assignment_or_expr   expr                           {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  assignment_or_expr   create_object                  {'OPENING_KEY'}
-  arr_declare          OPENING_BRA expr arr_declare_tail CLOSING_BRA {'OPENING_BRA'}
-  arr_declare_tail     COMMA expr arr_declare_tail    {'COMMA'}
-  arr_declare_tail     epsylon                        {'CLOSING_BRA'}
-  assignment_or_expr_tail assign_type assignment_or_expr {'ARROW', 'MOD_ASSIGN', 'MINUS_ASSIGN', 'PLUS_ASSIGN', 'TIMES_ASSIGN', 'ASSIGN', 'DIV_ASSIGN', 'POWER_ASSIGN'}
-  assignment_or_expr_tail epsylon                        {'CLOSING_BRA', 'en', 'OR', 'COMMA', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'MINUS', 'SEMICOLON', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'AND', 'DIV', 'MOD', 'EQUAL', 'LESS', 'POWER', 'NEQ'}
-  create_object        OPENING_KEY fields CLOSING_KEY {'OPENING_KEY'}
-  fields               IDENT field_body fields_tail   {'IDENT'}
-  fields               epsylon                        {'CLOSING_KEY'}
-  field_body           COLON expr                     {'COLON'}
-  field_body           OPENING_PAR params CLOSING_PAR simple_block_return {'OPENING_PAR'}
-  fields_tail          COMMA IDENT field_body fields_tail {'COMMA'}
-  fields_tail          epsylon                        {'CLOSING_KEY'}
-  console_use          consola PERIOD console_method call_args {'consola'}
+  code_line            simple_expr                    {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  console_use          consola PERIOD console_method call_args tail {'consola'}
   console_method       escribir                       {'escribir'}
   console_method       error                          {'error'}
   console_method       afirmar                        {'afirmar'}
@@ -142,301 +28,366 @@
   console_method       agrupar                        {'agrupar'}
   console_method       info                           {'info'}
   console_method       tabla                          {'tabla'}
+  call_args            OPENING_PAR call_empty_args CLOSING_PAR {'OPENING_PAR'}
+  call_empty_args      expr call_args_tail            {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  call_empty_args      epsylon                        {'CLOSING_PAR'}
+  call_args_tail       COMMA expr call_args_tail      {'COMMA'}
+  call_args_tail       epsylon                        {'CLOSING_PAR'}
+  tail                 SEMICOLON                      {'SEMICOLON'}
+  tail                 epsylon                        {'continuar', 'Infinito', 'EOF', 'indefinido', 'elegir', 'retornar', 'falso', 'romper', 'mut', 'NuN', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  simple_block         OPENING_KEY code_block CLOSING_KEY {'OPENING_KEY'}
+  declare_or_assign    var_type IDENT more_declare declare_or_assign_tail tail {'mut', 'var', 'const'}
+  var_type             mut                            {'mut'}
+  var_type             var                            {'var'}
+  var_type             const                          {'const'}
+  more_declare         COMMA IDENT more_declare       {'COMMA'}
+  more_declare         epsylon                        {'SEMICOLON', 'continuar', 'Infinito', 'EOF', 'indefinido', 'elegir', 'retornar', 'falso', 'romper', 'mut', 'NuN', 'ASSIGN', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  declare_or_assign_tail ASSIGN expr_or_object          {'ASSIGN'}
+  declare_or_assign_tail epsylon                        {'SEMICOLON', 'continuar', 'Infinito', 'EOF', 'indefinido', 'elegir', 'retornar', 'falso', 'romper', 'mut', 'NuN', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  expr_or_object       create_object                  {'OPENING_KEY'}
+  expr_or_object       expr                           {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  create_object        OPENING_KEY object_body CLOSING_KEY {'OPENING_KEY'}
+  object_body          object_entry object_body_tail  {'IDENT'}
+  object_body          epsylon                        {'CLOSING_KEY'}
+  object_body_tail     COMMA object_entry object_body_tail {'COMMA'}
+  object_body_tail     epsylon                        {'CLOSING_KEY'}
+  object_entry         IDENT object_entry_tail        {'IDENT'}
+  object_entry_tail    COLON value                    {'COLON'}
+  object_entry_tail    params simple_block_return     {'OPENING_PAR'}
+  value                params arrow_function          {'OPENING_PAR'}
+  value                element                        {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NUMBER', 'NuN', 'nulo', 'IDENT'}
+  arrow_function       ARROW arrow_function_body      {'ARROW'}
+  arrow_function_body  simple_block                   {'OPENING_KEY'}
+  arrow_function_body  expr                           {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
   conditional          si OPENING_PAR expr CLOSING_PAR simple_block conditional_alter {'si'}
   conditional_alter    sino conditional_alter_tail    {'sino'}
-  conditional_alter    epsylon                        {'retornar', 'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'mientras', 'EOF', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
+  conditional_alter    epsylon                        {'continuar', 'Infinito', 'EOF', 'indefinido', 'elegir', 'retornar', 'falso', 'romper', 'mut', 'NuN', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
   conditional_alter_tail si OPENING_PAR expr CLOSING_PAR simple_block conditional_alter {'si'}
   conditional_alter_tail simple_block                   {'OPENING_KEY'}
   switch               elegir OPENING_PAR expr CLOSING_PAR OPENING_KEY cases default_case CLOSING_KEY {'elegir'}
   cases                caso expr simple_block_break_continue cases {'caso'}
-  cases                epsylon                        {'porDefecto', 'CLOSING_KEY'}
+  cases                epsylon                        {'CLOSING_KEY', 'porDefecto'}
   default_case         porDefecto simple_block_break_continue {'porDefecto'}
   default_case         epsylon                        {'CLOSING_KEY'}
-  for_loop             para OPENING_PAR expr SEMICOLON expr SEMICOLON expr CLOSING_PAR simple_block_break_continue {'para'}
-  while_loop           mientras OPENING_PAR expr CLOSING_PAR simple_block_break_continue {'mientras'}
-  do_while_loop        hacer simple_block_break_continue mientras OPENING_PAR expr CLOSING_PAR SEMICOLON {'hacer'}
-  break                romper SEMICOLON               {'romper'}
-  continue             continuar SEMICOLON            {'continuar'}
-  code_line_break_continue code_line                      {'verdadero', 'mut', 'IDENT', 'const', 'hacer', 'STR', 'NUMBER', 'var', 'DECREMENT', 'elegir', 'MINUS', 'OPENING_BRA', 'indefinido', 'PLUS', 'INCREMENT', 'mientras', 'intentar', 'consola', 'falso', 'SPREAD', 'OPENING_KEY', 'nulo', 'para', 'funcion', 'NOT', 'si', 'REGEX', 'OPENING_PAR'}
+  simple_block_break_continue OPENING_KEY code_block_break_continue CLOSING_KEY {'OPENING_KEY'}
+  code_block_break_continue code_line_break_continue code_block_break_continue {'continuar', 'Infinito', 'indefinido', 'elegir', 'falso', 'romper', 'mut', 'NuN', 'intentar', 'funcion', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  code_block_break_continue epsylon                        {'CLOSING_KEY'}
+  code_line_break_continue code_line                      {'Infinito', 'indefinido', 'elegir', 'falso', 'intentar', 'funcion', 'mut', 'NuN', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
   code_line_break_continue break                          {'romper'}
   code_line_break_continue continue                       {'continuar'}
-  code_block_break_continue code_line_break_continue code_block_break_continue {'verdadero', 'mut', 'IDENT', 'const', 'hacer', 'STR', 'NUMBER', 'var', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'PLUS', 'INCREMENT', 'intentar', 'mientras', 'consola', 'romper', 'falso', 'SPREAD', 'OPENING_KEY', 'nulo', 'para', 'funcion', 'NOT', 'si', 'REGEX', 'OPENING_PAR'}
-  code_block_break_continue epsylon                        {'CLOSING_KEY'}
-  simple_block_break_continue OPENING_KEY code_block_break_continue CLOSING_KEY {'OPENING_KEY'}
-  simple_block         OPENING_KEY code_block CLOSING_KEY {'OPENING_KEY'}
-  function             funcion IDENT OPENING_PAR params CLOSING_PAR simple_block_return {'funcion'}
-  return_stmt          retornar return_stmt_tail      {'retornar'}
-  return_stmt          epsylon                        {'CLOSING_KEY'}
-  return_stmt_tail     expr SEMICOLON                 {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  return_stmt_tail     SEMICOLON                      {'SEMICOLON'}
-  simple_block_return  OPENING_KEY code_block return_stmt CLOSING_KEY {'OPENING_KEY'}
-  params               IDENT params_tail              {'IDENT'}
-  params               epsylon                        {'CLOSING_PAR'}
+  break                romper tail                    {'romper'}
+  continue             continuar tail                 {'continuar'}
+  for_loop             para OPENING_PAR expr SEMICOLON expr SEMICOLON expr CLOSING_PAR simple_block_break_continue {'para'}
+  while_loop           mientras OPENING_PAR expr CLOSING_PAR simple_block_break_continue {'mientras'}
+  do_while_loop        hacer simple_block_break_continue mientras OPENING_PAR expr CLOSING_PAR tail {'hacer'}
+  function             funcion IDENT params simple_block_return {'funcion'}
+  params               OPENING_PAR empty_params       {'OPENING_PAR'}
+  empty_params         CLOSING_PAR                    {'CLOSING_PAR'}
+  empty_params         IDENT params_tail              {'IDENT'}
   params_tail          COMMA IDENT params_tail        {'COMMA'}
-  params_tail          epsylon                        {'CLOSING_PAR'}
-  simple_expr          expr SEMICOLON                 {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
+  params_tail          CLOSING_PAR                    {'CLOSING_PAR'}
+  simple_block_return  OPENING_KEY code_block_return CLOSING_KEY {'OPENING_KEY'}
+  code_block_return    code_line_return code_block_return {'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'intentar', 'funcion', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  code_block_return    epsylon                        {'CLOSING_KEY'}
+  code_line_return     code_line                      {'Infinito', 'indefinido', 'elegir', 'falso', 'intentar', 'funcion', 'mut', 'NuN', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  code_line_return     retornar return_tail tail      {'retornar'}
+  return_tail          expr                           {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  return_tail          epsylon                        {'SEMICOLON', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'intentar', 'funcion', 'si', 'consola', 'CLOSING_KEY', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
   try_catch            intentar simple_block catch    {'intentar'}
   catch                capturar OPENING_PAR IDENT CLOSING_PAR simple_block {'capturar'}
+  expr                 expr_ternary                   {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  expr_ternary         expr_eq expr_ternary_tail      {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  expr_ternary_tail    TERNARY expr_ternary COLON expr_ternary {'TERNARY'}
+  expr_ternary_tail    epsylon                        {'SEMICOLON', 'continuar', 'COLON', 'Infinito', 'indefinido', 'MINUS', 'POWER', 'elegir', 'retornar', 'falso', 'mut', 'PLUS', 'NuN', 'CLOSING_PAR', 'STRICT_EQUAL', 'GEQ', 'OPENING_KEY', 'TIMES', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'GREATER', 'nulo', 'IDENT', 'const', 'mientras', 'DIV', 'EOF', 'NEQ', 'romper', 'intentar', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'verdadero', 'LEQ', 'OPENING_BRA', 'LESS', 'STRICT_NEQ', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA'}
+  expr_eq              expr_rel expr_eq_tail          {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  equality             EQUAL                          {'EQUAL'}
+  equality             NEQ                            {'NEQ'}
+  equality             STRICT_EQUAL                   {'STRICT_EQUAL'}
+  equality             STRICT_NEQ                     {'STRICT_NEQ'}
+  expr_eq_tail         equality expr_eq               {'EQUAL', 'STRICT_EQUAL', 'NEQ', 'STRICT_NEQ'}
+  expr_eq_tail         epsylon                        {'SEMICOLON', 'continuar', 'COLON', 'Infinito', 'indefinido', 'MINUS', 'POWER', 'elegir', 'retornar', 'falso', 'mut', 'PLUS', 'NuN', 'CLOSING_PAR', 'STRICT_EQUAL', 'GEQ', 'OPENING_KEY', 'TIMES', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'GREATER', 'nulo', 'IDENT', 'const', 'mientras', 'DIV', 'EOF', 'NEQ', 'romper', 'intentar', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'verdadero', 'LEQ', 'OPENING_BRA', 'LESS', 'STRICT_NEQ', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA'}
+  expr_rel             expr_add expr_rel_tail         {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  relational           LESS                           {'LESS'}
+  relational           GREATER                        {'GREATER'}
+  relational           LEQ                            {'LEQ'}
+  relational           GEQ                            {'GEQ'}
+  expr_rel_tail        relational expr_rel            {'LEQ', 'GREATER', 'LESS', 'GEQ'}
+  expr_rel_tail        epsylon                        {'SEMICOLON', 'continuar', 'COLON', 'Infinito', 'indefinido', 'MINUS', 'POWER', 'elegir', 'retornar', 'falso', 'mut', 'PLUS', 'NuN', 'CLOSING_PAR', 'STRICT_EQUAL', 'GEQ', 'OPENING_KEY', 'TIMES', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'GREATER', 'nulo', 'IDENT', 'const', 'mientras', 'DIV', 'EOF', 'NEQ', 'romper', 'intentar', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'verdadero', 'LEQ', 'OPENING_BRA', 'LESS', 'STRICT_NEQ', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA'}
+  expr_add             expr_mult expr_add_tail        {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  add                  PLUS                           {'PLUS'}
+  add                  MINUS                          {'MINUS'}
+  expr_add_tail        add expr_mult expr_add_tail    {'PLUS', 'MINUS'}
+  expr_add_tail        epsylon                        {'SEMICOLON', 'continuar', 'COLON', 'Infinito', 'indefinido', 'MINUS', 'POWER', 'elegir', 'retornar', 'falso', 'mut', 'PLUS', 'NuN', 'CLOSING_PAR', 'STRICT_EQUAL', 'GEQ', 'OPENING_KEY', 'TIMES', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'GREATER', 'nulo', 'IDENT', 'const', 'mientras', 'DIV', 'EOF', 'NEQ', 'romper', 'intentar', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'OPENING_BRA', 'LESS', 'STRICT_NEQ', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA'}
+  expr_mult            expr_expo expr_mult_tail       {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  mult                 TIMES                          {'TIMES'}
+  mult                 DIV                            {'DIV'}
+  mult                 MOD                            {'MOD'}
+  expr_mult_tail       mult expr_expo expr_mult_tail  {'TIMES', 'MOD', 'DIV'}
+  expr_mult_tail       epsylon                        {'SEMICOLON', 'continuar', 'COLON', 'Infinito', 'indefinido', 'MINUS', 'POWER', 'elegir', 'retornar', 'falso', 'mut', 'PLUS', 'NuN', 'CLOSING_PAR', 'STRICT_EQUAL', 'GEQ', 'OPENING_KEY', 'TIMES', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'GREATER', 'nulo', 'IDENT', 'const', 'mientras', 'DIV', 'EOF', 'NEQ', 'romper', 'intentar', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'OPENING_BRA', 'LESS', 'STRICT_NEQ', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA'}
+  expr_expo            expr_group expr_expo_tail      {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  expr_expo_tail       POWER expr_expo                {'POWER'}
+  expr_expo_tail       epsylon                        {'SEMICOLON', 'continuar', 'COLON', 'Infinito', 'indefinido', 'MINUS', 'POWER', 'elegir', 'retornar', 'falso', 'mut', 'PLUS', 'NuN', 'CLOSING_PAR', 'STRICT_EQUAL', 'GEQ', 'OPENING_KEY', 'TIMES', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'GREATER', 'nulo', 'IDENT', 'const', 'mientras', 'DIV', 'EOF', 'NEQ', 'romper', 'intentar', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'OPENING_BRA', 'LESS', 'STRICT_NEQ', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA'}
+  expr_group           OPENING_PAR expr CLOSING_PAR   {'OPENING_PAR'}
+  expr_group           element                        {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NUMBER', 'NuN', 'nulo', 'IDENT'}
+  element              identifier                     {'IDENT'}
+  element              array                          {'OPENING_BRA'}
+  element              NUMBER                         {'NUMBER'}
+  element              STR                            {'STR'}
+  element              indefinido                     {'indefinido'}
+  element              verdadero                      {'verdadero'}
+  element              falso                          {'falso'}
+  element              nulo                           {'nulo'}
+  element              NuN                            {'NuN'}
+  element              Infinito                       {'Infinito'}
+  identifier           IDENT identifier_tail          {'IDENT'}
+  identifier_tail      ASSIGN expr                    {'ASSIGN'}
+  identifier_tail      call_args                      {'OPENING_PAR'}
+  identifier_tail      OPENING_BRA expr CLOSING_BRA identifier_tail {'OPENING_BRA'}
+  identifier_tail      PERIOD IDENT identifier_tail   {'PERIOD'}
+  identifier_tail      epsylon                        {'SEMICOLON', 'continuar', 'COLON', 'Infinito', 'indefinido', 'MINUS', 'POWER', 'elegir', 'retornar', 'falso', 'mut', 'PLUS', 'NuN', 'CLOSING_PAR', 'STRICT_EQUAL', 'GEQ', 'OPENING_KEY', 'TIMES', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'GREATER', 'nulo', 'IDENT', 'const', 'mientras', 'DIV', 'EOF', 'NEQ', 'romper', 'intentar', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'OPENING_BRA', 'LESS', 'STRICT_NEQ', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA'}
+  array                OPENING_BRA array_tail CLOSING_BRA {'OPENING_BRA'}
+  array_tail           expr more_array_tail           {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  array_tail           epsylon                        {'CLOSING_BRA'}
+  more_array_tail      COMMA array_tail               {'COMMA'}
+  more_array_tail      epsylon                        {'CLOSING_BRA'}
+  simple_expr          expr tail                      {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
 
 [2] PREDICCIÓN TOTAL POR NO TERMINAL
 
   No terminal          Pred. Set total
   -------------------- ------------------------------
-  start                {'verdadero', 'mut', 'IDENT', 'const', 'hacer', 'STR', 'NUMBER', 'var', 'DECREMENT', 'elegir', 'MINUS', 'OPENING_BRA', 'indefinido', 'PLUS', 'INCREMENT', 'intentar', 'mientras', 'funcion', 'consola', 'EOF', 'falso', 'SPREAD', 'OPENING_KEY', 'nulo', 'para', 'NOT', 'si', 'REGEX', 'OPENING_PAR'}
-  code_line            {'verdadero', 'mut', 'IDENT', 'const', 'hacer', 'STR', 'NUMBER', 'var', 'DECREMENT', 'elegir', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'mientras', 'intentar', 'consola', 'falso', 'SPREAD', 'OPENING_KEY', 'para', 'nulo', 'funcion', 'NOT', 'si', 'REGEX', 'OPENING_PAR'}
-  code_block           {'verdadero', 'mut', 'retornar', 'IDENT', 'const', 'hacer', 'STR', 'NUMBER', 'var', 'DECREMENT', 'elegir', 'MINUS', 'OPENING_BRA', 'indefinido', 'PLUS', 'INCREMENT', 'mientras', 'intentar', 'EOF', 'consola', 'CLOSING_KEY', 'falso', 'SPREAD', 'OPENING_KEY', 'nulo', 'para', 'funcion', 'NOT', 'si', 'REGEX', 'OPENING_PAR'}
-  declare_or_assign    {'const', 'mut', 'var'}
-  declare_or_assign_tail {'ASSIGN', 'SEMICOLON'}
-  expr_or_object       {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'OPENING_KEY', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  more_declare         {'COMMA', 'ASSIGN', 'SEMICOLON'}
-  var_type             {'const', 'mut', 'var'}
-  simple_assign        {'ASSIGN'}
-  assign_type          {'ARROW', 'PLUS_ASSIGN', 'POWER_ASSIGN', 'TIMES_ASSIGN', 'MOD_ASSIGN', 'ASSIGN', 'DIV_ASSIGN', 'MINUS_ASSIGN'}
-  expr                 {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  expr_assign          {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  expr_assign_tail     {'CLOSING_BRA', 'en', 'COMMA', 'OR', 'LESS', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'TERNARY', 'CLOSING_PAR', 'SEMICOLON', 'MINUS', 'PLUS', 'GREATER', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'EQUAL', 'AND', 'POWER', 'NEQ'}
-  expr_or_nullish      {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  expr_or_nullish_tail {'CLOSING_BRA', 'en', 'OR', 'COMMA', 'LESS', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'TERNARY', 'SEMICOLON', 'CLOSING_PAR', 'MINUS', 'PLUS', 'GREATER', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'EQUAL', 'AND', 'POWER', 'NEQ'}
-  or_nullish           {'OR', 'NULLISH'}
-  expr_and             {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  expr_and_tail        {'CLOSING_BRA', 'en', 'OR', 'COMMA', 'LESS', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'MINUS', 'SEMICOLON', 'GREATER', 'TERNARY', 'CLOSING_PAR', 'PLUS', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'EQUAL', 'AND', 'POWER', 'NEQ'}
-  expr_equality        {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  expr_equality_tail   {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'TERNARY', 'CLOSING_PAR', 'PLUS', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  equality             {'STRICT_NEQ', 'STRICT_EQUAL', 'EQUAL', 'NEQ'}
-  expr_rel             {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  expr_rel_tail        {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'TERNARY', 'CLOSING_PAR', 'PLUS', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  relational           {'GEQ', 'GREATER', 'en', 'instanciaDe', 'LESS', 'LEQ'}
-  expr_add             {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  expr_add_tail        {'CLOSING_BRA', 'en', 'OR', 'COMMA', 'LESS', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'MINUS', 'PLUS', 'SEMICOLON', 'GREATER', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'EQUAL', 'AND', 'POWER', 'NEQ'}
-  additive             {'MINUS', 'PLUS'}
-  expr_mul             {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  expr_mul_tail        {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  multiplicative       {'DIV', 'MOD', 'TIMES'}
-  expr_power           {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  expr_power_tail      {'CLOSING_BRA', 'en', 'OR', 'COMMA', 'LESS', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'MINUS', 'SEMICOLON', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'EQUAL', 'AND', 'POWER', 'NEQ'}
-  expr_prefix          {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'OPENING_BRA', 'indefinido', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  prefix               {'DECREMENT', 'MINUS', 'PLUS', 'NOT', 'INCREMENT'}
-  expr_postfix         {'verdadero', 'consola', 'IDENT', 'STR', 'NUMBER', 'falso', 'nulo', 'OPENING_BRA', 'indefinido', 'REGEX', 'OPENING_PAR'}
-  expr_postfix_tail    {'CLOSING_BRA', 'en', 'OR', 'COMMA', 'LESS', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'MINUS', 'SEMICOLON', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'EQUAL', 'AND', 'POWER', 'NEQ'}
-  postfix              {'DECREMENT', 'INCREMENT'}
-  expr_group           {'verdadero', 'consola', 'IDENT', 'STR', 'falso', 'NUMBER', 'nulo', 'OPENING_BRA', 'indefinido', 'REGEX', 'OPENING_PAR'}
-  call_args            {'OPENING_PAR'}
-  call_empty_args      {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'CLOSING_PAR', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  call_args_tail       {'COMMA', 'CLOSING_PAR'}
-  assignable           {'IDENT'}
-  assignable_tail      {'MOD_ASSIGN', 'DECREMENT', 'instanciaDe', 'MINUS', 'OPENING_BRA', 'SEMICOLON', 'TIMES_ASSIGN', 'ARROW', 'CLOSING_KEY', 'LEQ', 'COLON', 'MINUS_ASSIGN', 'OPENING_KEY', 'NULLISH', 'GEQ', 'PERIOD', 'DIV', 'MOD', 'LESS', 'POWER', 'DIV_ASSIGN', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS_ASSIGN', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'ASSIGN', 'INCREMENT', 'POWER_ASSIGN', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  element              {'verdadero', 'consola', 'IDENT', 'STR', 'falso', 'NUMBER', 'nulo', 'OPENING_BRA', 'indefinido', 'REGEX'}
-  element_access_tail  {'MOD_ASSIGN', 'DECREMENT', 'instanciaDe', 'MINUS', 'OPENING_BRA', 'SEMICOLON', 'TIMES_ASSIGN', 'ARROW', 'CLOSING_KEY', 'LEQ', 'COLON', 'MINUS_ASSIGN', 'OPENING_KEY', 'NULLISH', 'GEQ', 'PERIOD', 'DIV', 'MOD', 'LESS', 'POWER', 'DIV_ASSIGN', 'OPENING_PAR', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS_ASSIGN', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'ASSIGN', 'INCREMENT', 'POWER_ASSIGN', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  assignment_or_expr   {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'OPENING_KEY', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  arr_declare          {'OPENING_BRA'}
-  arr_declare_tail     {'COMMA', 'CLOSING_BRA'}
-  assignment_or_expr_tail {'MOD_ASSIGN', 'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'TIMES_ASSIGN', 'ARROW', 'CLOSING_KEY', 'LEQ', 'COLON', 'MINUS_ASSIGN', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'DIV_ASSIGN', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS_ASSIGN', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'ASSIGN', 'INCREMENT', 'POWER_ASSIGN', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  create_object        {'OPENING_KEY'}
-  fields               {'IDENT', 'CLOSING_KEY'}
-  field_body           {'COLON', 'OPENING_PAR'}
-  fields_tail          {'COMMA', 'CLOSING_KEY'}
+  start                {'Infinito', 'EOF', 'indefinido', 'elegir', 'falso', 'mut', 'NuN', 'intentar', 'funcion', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  code_block           {'Infinito', 'EOF', 'indefinido', 'elegir', 'falso', 'intentar', 'funcion', 'mut', 'NuN', 'si', 'consola', 'CLOSING_KEY', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  code_line            {'Infinito', 'indefinido', 'elegir', 'falso', 'mut', 'funcion', 'intentar', 'NuN', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
   console_use          {'consola'}
-  console_method       {'agrupar', 'afirmar', 'error', 'escribir', 'info', 'limpiar', 'tabla'}
+  console_method       {'limpiar', 'error', 'agrupar', 'info', 'afirmar', 'tabla', 'escribir'}
+  call_args            {'OPENING_PAR'}
+  call_empty_args      {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'CLOSING_PAR', 'nulo', 'IDENT'}
+  call_args_tail       {'COMMA', 'CLOSING_PAR'}
+  tail                 {'SEMICOLON', 'continuar', 'Infinito', 'EOF', 'indefinido', 'elegir', 'retornar', 'falso', 'romper', 'mut', 'NuN', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  simple_block         {'OPENING_KEY'}
+  declare_or_assign    {'mut', 'var', 'const'}
+  var_type             {'mut', 'var', 'const'}
+  more_declare         {'SEMICOLON', 'continuar', 'Infinito', 'EOF', 'indefinido', 'elegir', 'retornar', 'falso', 'romper', 'mut', 'NuN', 'ASSIGN', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'COMMA', 'nulo', 'IDENT', 'const', 'mientras'}
+  declare_or_assign_tail {'SEMICOLON', 'continuar', 'Infinito', 'EOF', 'indefinido', 'elegir', 'retornar', 'falso', 'romper', 'mut', 'NuN', 'ASSIGN', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  expr_or_object       {'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  create_object        {'OPENING_KEY'}
+  object_body          {'CLOSING_KEY', 'IDENT'}
+  object_body_tail     {'COMMA', 'CLOSING_KEY'}
+  object_entry         {'IDENT'}
+  object_entry_tail    {'OPENING_PAR', 'COLON'}
+  value                {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'OPENING_PAR', 'NUMBER', 'NuN', 'nulo', 'IDENT'}
+  arrow_function       {'ARROW'}
+  arrow_function_body  {'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
   conditional          {'si'}
-  conditional_alter    {'retornar', 'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'mientras', 'EOF', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'sino', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
+  conditional_alter    {'sino', 'continuar', 'Infinito', 'EOF', 'indefinido', 'elegir', 'retornar', 'falso', 'romper', 'mut', 'NuN', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
   conditional_alter_tail {'OPENING_KEY', 'si'}
   switch               {'elegir'}
-  cases                {'caso', 'porDefecto', 'CLOSING_KEY'}
-  default_case         {'porDefecto', 'CLOSING_KEY'}
+  cases                {'caso', 'CLOSING_KEY', 'porDefecto'}
+  default_case         {'CLOSING_KEY', 'porDefecto'}
+  simple_block_break_continue {'OPENING_KEY'}
+  code_block_break_continue {'continuar', 'Infinito', 'indefinido', 'elegir', 'falso', 'romper', 'mut', 'NuN', 'intentar', 'funcion', 'si', 'consola', 'CLOSING_KEY', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  code_line_break_continue {'continuar', 'Infinito', 'indefinido', 'elegir', 'falso', 'romper', 'intentar', 'funcion', 'mut', 'NuN', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  break                {'romper'}
+  continue             {'continuar'}
   for_loop             {'para'}
   while_loop           {'mientras'}
   do_while_loop        {'hacer'}
-  break                {'romper'}
-  continue             {'continuar'}
-  code_line_break_continue {'verdadero', 'mut', 'IDENT', 'const', 'hacer', 'STR', 'NUMBER', 'var', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'PLUS', 'INCREMENT', 'mientras', 'intentar', 'consola', 'romper', 'falso', 'SPREAD', 'OPENING_KEY', 'nulo', 'para', 'funcion', 'NOT', 'si', 'REGEX', 'OPENING_PAR'}
-  code_block_break_continue {'verdadero', 'mut', 'IDENT', 'const', 'hacer', 'STR', 'NUMBER', 'var', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'PLUS', 'INCREMENT', 'intentar', 'mientras', 'consola', 'CLOSING_KEY', 'romper', 'falso', 'SPREAD', 'OPENING_KEY', 'nulo', 'para', 'funcion', 'NOT', 'si', 'REGEX', 'OPENING_PAR'}
-  simple_block_break_continue {'OPENING_KEY'}
-  simple_block         {'OPENING_KEY'}
   function             {'funcion'}
-  return_stmt          {'retornar', 'CLOSING_KEY'}
-  return_stmt_tail     {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'SEMICOLON', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  simple_block_return  {'OPENING_KEY'}
-  params               {'IDENT', 'CLOSING_PAR'}
+  params               {'OPENING_PAR'}
+  empty_params         {'IDENT', 'CLOSING_PAR'}
   params_tail          {'COMMA', 'CLOSING_PAR'}
-  simple_expr          {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
+  simple_block_return  {'OPENING_KEY'}
+  code_block_return    {'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'intentar', 'funcion', 'si', 'consola', 'CLOSING_KEY', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  code_line_return     {'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'intentar', 'funcion', 'mut', 'NuN', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  return_tail          {'SEMICOLON', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
   try_catch            {'intentar'}
   catch                {'capturar'}
+  expr                 {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  expr_ternary         {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  expr_ternary_tail    {'SEMICOLON', 'continuar', 'COLON', 'Infinito', 'indefinido', 'MINUS', 'POWER', 'elegir', 'retornar', 'falso', 'mut', 'PLUS', 'NuN', 'CLOSING_PAR', 'STRICT_EQUAL', 'GEQ', 'OPENING_KEY', 'TIMES', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'GREATER', 'nulo', 'IDENT', 'const', 'mientras', 'DIV', 'EOF', 'NEQ', 'romper', 'intentar', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'verdadero', 'LEQ', 'OPENING_BRA', 'LESS', 'STRICT_NEQ', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA'}
+  expr_eq              {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  equality             {'EQUAL', 'STRICT_EQUAL', 'NEQ', 'STRICT_NEQ'}
+  expr_eq_tail         {'SEMICOLON', 'continuar', 'COLON', 'Infinito', 'indefinido', 'MINUS', 'POWER', 'elegir', 'retornar', 'falso', 'mut', 'PLUS', 'NuN', 'CLOSING_PAR', 'STRICT_EQUAL', 'GEQ', 'OPENING_KEY', 'TIMES', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'GREATER', 'nulo', 'IDENT', 'const', 'mientras', 'DIV', 'EOF', 'NEQ', 'romper', 'intentar', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'verdadero', 'LEQ', 'STRICT_NEQ', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA'}
+  expr_rel             {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  relational           {'LEQ', 'GREATER', 'LESS', 'GEQ'}
+  expr_rel_tail        {'SEMICOLON', 'continuar', 'COLON', 'Infinito', 'indefinido', 'MINUS', 'POWER', 'elegir', 'retornar', 'falso', 'mut', 'PLUS', 'NuN', 'CLOSING_PAR', 'STRICT_EQUAL', 'GEQ', 'OPENING_KEY', 'TIMES', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'GREATER', 'nulo', 'IDENT', 'const', 'mientras', 'DIV', 'EOF', 'NEQ', 'romper', 'intentar', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'OPENING_BRA', 'LESS', 'STRICT_NEQ', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA'}
+  expr_add             {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  add                  {'PLUS', 'MINUS'}
+  expr_add_tail        {'SEMICOLON', 'continuar', 'COLON', 'Infinito', 'indefinido', 'MINUS', 'POWER', 'elegir', 'retornar', 'falso', 'PLUS', 'mut', 'NuN', 'CLOSING_PAR', 'STRICT_EQUAL', 'GEQ', 'OPENING_KEY', 'TIMES', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'GREATER', 'nulo', 'IDENT', 'const', 'mientras', 'DIV', 'EOF', 'NEQ', 'romper', 'intentar', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'OPENING_BRA', 'LESS', 'STRICT_NEQ', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA'}
+  expr_mult            {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  mult                 {'TIMES', 'MOD', 'DIV'}
+  expr_mult_tail       {'SEMICOLON', 'continuar', 'COLON', 'Infinito', 'indefinido', 'MINUS', 'POWER', 'elegir', 'retornar', 'falso', 'mut', 'PLUS', 'NuN', 'CLOSING_PAR', 'STRICT_EQUAL', 'GEQ', 'OPENING_KEY', 'TIMES', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'GREATER', 'nulo', 'IDENT', 'const', 'mientras', 'DIV', 'EOF', 'NEQ', 'romper', 'intentar', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'OPENING_BRA', 'LESS', 'STRICT_NEQ', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA'}
+  expr_expo            {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  expr_expo_tail       {'SEMICOLON', 'continuar', 'COLON', 'Infinito', 'indefinido', 'MINUS', 'POWER', 'elegir', 'retornar', 'falso', 'mut', 'PLUS', 'NuN', 'CLOSING_PAR', 'STRICT_EQUAL', 'GEQ', 'OPENING_KEY', 'TIMES', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'GREATER', 'nulo', 'IDENT', 'const', 'mientras', 'DIV', 'EOF', 'NEQ', 'romper', 'intentar', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'OPENING_BRA', 'LESS', 'STRICT_NEQ', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA'}
+  expr_group           {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'OPENING_PAR', 'NUMBER', 'NuN', 'nulo', 'IDENT'}
+  element              {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NUMBER', 'NuN', 'nulo', 'IDENT'}
+  identifier           {'IDENT'}
+  identifier_tail      {'SEMICOLON', 'continuar', 'COLON', 'Infinito', 'indefinido', 'MINUS', 'POWER', 'elegir', 'retornar', 'falso', 'mut', 'PLUS', 'ASSIGN', 'NuN', 'CLOSING_PAR', 'STRICT_EQUAL', 'GEQ', 'OPENING_KEY', 'TIMES', 'STR', 'PERIOD', 'OPENING_PAR', 'para', 'TERNARY', 'GREATER', 'nulo', 'IDENT', 'const', 'mientras', 'DIV', 'EOF', 'NEQ', 'romper', 'intentar', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'OPENING_BRA', 'LESS', 'STRICT_NEQ', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA'}
+  array                {'OPENING_BRA'}
+  array_tail           {'verdadero', 'OPENING_BRA', 'STR', 'CLOSING_BRA', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  more_array_tail      {'COMMA', 'CLOSING_BRA'}
+  simple_expr          {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
 
 [3] CONJUNTOS PRIMEROS (FIRST)
 
-  FIRST(start             ) = {'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'mientras', 'EOF', 'consola', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FIRST(code_line         ) = {'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'MINUS', 'OPENING_BRA', 'indefinido', 'mientras', 'intentar', 'consola', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FIRST(code_block        ) = {'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'mientras', 'consola', 'OPENING_KEY', 'nulo', 'epsylon', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FIRST(declare_or_assign ) = {'const', 'mut', 'var'}
-  FIRST(declare_or_assign_tail) = {'epsylon', 'ASSIGN'}
-  FIRST(expr_or_object    ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'OPENING_KEY', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FIRST(more_declare      ) = {'COMMA', 'epsylon'}
-  FIRST(var_type          ) = {'const', 'mut', 'var'}
-  FIRST(simple_assign     ) = {'ASSIGN'}
-  FIRST(assign_type       ) = {'ARROW', 'PLUS_ASSIGN', 'POWER_ASSIGN', 'TIMES_ASSIGN', 'MOD_ASSIGN', 'ASSIGN', 'DIV_ASSIGN', 'MINUS_ASSIGN'}
-  FIRST(expr              ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FIRST(expr_assign       ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FIRST(expr_assign_tail  ) = {'epsylon', 'TERNARY'}
-  FIRST(expr_or_nullish   ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FIRST(expr_or_nullish_tail) = {'epsylon', 'NULLISH', 'OR'}
-  FIRST(or_nullish        ) = {'OR', 'NULLISH'}
-  FIRST(expr_and          ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FIRST(expr_and_tail     ) = {'epsylon', 'AND'}
-  FIRST(expr_equality     ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FIRST(expr_equality_tail) = {'STRICT_NEQ', 'EQUAL', 'epsylon', 'STRICT_EQUAL', 'NEQ'}
-  FIRST(equality          ) = {'STRICT_NEQ', 'STRICT_EQUAL', 'EQUAL', 'NEQ'}
-  FIRST(expr_rel          ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FIRST(expr_rel_tail     ) = {'GEQ', 'en', 'GREATER', 'instanciaDe', 'epsylon', 'LESS', 'LEQ'}
-  FIRST(relational        ) = {'GEQ', 'GREATER', 'en', 'instanciaDe', 'LESS', 'LEQ'}
-  FIRST(expr_add          ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FIRST(expr_add_tail     ) = {'epsylon', 'MINUS', 'PLUS'}
-  FIRST(additive          ) = {'MINUS', 'PLUS'}
-  FIRST(expr_mul          ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FIRST(expr_mul_tail     ) = {'epsylon', 'DIV', 'MOD', 'TIMES'}
-  FIRST(multiplicative    ) = {'DIV', 'MOD', 'TIMES'}
-  FIRST(expr_power        ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FIRST(expr_power_tail   ) = {'epsylon', 'POWER'}
-  FIRST(expr_prefix       ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FIRST(prefix            ) = {'DECREMENT', 'MINUS', 'PLUS', 'NOT', 'INCREMENT'}
-  FIRST(expr_postfix      ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'OPENING_BRA', 'indefinido', 'consola', 'falso', 'nulo', 'REGEX', 'OPENING_PAR'}
-  FIRST(expr_postfix_tail ) = {'epsylon', 'INCREMENT', 'DECREMENT'}
-  FIRST(postfix           ) = {'DECREMENT', 'INCREMENT'}
-  FIRST(expr_group        ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'OPENING_BRA', 'indefinido', 'consola', 'falso', 'nulo', 'REGEX', 'OPENING_PAR'}
-  FIRST(call_args         ) = {'OPENING_PAR'}
-  FIRST(call_empty_args   ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'CLOSING_PAR', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FIRST(call_args_tail    ) = {'COMMA', 'epsylon'}
-  FIRST(assignable        ) = {'IDENT'}
-  FIRST(assignable_tail   ) = {'epsylon', 'PERIOD', 'OPENING_BRA'}
-  FIRST(element           ) = {'verdadero', 'consola', 'IDENT', 'STR', 'falso', 'NUMBER', 'nulo', 'OPENING_BRA', 'indefinido', 'REGEX'}
-  FIRST(element_access_tail) = {'DIV_ASSIGN', 'ARROW', 'epsylon', 'MOD_ASSIGN', 'MINUS_ASSIGN', 'PERIOD', 'PLUS_ASSIGN', 'OPENING_BRA', 'TIMES_ASSIGN', 'ASSIGN', 'OPENING_PAR', 'POWER_ASSIGN'}
-  FIRST(assignment_or_expr) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'OPENING_KEY', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FIRST(arr_declare       ) = {'OPENING_BRA'}
-  FIRST(arr_declare_tail  ) = {'COMMA', 'epsylon'}
-  FIRST(assignment_or_expr_tail) = {'ARROW', 'epsylon', 'MOD_ASSIGN', 'MINUS_ASSIGN', 'PLUS_ASSIGN', 'TIMES_ASSIGN', 'ASSIGN', 'DIV_ASSIGN', 'POWER_ASSIGN'}
-  FIRST(create_object     ) = {'OPENING_KEY'}
-  FIRST(fields            ) = {'IDENT', 'epsylon'}
-  FIRST(field_body        ) = {'COLON', 'OPENING_PAR'}
-  FIRST(fields_tail       ) = {'COMMA', 'epsylon'}
+  FIRST(start             ) = {'Infinito', 'indefinido', 'elegir', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'intentar', 'funcion', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FIRST(code_block        ) = {'Infinito', 'indefinido', 'elegir', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'intentar', 'funcion', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'epsylon', 'NUMBER'}
+  FIRST(code_line         ) = {'Infinito', 'indefinido', 'elegir', 'falso', 'intentar', 'funcion', 'mut', 'NuN', 'si', 'consola', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
   FIRST(console_use       ) = {'consola'}
-  FIRST(console_method    ) = {'agrupar', 'afirmar', 'error', 'escribir', 'info', 'limpiar', 'tabla'}
+  FIRST(console_method    ) = {'limpiar', 'error', 'agrupar', 'info', 'afirmar', 'tabla', 'escribir'}
+  FIRST(call_args         ) = {'OPENING_PAR'}
+  FIRST(call_empty_args   ) = {'Infinito', 'indefinido', 'falso', 'NuN', 'verdadero', 'OPENING_BRA', 'STR', 'epsylon', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  FIRST(call_args_tail    ) = {'COMMA', 'epsylon'}
+  FIRST(tail              ) = {'SEMICOLON', 'epsylon'}
+  FIRST(simple_block      ) = {'OPENING_KEY'}
+  FIRST(declare_or_assign ) = {'mut', 'var', 'const'}
+  FIRST(var_type          ) = {'mut', 'var', 'const'}
+  FIRST(more_declare      ) = {'COMMA', 'epsylon'}
+  FIRST(declare_or_assign_tail) = {'ASSIGN', 'epsylon'}
+  FIRST(expr_or_object    ) = {'Infinito', 'indefinido', 'falso', 'NuN', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  FIRST(create_object     ) = {'OPENING_KEY'}
+  FIRST(object_body       ) = {'IDENT', 'epsylon'}
+  FIRST(object_body_tail  ) = {'COMMA', 'epsylon'}
+  FIRST(object_entry      ) = {'IDENT'}
+  FIRST(object_entry_tail ) = {'OPENING_PAR', 'COLON'}
+  FIRST(value             ) = {'Infinito', 'indefinido', 'falso', 'NuN', 'verdadero', 'OPENING_BRA', 'STR', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  FIRST(arrow_function    ) = {'ARROW'}
+  FIRST(arrow_function_body) = {'Infinito', 'indefinido', 'falso', 'NuN', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
   FIRST(conditional       ) = {'si'}
-  FIRST(conditional_alter ) = {'epsylon', 'sino'}
+  FIRST(conditional_alter ) = {'sino', 'epsylon'}
   FIRST(conditional_alter_tail) = {'OPENING_KEY', 'si'}
   FIRST(switch            ) = {'elegir'}
-  FIRST(cases             ) = {'epsylon', 'caso'}
-  FIRST(default_case      ) = {'epsylon', 'porDefecto'}
+  FIRST(cases             ) = {'caso', 'epsylon'}
+  FIRST(default_case      ) = {'porDefecto', 'epsylon'}
+  FIRST(simple_block_break_continue) = {'OPENING_KEY'}
+  FIRST(code_block_break_continue) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'romper', 'intentar', 'funcion', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'epsylon', 'NUMBER'}
+  FIRST(code_line_break_continue) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'romper', 'intentar', 'funcion', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FIRST(break             ) = {'romper'}
+  FIRST(continue          ) = {'continuar'}
   FIRST(for_loop          ) = {'para'}
   FIRST(while_loop        ) = {'mientras'}
   FIRST(do_while_loop     ) = {'hacer'}
-  FIRST(break             ) = {'romper'}
-  FIRST(continue          ) = {'continuar'}
-  FIRST(code_line_break_continue) = {'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'mientras', 'consola', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FIRST(code_block_break_continue) = {'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'mientras', 'intentar', 'consola', 'romper', 'OPENING_KEY', 'nulo', 'epsylon', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FIRST(simple_block_break_continue) = {'OPENING_KEY'}
-  FIRST(simple_block      ) = {'OPENING_KEY'}
   FIRST(function          ) = {'funcion'}
-  FIRST(return_stmt       ) = {'epsylon', 'retornar'}
-  FIRST(return_stmt_tail  ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'SEMICOLON', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
+  FIRST(params            ) = {'OPENING_PAR'}
+  FIRST(empty_params      ) = {'IDENT', 'CLOSING_PAR'}
+  FIRST(params_tail       ) = {'COMMA', 'CLOSING_PAR'}
   FIRST(simple_block_return) = {'OPENING_KEY'}
-  FIRST(params            ) = {'IDENT', 'epsylon'}
-  FIRST(params_tail       ) = {'COMMA', 'epsylon'}
-  FIRST(simple_expr       ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
+  FIRST(code_block_return ) = {'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'intentar', 'funcion', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'epsylon', 'NUMBER'}
+  FIRST(code_line_return  ) = {'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'intentar', 'funcion', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FIRST(return_tail       ) = {'Infinito', 'indefinido', 'falso', 'NuN', 'verdadero', 'OPENING_BRA', 'STR', 'epsylon', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
   FIRST(try_catch         ) = {'intentar'}
   FIRST(catch             ) = {'capturar'}
+  FIRST(expr              ) = {'Infinito', 'indefinido', 'falso', 'NuN', 'verdadero', 'OPENING_BRA', 'STR', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  FIRST(expr_ternary      ) = {'Infinito', 'indefinido', 'falso', 'NuN', 'verdadero', 'OPENING_BRA', 'STR', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  FIRST(expr_ternary_tail ) = {'TERNARY', 'epsylon'}
+  FIRST(expr_eq           ) = {'Infinito', 'indefinido', 'falso', 'NuN', 'verdadero', 'OPENING_BRA', 'STR', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  FIRST(equality          ) = {'EQUAL', 'STRICT_EQUAL', 'NEQ', 'STRICT_NEQ'}
+  FIRST(expr_eq_tail      ) = {'NEQ', 'STRICT_NEQ', 'EQUAL', 'STRICT_EQUAL', 'epsylon'}
+  FIRST(expr_rel          ) = {'Infinito', 'indefinido', 'falso', 'NuN', 'verdadero', 'OPENING_BRA', 'STR', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  FIRST(relational        ) = {'LEQ', 'GREATER', 'LESS', 'GEQ'}
+  FIRST(expr_rel_tail     ) = {'LEQ', 'LESS', 'GREATER', 'GEQ', 'epsylon'}
+  FIRST(expr_add          ) = {'Infinito', 'indefinido', 'falso', 'NuN', 'verdadero', 'OPENING_BRA', 'STR', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  FIRST(add               ) = {'PLUS', 'MINUS'}
+  FIRST(expr_add_tail     ) = {'PLUS', 'MINUS', 'epsylon'}
+  FIRST(expr_mult         ) = {'Infinito', 'indefinido', 'falso', 'NuN', 'verdadero', 'OPENING_BRA', 'STR', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  FIRST(mult              ) = {'TIMES', 'MOD', 'DIV'}
+  FIRST(expr_mult_tail    ) = {'TIMES', 'MOD', 'DIV', 'epsylon'}
+  FIRST(expr_expo         ) = {'Infinito', 'indefinido', 'falso', 'NuN', 'verdadero', 'OPENING_BRA', 'STR', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  FIRST(expr_expo_tail    ) = {'POWER', 'epsylon'}
+  FIRST(expr_group        ) = {'Infinito', 'indefinido', 'falso', 'NuN', 'verdadero', 'OPENING_BRA', 'STR', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  FIRST(element           ) = {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NUMBER', 'NuN', 'nulo', 'IDENT'}
+  FIRST(identifier        ) = {'IDENT'}
+  FIRST(identifier_tail   ) = {'OPENING_BRA', 'OPENING_PAR', 'ASSIGN', 'PERIOD', 'epsylon'}
+  FIRST(array             ) = {'OPENING_BRA'}
+  FIRST(array_tail        ) = {'Infinito', 'indefinido', 'falso', 'NuN', 'verdadero', 'OPENING_BRA', 'STR', 'epsylon', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  FIRST(more_array_tail   ) = {'COMMA', 'epsylon'}
+  FIRST(simple_expr       ) = {'Infinito', 'indefinido', 'falso', 'NuN', 'verdadero', 'OPENING_BRA', 'STR', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
 
 [4] CONJUNTOS SIGUIENTES (FOLLOW)
 
   FOLLOW(start            ) = {'EOF'}
-  FOLLOW(code_line        ) = {'retornar', 'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'mientras', 'EOF', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FOLLOW(code_block       ) = {'retornar', 'EOF', 'CLOSING_KEY'}
-  FOLLOW(declare_or_assign) = {'retornar', 'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'mientras', 'EOF', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FOLLOW(declare_or_assign_tail) = {'SEMICOLON'}
-  FOLLOW(expr_or_object   ) = {'SEMICOLON'}
-  FOLLOW(more_declare     ) = {'ASSIGN', 'SEMICOLON'}
-  FOLLOW(var_type         ) = {'IDENT'}
-  FOLLOW(simple_assign    ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'OPENING_KEY', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FOLLOW(assign_type      ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'SPREAD', 'OPENING_KEY', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FOLLOW(expr             ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'COMMA', 'OR', 'STRICT_NEQ', 'GREATER', 'CLOSING_PAR', 'PLUS', 'TERNARY', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(expr_assign      ) = {'CLOSING_BRA', 'en', 'COMMA', 'OR', 'LESS', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'CLOSING_PAR', 'SEMICOLON', 'MINUS', 'PLUS', 'GREATER', 'TERNARY', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'EQUAL', 'AND', 'POWER', 'NEQ'}
-  FOLLOW(expr_assign_tail ) = {'CLOSING_BRA', 'en', 'COMMA', 'OR', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'CLOSING_PAR', 'SEMICOLON', 'MINUS', 'PLUS', 'GREATER', 'TERNARY', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'AND', 'DIV', 'MOD', 'EQUAL', 'LESS', 'POWER', 'NEQ'}
-  FOLLOW(expr_or_nullish  ) = {'CLOSING_BRA', 'en', 'COMMA', 'OR', 'LESS', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'TERNARY', 'SEMICOLON', 'CLOSING_PAR', 'MINUS', 'PLUS', 'GREATER', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'EQUAL', 'AND', 'POWER', 'NEQ'}
-  FOLLOW(expr_or_nullish_tail) = {'CLOSING_BRA', 'en', 'COMMA', 'OR', 'DECREMENT', 'STRICT_NEQ', 'instanciaDe', 'TERNARY', 'SEMICOLON', 'CLOSING_PAR', 'MINUS', 'PLUS', 'GREATER', 'STRICT_EQUAL', 'INCREMENT', 'CLOSING_KEY', 'LEQ', 'COLON', 'TIMES', 'OPENING_KEY', 'NULLISH', 'GEQ', 'AND', 'DIV', 'MOD', 'EQUAL', 'LESS', 'POWER', 'NEQ'}
-  FOLLOW(or_nullish       ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FOLLOW(expr_and         ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'TERNARY', 'CLOSING_PAR', 'PLUS', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(expr_and_tail    ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'TERNARY', 'CLOSING_PAR', 'PLUS', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(expr_equality    ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'TERNARY', 'CLOSING_PAR', 'PLUS', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(expr_equality_tail) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'TERNARY', 'CLOSING_PAR', 'PLUS', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(equality         ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FOLLOW(expr_rel         ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'TERNARY', 'CLOSING_PAR', 'PLUS', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(expr_rel_tail    ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'TERNARY', 'CLOSING_PAR', 'PLUS', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(relational       ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FOLLOW(expr_add         ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'TERNARY', 'CLOSING_PAR', 'PLUS', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(expr_add_tail    ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'TERNARY', 'CLOSING_PAR', 'PLUS', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(additive         ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FOLLOW(expr_mul         ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(expr_mul_tail    ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(multiplicative   ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FOLLOW(expr_power       ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(expr_power_tail  ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(expr_prefix      ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(prefix           ) = {'verdadero', 'IDENT', 'STR', 'NUMBER', 'DECREMENT', 'MINUS', 'PLUS', 'indefinido', 'OPENING_BRA', 'INCREMENT', 'consola', 'falso', 'nulo', 'NOT', 'REGEX', 'OPENING_PAR'}
-  FOLLOW(expr_postfix     ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(expr_postfix_tail) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(postfix          ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(expr_group       ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(call_args        ) = {'MOD_ASSIGN', 'DECREMENT', 'instanciaDe', 'MINUS', 'OPENING_BRA', 'SEMICOLON', 'TIMES_ASSIGN', 'ARROW', 'CLOSING_KEY', 'LEQ', 'COLON', 'MINUS_ASSIGN', 'OPENING_KEY', 'NULLISH', 'GEQ', 'PERIOD', 'DIV', 'MOD', 'LESS', 'POWER', 'DIV_ASSIGN', 'OPENING_PAR', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS_ASSIGN', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'ASSIGN', 'INCREMENT', 'POWER_ASSIGN', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(call_empty_args  ) = {'MOD_ASSIGN', 'DECREMENT', 'instanciaDe', 'MINUS', 'OPENING_BRA', 'SEMICOLON', 'TIMES_ASSIGN', 'ARROW', 'CLOSING_KEY', 'LEQ', 'COLON', 'MINUS_ASSIGN', 'OPENING_KEY', 'NULLISH', 'GEQ', 'PERIOD', 'DIV', 'MOD', 'LESS', 'POWER', 'DIV_ASSIGN', 'OPENING_PAR', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS_ASSIGN', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'ASSIGN', 'INCREMENT', 'POWER_ASSIGN', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(call_args_tail   ) = {'CLOSING_PAR'}
-  FOLLOW(assignable       ) = {'MOD_ASSIGN', 'TIMES_ASSIGN', 'OPENING_KEY', 'NULLISH', 'MOD', 'POWER', 'DIV_ASSIGN', 'CLOSING_BRA', 'OR', 'COMMA', 'STRICT_NEQ', 'PLUS_ASSIGN', 'PLUS', 'TERNARY', 'STRICT_EQUAL', 'ASSIGN', 'INCREMENT', 'POWER_ASSIGN', 'EQUAL', 'AND', 'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'ARROW', 'CLOSING_KEY', 'LEQ', 'COLON', 'MINUS_ASSIGN', 'GEQ', 'DIV', 'LESS', 'en', 'GREATER', 'CLOSING_PAR', 'TIMES', 'NEQ'}
-  FOLLOW(assignable_tail  ) = {'MOD_ASSIGN', 'TIMES_ASSIGN', 'OPENING_KEY', 'NULLISH', 'MOD', 'POWER', 'DIV_ASSIGN', 'CLOSING_BRA', 'OR', 'COMMA', 'STRICT_NEQ', 'PLUS_ASSIGN', 'PLUS', 'TERNARY', 'STRICT_EQUAL', 'ASSIGN', 'INCREMENT', 'POWER_ASSIGN', 'EQUAL', 'AND', 'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'ARROW', 'CLOSING_KEY', 'LEQ', 'COLON', 'MINUS_ASSIGN', 'GEQ', 'DIV', 'LESS', 'en', 'GREATER', 'CLOSING_PAR', 'TIMES', 'NEQ'}
-  FOLLOW(element          ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(element_access_tail) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(assignment_or_expr) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(arr_declare      ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(arr_declare_tail ) = {'CLOSING_BRA'}
-  FOLLOW(assignment_or_expr_tail) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(create_object    ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
-  FOLLOW(fields           ) = {'CLOSING_KEY'}
-  FOLLOW(field_body       ) = {'COMMA', 'CLOSING_KEY'}
-  FOLLOW(fields_tail      ) = {'CLOSING_KEY'}
-  FOLLOW(console_use      ) = {'DECREMENT', 'instanciaDe', 'MINUS', 'SEMICOLON', 'CLOSING_KEY', 'LEQ', 'COLON', 'OPENING_KEY', 'NULLISH', 'GEQ', 'DIV', 'MOD', 'LESS', 'POWER', 'CLOSING_BRA', 'en', 'OR', 'COMMA', 'STRICT_NEQ', 'GREATER', 'PLUS', 'TERNARY', 'CLOSING_PAR', 'STRICT_EQUAL', 'INCREMENT', 'TIMES', 'EQUAL', 'AND', 'NEQ'}
+  FOLLOW(code_block       ) = {'EOF', 'CLOSING_KEY'}
+  FOLLOW(code_line        ) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FOLLOW(console_use      ) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
   FOLLOW(console_method   ) = {'OPENING_PAR'}
-  FOLLOW(conditional      ) = {'retornar', 'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'mientras', 'EOF', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FOLLOW(conditional_alter) = {'retornar', 'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'mientras', 'EOF', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FOLLOW(conditional_alter_tail) = {'retornar', 'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'mientras', 'EOF', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FOLLOW(switch           ) = {'retornar', 'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'mientras', 'EOF', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FOLLOW(cases            ) = {'porDefecto', 'CLOSING_KEY'}
+  FOLLOW(call_args        ) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'verdadero', 'LEQ', 'STRICT_NEQ'}
+  FOLLOW(call_empty_args  ) = {'CLOSING_PAR'}
+  FOLLOW(call_args_tail   ) = {'CLOSING_PAR'}
+  FOLLOW(tail             ) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FOLLOW(simple_block     ) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'sino', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER', 'COMMA', 'capturar'}
+  FOLLOW(declare_or_assign) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FOLLOW(var_type         ) = {'IDENT'}
+  FOLLOW(more_declare     ) = {'SEMICOLON', 'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'ASSIGN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FOLLOW(declare_or_assign_tail) = {'SEMICOLON', 'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FOLLOW(expr_or_object   ) = {'SEMICOLON', 'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FOLLOW(create_object    ) = {'SEMICOLON', 'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FOLLOW(object_body      ) = {'CLOSING_KEY'}
+  FOLLOW(object_body_tail ) = {'CLOSING_KEY'}
+  FOLLOW(object_entry     ) = {'COMMA', 'CLOSING_KEY'}
+  FOLLOW(object_entry_tail) = {'COMMA', 'CLOSING_KEY'}
+  FOLLOW(value            ) = {'COMMA', 'CLOSING_KEY'}
+  FOLLOW(arrow_function   ) = {'COMMA', 'CLOSING_KEY'}
+  FOLLOW(arrow_function_body) = {'COMMA', 'CLOSING_KEY'}
+  FOLLOW(conditional      ) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FOLLOW(conditional_alter) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FOLLOW(conditional_alter_tail) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FOLLOW(switch           ) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FOLLOW(cases            ) = {'CLOSING_KEY', 'porDefecto'}
   FOLLOW(default_case     ) = {'CLOSING_KEY'}
-  FOLLOW(for_loop         ) = {'retornar', 'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'mientras', 'EOF', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FOLLOW(while_loop       ) = {'retornar', 'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'mientras', 'EOF', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FOLLOW(do_while_loop    ) = {'retornar', 'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'mientras', 'EOF', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FOLLOW(break            ) = {'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'mientras', 'intentar', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FOLLOW(continue         ) = {'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'mientras', 'intentar', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FOLLOW(code_line_break_continue) = {'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'mientras', 'intentar', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
+  FOLLOW(simple_block_break_continue) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'porDefecto', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'caso', 'CLOSING_KEY', 'intentar', 'funcion', 'romper', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
   FOLLOW(code_block_break_continue) = {'CLOSING_KEY'}
-  FOLLOW(simple_block_break_continue) = {'retornar', 'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'mientras', 'intentar', 'EOF', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'caso', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si', 'porDefecto'}
-  FOLLOW(simple_block     ) = {'mut', 'elegir', 'continuar', 'mientras', 'romper', 'OPENING_KEY', 'nulo', 'NOT', 'verdadero', 'capturar', 'PLUS', 'INCREMENT', 'SPREAD', 'para', 'retornar', 'hacer', 'STR', 'DECREMENT', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'EOF', 'consola', 'CLOSING_KEY', 'funcion', 'REGEX', 'OPENING_PAR', 'sino', 'IDENT', 'const', 'NUMBER', 'var', 'falso', 'si'}
-  FOLLOW(function         ) = {'retornar', 'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'mientras', 'EOF', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FOLLOW(return_stmt      ) = {'CLOSING_KEY'}
-  FOLLOW(return_stmt_tail ) = {'CLOSING_KEY'}
-  FOLLOW(simple_block_return) = {'mut', 'elegir', 'continuar', 'mientras', 'romper', 'OPENING_KEY', 'nulo', 'NOT', 'verdadero', 'COMMA', 'PLUS', 'INCREMENT', 'SPREAD', 'para', 'retornar', 'hacer', 'STR', 'DECREMENT', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'EOF', 'consola', 'CLOSING_KEY', 'funcion', 'REGEX', 'OPENING_PAR', 'IDENT', 'const', 'NUMBER', 'var', 'falso', 'si'}
-  FOLLOW(params           ) = {'CLOSING_PAR'}
-  FOLLOW(params_tail      ) = {'CLOSING_PAR'}
-  FOLLOW(simple_expr      ) = {'retornar', 'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'mientras', 'EOF', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FOLLOW(try_catch        ) = {'retornar', 'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'mientras', 'EOF', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
-  FOLLOW(catch            ) = {'retornar', 'mut', 'hacer', 'STR', 'DECREMENT', 'elegir', 'continuar', 'MINUS', 'OPENING_BRA', 'indefinido', 'intentar', 'mientras', 'EOF', 'consola', 'CLOSING_KEY', 'romper', 'OPENING_KEY', 'nulo', 'funcion', 'NOT', 'REGEX', 'OPENING_PAR', 'verdadero', 'IDENT', 'const', 'NUMBER', 'var', 'PLUS', 'INCREMENT', 'falso', 'SPREAD', 'para', 'si'}
+  FOLLOW(code_line_break_continue) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'falso', 'romper', 'mut', 'NuN', 'intentar', 'funcion', 'si', 'consola', 'CLOSING_KEY', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  FOLLOW(break            ) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'falso', 'romper', 'mut', 'NuN', 'intentar', 'funcion', 'si', 'consola', 'CLOSING_KEY', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  FOLLOW(continue         ) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'falso', 'romper', 'mut', 'NuN', 'intentar', 'funcion', 'si', 'consola', 'CLOSING_KEY', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  FOLLOW(for_loop         ) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FOLLOW(while_loop       ) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FOLLOW(do_while_loop    ) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FOLLOW(function         ) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FOLLOW(params           ) = {'OPENING_KEY', 'ARROW'}
+  FOLLOW(empty_params     ) = {'OPENING_KEY', 'ARROW'}
+  FOLLOW(params_tail      ) = {'OPENING_KEY', 'ARROW'}
+  FOLLOW(simple_block_return) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'CLOSING_KEY', 'intentar', 'funcion', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER', 'COMMA'}
+  FOLLOW(code_block_return) = {'CLOSING_KEY'}
+  FOLLOW(code_line_return ) = {'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'intentar', 'funcion', 'si', 'consola', 'CLOSING_KEY', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  FOLLOW(return_tail      ) = {'SEMICOLON', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'intentar', 'funcion', 'si', 'consola', 'CLOSING_KEY', 'var', 'verdadero', 'OPENING_KEY', 'OPENING_BRA', 'STR', 'hacer', 'OPENING_PAR', 'para', 'NUMBER', 'nulo', 'IDENT', 'const', 'mientras'}
+  FOLLOW(try_catch        ) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FOLLOW(catch            ) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
+  FOLLOW(expr             ) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'verdadero', 'LEQ', 'STRICT_NEQ'}
+  FOLLOW(expr_ternary     ) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'verdadero', 'LEQ', 'STRICT_NEQ'}
+  FOLLOW(expr_ternary_tail) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'verdadero', 'LEQ', 'STRICT_NEQ'}
+  FOLLOW(expr_eq          ) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'verdadero', 'LEQ', 'STRICT_NEQ'}
+  FOLLOW(equality         ) = {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  FOLLOW(expr_eq_tail     ) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'verdadero', 'LEQ', 'STRICT_NEQ'}
+  FOLLOW(expr_rel         ) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'verdadero', 'LEQ', 'STRICT_NEQ'}
+  FOLLOW(relational       ) = {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  FOLLOW(expr_rel_tail    ) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'verdadero', 'LEQ', 'STRICT_NEQ'}
+  FOLLOW(expr_add         ) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'STRICT_NEQ'}
+  FOLLOW(add              ) = {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  FOLLOW(expr_add_tail    ) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'STRICT_NEQ'}
+  FOLLOW(expr_mult        ) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'STRICT_NEQ'}
+  FOLLOW(mult             ) = {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  FOLLOW(expr_mult_tail   ) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'STRICT_NEQ'}
+  FOLLOW(expr_expo        ) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'STRICT_NEQ'}
+  FOLLOW(expr_expo_tail   ) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'STRICT_NEQ'}
+  FOLLOW(expr_group       ) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'STRICT_NEQ'}
+  FOLLOW(element          ) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'STRICT_NEQ'}
+  FOLLOW(identifier       ) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'STRICT_NEQ'}
+  FOLLOW(identifier_tail  ) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'STRICT_NEQ'}
+  FOLLOW(array            ) = {'SEMICOLON', 'COLON', 'indefinido', 'MINUS', 'POWER', 'retornar', 'mut', 'CLOSING_PAR', 'STRICT_EQUAL', 'OPENING_KEY', 'TIMES', 'GREATER', 'mientras', 'NEQ', 'romper', 'intentar', 'OPENING_BRA', 'LESS', 'CLOSING_BRA', 'hacer', 'NUMBER', 'MOD', 'EQUAL', 'COMMA', 'continuar', 'Infinito', 'elegir', 'falso', 'PLUS', 'NuN', 'GEQ', 'STR', 'OPENING_PAR', 'para', 'TERNARY', 'nulo', 'IDENT', 'const', 'DIV', 'EOF', 'CLOSING_KEY', 'funcion', 'si', 'consola', 'var', 'LEQ', 'verdadero', 'STRICT_NEQ'}
+  FOLLOW(array_tail       ) = {'CLOSING_BRA'}
+  FOLLOW(more_array_tail  ) = {'CLOSING_BRA'}
+  FOLLOW(simple_expr      ) = {'continuar', 'Infinito', 'indefinido', 'elegir', 'retornar', 'falso', 'mut', 'NuN', 'OPENING_KEY', 'STR', 'OPENING_PAR', 'para', 'nulo', 'IDENT', 'const', 'mientras', 'EOF', 'romper', 'intentar', 'funcion', 'CLOSING_KEY', 'si', 'consola', 'var', 'verdadero', 'OPENING_BRA', 'hacer', 'NUMBER'}
 
 [5] CONFLICTOS
 
-  ⚠  expr_assign_tail
-  ⚠  expr_or_nullish_tail
-  ⚠  expr_and_tail
-  ⚠  expr_equality_tail
-  ⚠  expr_rel_tail
-  ⚠  expr_add_tail
-  ⚠  expr_mul_tail
-  ⚠  expr_power_tail
-  ⚠  expr_postfix_tail
-  ⚠  assignment_or_expr
+  ⚠  return_tail = {'verdadero', 'OPENING_BRA', 'STR', 'Infinito', 'indefinido', 'falso', 'NuN', 'OPENING_PAR', 'NUMBER', 'nulo', 'IDENT'}
+  ⚠  expr_ternary_tail = {'TERNARY'}
+  ⚠  expr_eq_tail = {'EQUAL', 'STRICT_EQUAL', 'NEQ', 'STRICT_NEQ'}
+  ⚠  expr_rel_tail = {'LEQ', 'GREATER', 'LESS', 'GEQ'}
+  ⚠  expr_add_tail = {'PLUS', 'MINUS'}
+  ⚠  expr_mult_tail = {'TIMES', 'MOD', 'DIV'}
+  ⚠  expr_expo_tail = {'POWER'}
+  ⚠  identifier_tail = {'OPENING_BRA', 'OPENING_PAR'}
 
 ============================================================

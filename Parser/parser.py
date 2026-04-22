@@ -156,28 +156,23 @@ class Parser:
         for rule in no_terminal_values["rules"]:
             if self.token.kind in rule["pred_set"]:
                 symbols = [s for s in rule["rule"] if s != "epsylon"]
-                
-                for i, symbol in enumerate(symbols):
-                    # Lo que viene después de este símbolo en esta regla
-                    rest = symbols[i+1:]
-                    first_rest = self.grammar.first_of_sequence(rest) if rest else {"epsylon"}
-                    
-                    if "epsylon" in first_rest:
-                        # Si el resto puede ser vacío, el follow local incluye
-                        # el follow que nos pasó el llamador
-                        local_follow = (first_rest - {"epsylon"}) | (follow or set())
-                    else:
-                        local_follow = first_rest
-                    
-                    self.assign_symbol(symbol, follow=local_follow)
+                for symbol in symbols:
+                    self.assign_symbol(symbol)  # ← sin propagar follow dinámico
                 return
         
-        follow = set()
-        for rule in no_terminal_values["rules"]:
-            follow.update(rule["pred_set"])
-        error_set = follow if follow is not None else no_terminal_values["total_pred_set"]
-        self.sintax_error(list(error_set))
-    
+        # Ninguna regla matchea
+        has_epsilon = any("epsylon" in rule["rule"] for rule in no_terminal_values["rules"])
+        
+        if has_epsilon:
+            # Verificar con el FOLLOW formal calculado
+            formal_follow = self.grammar.follow_set[no_terminal]
+            if self.token.kind in formal_follow:
+                return  # epsilon válido
+            else:
+                self.sintax_error(list(formal_follow))  # reporta FOLLOW formal
+        else:
+            self.sintax_error(list(no_terminal_values["total_pred_set"]))
+        
     def pair_terminals(self, expected_token):
         if self.token.kind == expected_token:
             if expected_token == "EOF":
@@ -188,6 +183,7 @@ class Parser:
             
     def sintax_error(self, expected_token):
         if self.token.kind == "EOF": self.token.lexeme = "final de archivo"
+        if self.token.kind == "STR": self.token.lexeme = self.token.lexeme[1:-1]
         if isinstance(expected_token, list):
             expected_token = [TOKEN_KIND_REPR[e] if e in TOKEN_KIND_REPR else e for e in expected_token]
             expected_token.sort()

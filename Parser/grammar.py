@@ -2,7 +2,13 @@ GRAMMAR = {
     "start": [
         ["code_block", "EOF"],
     ],
+    "code_block": [
+        ["code_line", "code_block"],
+        ["epsylon"]
+    ],
     "code_line": [
+        ["console_use"],
+        ["simple_block"],
         ["declare_or_assign"],
         ["conditional"],
         ["switch"],
@@ -10,240 +16,11 @@ GRAMMAR = {
         ["while_loop"],
         ["do_while_loop"],
         ["function"],
-        ["simple_expr"],
         ["try_catch"],
-        ["simple_block"],
-    ],
-    "code_block": [
-        ["code_line", "code_block"],
-        ["epsylon"]
-    ],
-    "declare_or_assign": [
-        ["var_type", "IDENT", "more_declare","declare_or_assign_tail", "SEMICOLON"],
-    ],
-    "declare_or_assign_tail": [
-        ["simple_assign", "expr_or_object"],
-        ["epsylon"]
-    ],
-    "expr_or_object": [
-        ["create_object"],
-        ["expr"]
-    ],
-    "more_declare": [
-        ["COMMA", "IDENT", "more_declare"],
-        ["epsylon"]
-    ],
-    "var_type": [
-        ["mut"],
-        ["var"],
-        ["const"],
-    ],
-    "simple_assign": [
-        ["ASSIGN"],
-    ],
-    "assign_type": [
-        ["ASSIGN"],
-        ["PLUS_ASSIGN"],
-        ["MINUS_ASSIGN"],
-        ["TIMES_ASSIGN"],
-        ["DIV_ASSIGN"],
-        ["MOD_ASSIGN"],
-        ["POWER_ASSIGN"],
-        ["ARROW"],
-    ],
-    "expr": [
-        ["expr_assign"],
-    ],
-    "expr_assign": [
-        ["expr_or_nullish", "expr_assign_tail"],
-        ["SPREAD", "expr_or_nullish", "expr_assign_tail"],  # spread
-    ],
-    "expr_assign_tail": [
-        ["TERNARY", "expr_assign", "COLON", "expr_assign"],
-        ["epsylon"]                        # si no, termina
-    ],
-    "expr_or_nullish": [
-        ["expr_and", "expr_or_nullish_tail"],
-    ],
-    "expr_or_nullish_tail": [
-        ["or_nullish", "expr_and", "expr_or_nullish_tail"],
-        ["epsylon"]
-    ],
-    "or_nullish": [
-        ["OR"],
-        ["NULLISH"],
-    ],
-    "expr_and": [
-        ["expr_equality", "expr_and_tail"],
-    ],
-    "expr_and_tail": [
-        ["AND", "expr_equality", "expr_and_tail"],
-        ["epsylon"]
-    ],
-    "expr_equality": [
-        ["expr_rel", "expr_equality_tail"],
-    ],
-    "expr_equality_tail": [
-        ["equality", "expr_rel", "expr_equality_tail"],
-        ["epsylon"]
-    ],
-    "equality": [
-        ["EQUAL"],
-        ["NEQ"],
-        ["STRICT_EQUAL"],
-        ["STRICT_NEQ"],
-    ],
-    "expr_rel": [
-        ["expr_add", "expr_rel_tail"],
-    ],
-    "expr_rel_tail": [
-        ["relational", "expr_add", "expr_rel_tail"],
-        ["epsylon"]
-    ],
-    "relational": [
-        ["LESS"],
-        ["LEQ"],
-        ["GREATER"],
-        ["GEQ"],
-        ["en"],
-        ["instanciaDe"],
-    ],
-    "expr_add": [
-        ["expr_mul", "expr_add_tail"],
-    ],
-    "expr_add_tail": [
-        ["additive", "expr_mul", "expr_add_tail"],
-        ["epsylon"]
-    ],
-    "additive": [
-        ["PLUS"],
-        ["MINUS"],
-    ],
-    "expr_mul": [
-        ["expr_power", "expr_mul_tail"],
-    ],
-    "expr_mul_tail": [
-        ["multiplicative", "expr_power", "expr_mul_tail"],
-        ["epsylon"]
-    ],
-    "multiplicative": [
-        ["TIMES"],
-        ["DIV"],
-        ["MOD"],
-    ],
-    "expr_power": [
-        ["expr_prefix", "expr_power_tail"],
-    ],
-    "expr_power_tail": [
-        ["POWER", "expr_power"],   # right-associative → recursa en expr_power
-        ["epsylon"]
-    ],
-    "expr_prefix": [
-        ["prefix", "expr_prefix"],
-        ["expr_postfix"],
-    ],
-    "prefix": [
-        ["NOT"],
-        ["MINUS"],
-        ["PLUS"],
-        ["INCREMENT"],
-        ["DECREMENT"],
-    ],
-    "expr_postfix": [
-        ["expr_group", "expr_postfix_tail"]
-    ],
-    "expr_postfix_tail": [
-        ["postfix", "expr_postfix_tail"],
-        ["epsylon"]
-    ],
-    "postfix": [
-        ["INCREMENT"],
-        ["DECREMENT"],
-    ],
-    "expr_group": [
-        ["OPENING_PAR", "expr", "CLOSING_PAR"],
-        ["element"],
-    ],
-    "call_args": [
-        ["OPENING_PAR", "call_empty_args"],
-    ],
-    "call_empty_args": [
-        ["CLOSING_PAR"],
-        ["expr", "call_args_tail", "CLOSING_PAR"]
-    ],
-    "call_args_tail": [
-        ["COMMA", "expr", "call_args_tail"],
-        ["epsylon"]
-    ],
-    # Solo lo que puede recibir asignación (izquierda del =)
-    "assignable": [
-        ["IDENT", "assignable_tail"],
-    ],
-    "assignable_tail": [
-        ["PERIOD", "IDENT", "assignable_tail"],                      # obj.prop
-        ["OPENING_BRA", "expr", "CLOSING_BRA", "assignable_tail"],  # arr[0]
-        ["epsylon"]
-    ],
-
-    # Todo lo que puede ser elemento (incluye llamadas)
-    "element": [
-        ["console_use"],
-        ["IDENT", "element_access_tail"],   # cubre acceso, llamada y asignación
-        ["NUMBER"],
-        ["STR"],
-        ["REGEX"],
-        ["arr_declare"],
-        ["verdadero"],
-        ["falso"],
-        ["nulo"],
-        ["indefinido"],
-    ],
-    "element_access_tail": [
-        ["PERIOD", "IDENT", "element_access_tail"],                      # obj.prop
-        ["OPENING_BRA", "expr", "CLOSING_BRA", "element_access_tail"],  # arr[0]
-        ["call_args", "element_access_tail"],  # func()
-        ["assign_type", "assignment_or_expr"],                           # x = ...
-        ["epsylon"]                                                      # solo ident
-    ],
-    # Lado derecho de una asignación
-    "assignment_or_expr": [
-        ["assignable", "assignment_or_expr_tail"],  # si hay assignable, puede asignar
-        ["expr"],                                   # si no, expresión normal
-        ["create_object"],
-    ],
-    "arr_declare": [
-        ["OPENING_BRA", "expr", "arr_declare_tail", "CLOSING_BRA"],
-    ],
-    "arr_declare_tail": [
-        ["COMMA", "expr", "arr_declare_tail"],
-        ["epsylon"]
-    ],
-    "assignment_or_expr_tail": [
-        ["assign_type", "assignment_or_expr"],  # encadena
-        ["epsylon"]                             # termina
-    ],
-    "create_object": [
-        ["OPENING_KEY", "fields", "CLOSING_KEY"],
-    ],
-
-    "fields": [
-        ["IDENT", "field_body", "fields_tail"],
-        ["epsylon"]
-    ],
-
-    "field_body": [
-        # Propiedad normal:  key: value
-        ["COLON", "expr"],
-        # Método:  key(params) { ... }
-        ["OPENING_PAR", "params", "CLOSING_PAR", "simple_block_return"],
-    ],
-
-    "fields_tail": [
-        ["COMMA", "IDENT", "field_body", "fields_tail"],
-        ["epsylon"]
+        ["simple_expr"],
     ],
     "console_use": [
-        ["consola", "PERIOD", "console_method", "call_args"],
+        ["consola", "PERIOD", "console_method", "call_args","tail"],
     ],
     "console_method": [
         ["escribir"],
@@ -253,9 +30,75 @@ GRAMMAR = {
         ["agrupar"],
         ["info"],
         ["tabla"],
-        # agrega los que necesites
     ],
-   "conditional": [
+    "call_args": [
+        ["OPENING_PAR", "call_empty_args", "CLOSING_PAR"],
+    ],
+    "call_empty_args": [
+        ["expr", "call_args_tail"],
+        ["epsylon"],
+    ],
+    "call_args_tail": [
+        ["COMMA", "expr", "call_args_tail"],
+        ["epsylon"]
+    ],
+    "tail": [
+        ["SEMICOLON"],
+        ["epsylon"]
+    ],
+    "simple_block": [
+        ["OPENING_KEY", "code_block", "CLOSING_KEY"],
+    ],
+    "declare_or_assign": [
+        ["var_type", "IDENT", "more_declare","declare_or_assign_tail", "tail"],
+    ],
+    "var_type": [
+        ["mut"],
+        ["var"],
+        ["const"],
+    ],
+    "more_declare": [
+        ["COMMA", "IDENT", "more_declare"],
+        ["epsylon"]
+    ],
+    "declare_or_assign_tail": [
+        ["ASSIGN", "expr_or_object"],
+        ["epsylon"]
+    ],
+    "expr_or_object": [
+        ["create_object"],
+        ["expr"]
+    ],
+    "create_object": [
+        ["OPENING_KEY", "object_body", "CLOSING_KEY"],
+    ],
+    "object_body": [
+        ["object_entry", "object_body_tail"],
+        ["epsylon"],
+    ],
+    "object_body_tail": [
+        ["COMMA", "object_entry", "object_body_tail"],
+        ["epsylon"],
+    ],
+    "object_entry": [
+        ["IDENT", "object_entry_tail"],
+    ],
+    "object_entry_tail": [
+        ["COLON", "value"],      # propiedad: valor
+        ["params", "simple_block_return"],  # método() { }
+    ],
+    "value": [
+        ["params", "arrow_function"],
+        ["element"],
+    ],
+    "arrow_function": [
+        ["ARROW", "arrow_function_body"],
+    ],
+    "arrow_function_body": [
+        ["simple_block"],
+        ["expr"],
+    ],
+    "conditional": [
         ["si", "OPENING_PAR", "expr", "CLOSING_PAR", "simple_block", "conditional_alter"],
     ],
     "conditional_alter": [
@@ -277,6 +120,24 @@ GRAMMAR = {
         ["porDefecto", "simple_block_break_continue"],
         ["epsylon"]
     ],
+    "simple_block_break_continue": [
+        ["OPENING_KEY", "code_block_break_continue", "CLOSING_KEY"],
+    ],
+    "code_block_break_continue": [
+        ["code_line_break_continue", "code_block_break_continue"],
+        ["epsylon"]
+    ],
+    "code_line_break_continue": [
+        ["code_line"],
+        ["break"],
+        ["continue"],
+    ],
+    "break": [
+        ["romper", "tail"],
+    ],
+    "continue": [
+        ["continuar", "tail"],
+    ],
     "for_loop": [
         ["para", "OPENING_PAR", "expr", "SEMICOLON", "expr", "SEMICOLON", "expr", "CLOSING_PAR", "simple_block_break_continue"],
     ],
@@ -284,60 +145,175 @@ GRAMMAR = {
         ["mientras", "OPENING_PAR", "expr", "CLOSING_PAR", "simple_block_break_continue"],
     ],
     "do_while_loop": [
-        ["hacer", "simple_block_break_continue", "mientras", "OPENING_PAR", "expr", "CLOSING_PAR", "SEMICOLON"],
-    ],
-    "break": [
-        ["romper", "SEMICOLON"],
-    ],
-    "continue": [
-        ["continuar", "SEMICOLON"],
-    ],
-    "code_line_break_continue": [
-        ["code_line"],
-        ["break"],
-        ["continue"],
-    ],
-    "code_block_break_continue": [
-        ["code_line_break_continue", "code_block_break_continue"],
-        ["epsylon"]
-    ],
-    "simple_block_break_continue": [
-        ["OPENING_KEY", "code_block_break_continue", "CLOSING_KEY"],
-    ],
-    "simple_block": [
-        ["OPENING_KEY", "code_block", "CLOSING_KEY"],
+        ["hacer", "simple_block_break_continue", "mientras", "OPENING_PAR", "expr", "CLOSING_PAR", "tail"],
     ],
     "function": [
-        ["funcion", "IDENT", "OPENING_PAR", "params", "CLOSING_PAR", "simple_block_return"],
-    ],
-    "return_stmt": [
-        ["retornar", "return_stmt_tail"],
-        ["epsylon"]
-    ],
-    "return_stmt_tail": [
-        ["expr", "SEMICOLON"],
-        ["SEMICOLON"]
-    ],
-    "simple_block_return": [
-        ["OPENING_KEY", "code_block","return_stmt", "CLOSING_KEY"],
+        ["funcion", "IDENT", "params", "simple_block_return"],
     ],
     "params": [
-        ["IDENT", "params_tail"],
-        ["epsylon"]
+        ["OPENING_PAR", "empty_params"],
+    ],
+    "empty_params": [
+        ["CLOSING_PAR"],
+        ["IDENT", "params_tail"]
     ],
     "params_tail": [
         ["COMMA", "IDENT", "params_tail"],
+        ["CLOSING_PAR"]
+    ],
+    "simple_block_return": [
+        ["OPENING_KEY", "code_block_return", "CLOSING_KEY"],
+    ],
+    "code_block_return": [
+        ["code_line_return", "code_block_return"],
         ["epsylon"]
     ],
-    "simple_expr": [
-        ["expr", "SEMICOLON"],
+    "code_line_return": [
+        ["code_line"],
+        ["retornar", "return_tail","tail"],
+    ],
+    "return_tail": [
+        ["expr"],
+        ["epsylon"]
     ],
     "try_catch": [
         ["intentar", "simple_block", "catch"],
     ],
     "catch": [
         ["capturar", "OPENING_PAR", "IDENT", "CLOSING_PAR", "simple_block"],
-    ]
+    ],
+    # Expr ------------------------------------------------------------------
+    "expr": [
+        ["expr_ternary"],          # antes apuntaba a expr_eq
+    ],
+    "expr_ternary": [
+        ["expr_eq", "expr_ternary_tail"],
+    ],
+    "expr_ternary_tail": [
+        ["TERNARY", "expr_ternary", "COLON", "expr_ternary"],  # asociatividad derecha
+        ["epsylon"],
+    ],
+    "expr_eq":[
+        ["expr_rel", "expr_eq_tail"],
+    ],
+    "equality": [
+        ["EQUAL"],
+        ["NEQ"],
+        ["STRICT_EQUAL"],
+        ["STRICT_NEQ"],
+    ],
+    "expr_eq_tail": [
+        ["equality", "expr_eq"],
+        ["epsylon"],
+    ],
+    "expr_rel": [
+        ["expr_add", "expr_rel_tail"],
+    ],
+    "relational": [
+        ["LESS"],
+        ["GREATER"],
+        ["LEQ"],
+        ["GEQ"],
+    ],
+    "expr_rel_tail": [
+        ["relational", "expr_rel"],
+        ["epsylon"],
+    ],
+    "expr_add": [
+        ["expr_mult","expr_add_tail"],
+    ],
+    "add": [
+        ["PLUS"],
+        ["MINUS"],
+    ],
+    "expr_add_tail": [
+        ["add", "expr_mult", "expr_add_tail"],
+        ["epsylon"],
+    ],
+    "expr_mult": [
+        ["expr_expo", "expr_mult_tail"],
+    ],
+    "mult": [
+        ["TIMES"],
+        ["DIV"],
+        ["MOD"],
+    ],
+    "expr_mult_tail": [
+        ["mult", "expr_expo", "expr_mult_tail"],
+        ["epsylon"],
+    ],
+    "expr_expo": [
+        ["expr_group", "expr_expo_tail"],
+    ],
+    "expr_expo_tail": [
+        ["POWER", "expr_expo"],
+        ["epsylon"],
+    ],
+    "expr_unary": [
+        ["unary","expr_group"],
+        ["expr_group"],
+    ],
+    "unary": [
+        ["PLUS"],
+        ["MINUS"],
+        ["NOT"],
+    ],
+    "expr_group": [
+        ["OPENING_PAR", "expr", "CLOSING_PAR"],
+        ["element"]
+    ],
+    "element": [
+        ["identifier"],
+        ["array"],
+        ["NUMBER"],
+        ["STR"],
+        ["indefinido"],
+        ["verdadero"],
+        ["falso"],
+        ["nulo"],
+        ["NuN"],
+        ["Infinito"],
+        ["classes_use"]
+    ],
+    "classes_use": [
+        ["classes", "classes_tail"],
+    ],
+    "classes": [
+        ["Numero"],
+        ["Mate"],
+        ["Matriz"],
+        ["Arreglo"],
+        ["Booleano"],
+        ["Cadena"]
+    ],
+    "classes_tail": [
+        ["PERIOD", "IDENT", "classes_tail"],
+        ["epsylon"]
+    ],
+    "identifier": [
+        ["IDENT", "identifier_tail"],
+    ],
+    "identifier_tail": [
+        ["ASSIGN", "expr"],
+        ["call_args"],
+        ["OPENING_BRA", "expr", "CLOSING_BRA", "identifier_tail"],
+        ["PERIOD", "IDENT", "identifier_tail"],
+        ["epsylon"]
+    ],
+    "array": [
+        ["OPENING_BRA", "array_tail", "CLOSING_BRA"],
+    ],
+    "array_tail": [
+        ["expr", "more_array_tail"],
+        ["epsylon"],
+    ],
+    "more_array_tail": [
+        ["COMMA", "array_tail"],
+        ["epsylon"],
+    ],
+    "simple_expr": [
+        ["expr", "tail"],
+    ],
 }
 
 class Grammar:
@@ -526,8 +502,8 @@ def write_grammar_report(grammar, filepath="grammar_report.txt"):
     # ─── Conflictos ───────────────────────────────────────────────
     lines.append("\n[5] CONFLICTOS\n")
     if grammar.conflicts:
-        for conflict in grammar.conflicts:
-            lines.append(f"  ⚠  {conflict}")
+        for conflict, item in grammar.conflicts.items():
+            lines.append(f"  ⚠  {conflict} = {item}")
     else:
         lines.append("  ✔  Sin conflictos detectados.")
 

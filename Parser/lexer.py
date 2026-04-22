@@ -1,3 +1,4 @@
+from __future__ import annotations
 #!/usr/bin/env python3
 """
 Lexer EsJS — traducción directa del lexer.c
@@ -116,20 +117,6 @@ DIVISION_CONTEXT = {
     "CLOSING_BRA",
 }
 
-ASI_TRIGGERS = {
-    "IDENT", "NUMBER", "STR", "REGEX",
-    "CLOSING_PAR",    # )
-    "CLOSING_BRA",  # ]
-    "INCREMENT", # ++
-    "DECREMENT", # --
-}
-
-# Keywords que SIEMPRE insertan ';' después de newline
-ASI_KEYWORD_TRIGGERS = {"retornar", "romper", "continuar", "lanzar"}
-
-# Si el SIGUIENTE token es uno de estos, el newline NO es ';'
-ASI_BLOCKERS = {"OPENING_PAR", "OPENING_BRA", "PLUS", "MINUS", "SLASH", "PERIOD"}
-
 class Token:
     def __init__(self, kind: str, lexeme: str, line: int, col: int):
         self.kind   = kind
@@ -176,16 +163,6 @@ class Lexer:
             return self._peeked.pop(0)
         tok = self._scan()
         if tok is None:
-            # ASI en EOF: si el último token puede cerrar sentencia, emitir ';'
-            # antes de emitir EOF, igual que haría un salto de línea.
-            if self.last_token is not None and (
-                self.last_token.kind in ASI_TRIGGERS
-                or self.last_token.kind in ASI_KEYWORD_TRIGGERS
-            ):
-                eof_line = self.line
-                self._peeked.append(Token("EOF", "", eof_line, 1))
-                self.last_token = None   # para no re-emitir ';' en la próxima llamada
-                return Token("SEMICOLON", ";", eof_line+1, 1)
             return Token("EOF", "", self.line+1, 1)
         return tok
 
@@ -268,25 +245,7 @@ class Lexer:
                 self.line      += 1
                 self.line_start = m.end()
                 self.pos        = m.end()
-                
-                # ¿El token anterior puede cerrar sentencia?
-                last_is_trigger = self.last_token is not None and (self.last_token.kind in ASI_TRIGGERS or 
-                    self.last_token.kind in ASI_KEYWORD_TRIGGERS) and (self.last_token.line == line)
-                
-                if last_is_trigger:
-                    # Mirar qué viene después para aplicar ASI_BLOCKERS
-                    next_tok = self.peek() # escanea el siguiente real
-                    
-                    if next_tok is None:
-                        # EOF tras trigger → sí aplica ASI
-                        return Token("SEMICOLON", ";", line, col)
-
-                    if next_tok.kind in ASI_BLOCKERS:
-                        # El siguiente token bloquea ASI → no insertar ';'
-                        return self._peeked.pop(0)
-                    else:
-                        # Sí aplica ASI → emitir ';' y guardar el siguiente
-                        return Token("SEMICOLON", ";", line, col)
+            
                 continue
 
             # ── keyword vs identificador ──────────────────────────────

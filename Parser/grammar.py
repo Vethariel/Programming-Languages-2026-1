@@ -18,6 +18,45 @@ GRAMMAR = {
         ["function"],
         ["try_catch"],
         ["expr", "SEMICOLON"],
+        ["retornar", "return_tail", "SEMICOLON"],
+        ["romper", "SEMICOLON"],
+        ["continuar", "SEMICOLON"],
+    ],
+    "block_line": [
+        ["console_use"],
+        ["simple_block"],
+        ["declare_or_assign_block"],  # <--- Exclusivo para bloques
+        ["conditional"],
+        ["switch"],
+        ["for_loop"],
+        ["while_loop"],
+        ["do_while_loop"],
+        ["function"],
+        ["try_catch"],
+        ["expr", "SEMICOLON"],
+        ["retornar", "return_tail", "SEMICOLON"],
+        ["romper", "SEMICOLON"],
+        ["continuar", "SEMICOLON"],
+    ],
+    # Duplicamos las reglas de asignación con nombres separados
+    "declare_or_assign_block": [
+        ["decl_kw", "IDENT", "more_declare_block", "declare_tail_block", "tail"],
+        ["IDENT", "identifier_tail_assign", "tail"],
+    ],
+    "more_declare_block": [
+        ["COMMA", "IDENT", "more_declare_block"],
+        ["epsylon"], 
+    ],
+    "declare_tail_block": [
+        ["ASSIGN", "expr_or_object"],
+        ["epsylon"],  
+    ],
+    "block_statements": [
+        ["block_line", "block_statements"],
+        ["epsylon"],  # Aquí sí esperará el "}"
+    ],
+    "simple_block": [
+        ["OPENING_KEY", "block_statements", "CLOSING_KEY"],
     ],
     "console_use": [
         ["consola", "PERIOD", "console_method", "call_args_full", "tail"],
@@ -35,29 +74,34 @@ GRAMMAR = {
     # CLAVE T17: call_args_full permite múltiples argumentos separados por coma
     # y reporta el FIRST completo de expr cuando falla (operadores incluidos)
     "call_args_full": [
-        ["OPENING_PAR", "call_empty_args", "CLOSING_PAR"],
+        ["OPENING_PAR", "call_empty_args"],
     ],
     "call_empty_args": [
-        ["expr", "call_args_tail"],
-        ["epsylon"],  # epsylon
+        ["arg_expr", "call_args_tail"],
+        ["CLOSING_PAR"],  # epsylon
     ],
     "call_args_tail": [
-        ["COMMA", "expr", "call_args_tail"],
-        ["epsylon"],  # epsylon
+        ["COMMA", "arg_expr", "call_args_tail"],
+        ["CLOSING_PAR"],  # epsylon
+    ],
+    
+    "simple_call": [
+        ["OPENING_PAR", "simple_call_tail"],
+    ],
+    "simple_call_tail": [
+        ["arg_expr", "CLOSING_PAR"],
+        ["CLOSING_PAR"],  # epsylon
     ],
 
     "tail": [
         ["SEMICOLON"],
         ["epsylon"],  # epsylon
     ],
-    "simple_block": [
-        ["OPENING_KEY", "code_block", "CLOSING_KEY"],
-    ],
 
     # CLAVE T25: declare_or_assign separado de expr stmt
     # var_type obligatorio para declaraciones, sin ε en var_type aquí
     "declare_or_assign": [
-        ["decl_kw", "IDENT", "more_declare", "declare_tail", "tail"],
+        ["decl_kw", "IDENT", "declare_continuation", "tail"],
         ["IDENT", "identifier_tail_assign", "tail"],
     ],
 
@@ -67,15 +111,10 @@ GRAMMAR = {
         ["const"],
     ],
 
-    "more_declare": [
-        ["COMMA", "IDENT", "more_declare"],
-        ["epsylon"],  # epsylon
-    ],
-
-    # CLAVE T25: declare_tail solo acepta ASSIGN, nunca +=
-    "declare_tail": [
+    "declare_continuation": [
+        ["COMMA", "IDENT", "declare_continuation"],
         ["ASSIGN", "expr_or_object"],
-        ["epsylon"],  # epsylon — declaración sin inicializar
+        ["epsylon"]
     ],
 
     # identifier_tail para asignaciones standalone (x = ..., x += ...)
@@ -98,6 +137,10 @@ GRAMMAR = {
     "expr_or_object": [
         ["create_object"],
         ["expr"],
+        ["crear_instance"]
+    ],
+    "crear_instance": [
+        ["crear", "IDENT", "call_args_full"],
     ],
     "create_object": [
         ["OPENING_KEY", "object_body", "CLOSING_KEY"],
@@ -136,14 +179,14 @@ GRAMMAR = {
     ],
 
     "conditional": [
-        ["si", "OPENING_PAR", "expr", "CLOSING_PAR", "simple_block", "conditional_alter"],
+        ["si", "OPENING_PAR", "arg_expr", "CLOSING_PAR", "simple_block", "conditional_alter"],
     ],
     "conditional_alter": [
         ["sino", "conditional_alter_tail"],
         ["epsylon"],  # epsylon
     ],
     "conditional_alter_tail": [
-        ["si", "OPENING_PAR", "expr", "CLOSING_PAR", "simple_block", "conditional_alter"],
+        ["si", "OPENING_PAR", "arg_expr", "CLOSING_PAR", "simple_block", "conditional_alter"],
         ["simple_block"],
     ],
     "switch": [
@@ -167,7 +210,7 @@ GRAMMAR = {
     "code_line_break_continue": [
         ["romper",    "tail"],
         ["continuar", "tail"],
-        ["code_line"],
+        ["block_line"],
     ],
     "for_loop": [
         ["para", "OPENING_PAR", "expr", "SEMICOLON", "expr", "SEMICOLON", "expr", "CLOSING_PAR", "simple_block_break_continue"],
@@ -201,7 +244,7 @@ GRAMMAR = {
     ],
     "code_line_return": [
         ["retornar", "return_tail", "tail"],
-        ["code_line"],
+        ["block_line"],
     ],
     "return_tail": [
         ["expr"],
@@ -230,7 +273,6 @@ GRAMMAR = {
     ],
     "expr_or_and_tail": [
         ["OR",      "expr_eq", "expr_or_and_tail"],
-        ["NULLISH", "expr_eq", "expr_or_and_tail"],
         ["AND",     "expr_eq", "expr_or_and_tail"],
         ["epsylon"],  # epsylon
     ],
@@ -312,7 +354,7 @@ GRAMMAR = {
 
     # consola dentro de expresión (para T13: consola aparece en FIRST de expr)
     "consola_call": [
-        ["consola", "PERIOD", "console_method", "call_args_full"],
+        ["consola", "PERIOD", "console_method", "OPENING_PAR", "arg_expr", "CLOSING_PAR",],
     ],
 
     "element": [
@@ -366,6 +408,89 @@ GRAMMAR = {
     "simple_expr": [
         ["expr", "tail"],
     ],
+    
+    # Expresiones arg ---------
+    
+    "arg_expr": [
+        ["arg_expr_ternary"],
+    ],
+    "arg_expr_ternary": [
+        ["arg_expr_or_and", "arg_expr_ternary_tail"],
+    ],
+    "arg_expr_ternary_tail": [
+        ["TERNARY", "expr", "COLON", "arg_expr_ternary"],
+        ["epsylon"],  # epsylon
+    ],
+
+    # CLAVE T13: incluir OR/AND/NULLISH en la cadena de precedencia
+    # para que aparezcan en el FIRST set cuando se reporta error
+    "arg_expr_or_and": [
+        ["arg_expr_eq", "arg_expr_or_and_tail"],
+    ],
+    "arg_expr_or_and_tail": [
+        ["OR",      "arg_expr_eq", "arg_expr_or_and_tail"],
+        ["AND",     "arg_expr_eq", "arg_expr_or_and_tail"],
+        ["epsylon"],  # epsylon
+    ],
+
+    "arg_expr_eq": [
+        ["arg_expr_rel", "arg_expr_eq_tail"],
+    ],
+
+    "arg_expr_eq_tail": [
+        ["equality", "arg_expr_eq"],
+        ["epsylon"],  # epsylon
+    ],
+    "arg_expr_rel": [
+        ["arg_expr_add", "arg_expr_rel_tail"],
+    ],
+
+    "arg_expr_rel_tail": [
+        ["relational", "arg_expr_rel"],
+        ["epsylon"],  # epsylon
+    ],
+    "arg_expr_add": [
+        ["arg_expr_mult", "arg_expr_add_tail"],
+    ],
+
+    "arg_expr_add_tail": [
+        ["add", "arg_expr_mult", "arg_expr_add_tail"],
+        ["epsylon"],  # epsylon
+    ],
+    "arg_expr_mult": [
+        ["arg_expr_expo", "arg_expr_mult_tail"],
+    ],
+
+    "arg_expr_mult_tail": [
+        ["mult", "arg_expr_expo", "arg_expr_mult_tail"],
+        ["epsylon"],  # epsylon
+    ],
+    "arg_expr_expo": [
+        ["arg_expr_unary", "arg_expr_expo_tail"],
+    ],
+    "arg_expr_expo_tail": [
+        ["POWER", "arg_expr_expo"],
+        ["epsylon"],  # epsylon
+    ],
+
+    # CLAVE T13/T26: arg_expr_unary incluye MINUS, PLUS, NOT
+    # para que aparezcan en el FIRST set de arg_expr
+    "arg_expr_unary": [
+        ["MINUS", "arg_expr_unary"],
+        ["PLUS",  "arg_expr_unary"],
+        ["NOT",   "arg_expr_unary"],
+        ["arg_expr_group"],
+    ],
+
+    # CLAVE T13/T26: arg_expr_group incluye consola y objeto { }
+    # para que aparezcan en el FIRST set reportado
+    "arg_expr_group": [
+        ["OPENING_PAR", "arg_expr", "CLOSING_PAR"],
+        ["create_object"],
+        ["element"],
+    ],
+
+
 }
 
 class Grammar:

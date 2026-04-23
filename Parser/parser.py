@@ -180,8 +180,10 @@ class Parser:
             if self.token.kind in formal_follow:
                 return  # epsilon válido
             else:
-                self.sintax_error(list(formal_follow))  # reporta FOLLOW formal
+                #print(f"DEBUG epsilon: no_terminal={no_terminal}, token={self.token.kind}")
+                self.sintax_error(list(no_terminal_values["total_pred_set"]))
         else:
+            #print(f"DEBUG no-epsilon: no_terminal={no_terminal}, token={self.token.kind}")
             self.sintax_error(list(no_terminal_values["total_pred_set"]))
         
     def pair_terminals(self, expected_token):

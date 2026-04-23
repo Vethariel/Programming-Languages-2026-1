@@ -131,7 +131,7 @@ hacer {
 "name": "Test 17",
 "input": """\
 consola.escribir(45"this")""",
-"expected": '<1:20> Error sintactico: se encontro: "this"; se esperaba: "&&", ")", "/", "==", ">=", ">", "<=", "<", "-", "%", "!=", "||", "+", "**", "===", "!==", "?", "*".',
+"expected": '<1:20> Error sintactico: se encontro: "this"; se esperaba: "&&", ")", ",", "/", "==", ">=", ">", "<=", "<", "-", "%", "!=", "||", "+", "**", "===", "!==", "?", "*".',
     },
     {
 "name": "Test 18",

@@ -1,6 +1,7 @@
 import subprocess
 import sys
 import os
+from datetime import datetime
 
 # ── Colores ANSI ──────────────────────────────────────────────────────────────
 GREEN  = "\033[92m"
@@ -112,8 +113,7 @@ si (entrada === indefinido) {
     {
 "name": "Test 13",
 "input": """\
-1>2 ? ? consola.escribir("a") : 1;
-""",
+1>2 ? ? consola.escribir("a") : 1;""",
 "expected": '<1:7> Error sintactico: se encontro: "?"; se esperaba: "Arreglo", "Booleano", "Cadena", "cadena_de_caracteres", "consola", "falso", "id", "indefinido", "Infinito", "Mate", "Matriz", "NuN", "nulo", "Numero", "-", "!", "[", "{", "(", "+", "valor_numérico", "verdadero".',
     },
     {
@@ -221,7 +221,6 @@ funcion_.inventada(operaciones[tipo](10, 5));""",
     },
 ]
 
-# ── Ejecutar un caso ──────────────────────────────────────────────────────────
 def run_case(tc):
     try:
         result = subprocess.run(
@@ -242,7 +241,6 @@ def run_case(tc):
 def check(tc, output):
     expected = tc["expected"]
     if expected is None:
-        # Solo verificamos que NO diga que finalizó exitosamente
         ok = "exitosamente" not in output.lower()
         note = "(se espera cualquier error sintáctico)"
     else:
@@ -250,51 +248,101 @@ def check(tc, output):
         note = ""
     return ok, note
 
+# ── Clase para escribir en consola y archivo simultáneamente ──────────────────
+class DualWriter:
+    def __init__(self, filepath):
+        self.file = open(filepath, "w", encoding="utf-8")
+
+    def write(self, text_plain, text_console=None):
+        """
+        text_plain  → versión sin colores ANSI (va al archivo)
+        text_console → versión con colores  (va a consola); si None usa text_plain
+        """
+        print(text_console if text_console is not None else text_plain)
+        self.file.write(text_plain + "\n")
+
+    def close(self):
+        self.file.close()
+
 # ── Runner principal ──────────────────────────────────────────────────────────
 def main():
     passed = 0
     failed = 0
     errors = 0
 
-    print(f"\n{BOLD}{CYAN}{'═'*64}{RESET}")
-    print(f"{BOLD}{CYAN}  Tester — Analizador Sintáctico EsJs{RESET}")
-    print(f"{BOLD}{CYAN}{'═'*64}{RESET}\n")
+    # Nombre del reporte con timestamp
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    report_path = f"parser_report_{timestamp}.txt"
+    dw = DualWriter(report_path)
+
+    sep  = "═" * 64
+    sep2 = "─" * 64
+
+    dw.write(sep, f"{BOLD}{CYAN}{sep}{RESET}")
+    dw.write("  Tester — Analizador Sintáctico EsJs",
+             f"{BOLD}{CYAN}  Tester — Analizador Sintáctico EsJs{RESET}")
+    dw.write(sep + "\n", f"{BOLD}{CYAN}{sep}{RESET}\n")
 
     for i, tc in enumerate(TEST_CASES, 1):
         output = run_case(tc)
 
         if output.startswith("__"):
-            status = f"{RED}ERROR{RESET}"
+            status_plain   = "ERROR"
+            status_console = f"{RED}ERROR{RESET}"
             errors += 1
         else:
             ok, note = check(tc, output)
             if ok:
-                status = f"{GREEN}PASS{RESET}"
+                status_plain   = "PASS"
+                status_console = f"{GREEN}PASS{RESET}"
                 passed += 1
             else:
-                status = f"{RED}FAIL{RESET}"
+                status_plain   = "FAIL"
+                status_console = f"{RED}FAIL{RESET}"
                 failed += 1
 
-        print(f"[{i:02d}] {status}  {tc['name']}")
+        dw.write(
+            f"[{i:02d}] {status_plain:<6} {tc['name']}",
+            f"[{i:02d}] {status_console}  {tc['name']}"
+        )
 
         if not output.startswith("__"):
             ok, note = check(tc, output)
             if not ok:
                 exp = tc["expected"] if tc["expected"] is not None else "(cualquier error)"
-                print(f"       {YELLOW}Esperado:{RESET} {exp}")
-                print(f"       {YELLOW}Obtenido:{RESET} {output}")
+                dw.write(f"       Esperado: {exp}",
+                         f"       {YELLOW}Esperado:{RESET} {exp}")
+                dw.write(f"       Obtenido: {output}",
+                         f"       {YELLOW}Obtenido:{RESET} {output}")
             elif note:
-                print(f"       {CYAN}{note}{RESET}")
+                dw.write(f"       {note}",
+                         f"       {CYAN}{note}{RESET}")
         else:
-            print(f"       {RED}{output}{RESET}")
+            dw.write(f"       {output}",
+                     f"       {RED}{output}{RESET}")
 
     total = len(TEST_CASES)
-    print(f"\n{BOLD}{'─'*64}{RESET}")
-    print(f"  Total: {total}  |  "
-          f"{GREEN}Pasaron: {passed}{RESET}  |  "
-          f"{RED}Fallaron: {failed}{RESET}  |  "
-          f"{YELLOW}Errores de ejecución: {errors}{RESET}")
-    print(f"{BOLD}{'─'*64}{RESET}\n")
+    summary_plain = (
+        f"\n{sep2}\n"
+        f"  Total: {total}  |  Pasaron: {passed}  |  "
+        f"Fallaron: {failed}  |  Errores de ejecución: {errors}\n"
+        f"{sep2}\n"
+    )
+    summary_console = (
+        f"\n{BOLD}{sep2}{RESET}\n"
+        f"  Total: {total}  |  "
+        f"{GREEN}Pasaron: {passed}{RESET}  |  "
+        f"{RED}Fallaron: {failed}{RESET}  |  "
+        f"{YELLOW}Errores de ejecución: {errors}{RESET}\n"
+        f"{BOLD}{sep2}{RESET}\n"
+    )
+    # write() agrega \n propio, así que usamos print/file directo para el bloque
+    print(summary_console)
+    dw.file.write(summary_plain)
+
+    dw.write(f"Reporte guardado en: {report_path}",
+             f"{CYAN}Reporte guardado en: {report_path}{RESET}")
+    dw.close()
 
     sys.exit(0 if failed == 0 and errors == 0 else 1)
 

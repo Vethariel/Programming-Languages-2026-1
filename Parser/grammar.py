@@ -7,7 +7,7 @@ GRAMMAR = {
         ["epsylon"],  # epsylon
     ],
     "code_line": [
-        ["console_use"],
+        #["console_use"],
         ["simple_block"],
         ["declare_or_assign"],
         ["conditional"],
@@ -17,13 +17,21 @@ GRAMMAR = {
         ["do_while_loop"],
         ["function"],
         ["try_catch"],
-        ["expr", "SEMICOLON"],
-        ["retornar", "return_tail", "SEMICOLON"],
-        ["romper", "SEMICOLON"],
-        ["continuar", "SEMICOLON"],
+        ["expr"],
+        ["retornar", "return_tail"],
+        ["romper"],
+        ["continuar"],
+        ["empty_line"],
+    ],
+    "empty_line": [
+        ["SEMICOLON"],
+    ],
+    "return_tail": [
+        ["expr"],
+        ["epsylon"],
     ],
     "block_line": [
-        ["console_use"],
+        #["console_use"],
         ["simple_block"],
         ["declare_or_assign_block"],  # <--- Exclusivo para bloques
         ["conditional"],
@@ -33,15 +41,16 @@ GRAMMAR = {
         ["do_while_loop"],
         ["function"],
         ["try_catch"],
-        ["expr", "SEMICOLON"],
-        ["retornar", "return_tail", "SEMICOLON"],
-        ["romper", "SEMICOLON"],
-        ["continuar", "SEMICOLON"],
+        ["expr"],
+        ["retornar", "return_tail"],
+        ["romper"],
+        ["continuar"],
+        ["empty_line"],
     ],
     # Duplicamos las reglas de asignación con nombres separados
     "declare_or_assign_block": [
-        ["decl_kw", "IDENT", "more_declare_block", "declare_tail_block", "tail"],
-        ["IDENT", "identifier_tail_assign", "tail"],
+        ["decl_kw", "IDENT", "more_declare_block", "declare_tail_block"],
+        ["IDENT", "identifier_tail_assign"],
     ],
     "more_declare_block": [
         ["COMMA", "IDENT", "more_declare_block"],
@@ -59,7 +68,7 @@ GRAMMAR = {
         ["OPENING_KEY", "block_statements", "CLOSING_KEY"],
     ],
     "console_use": [
-        ["consola", "PERIOD", "console_method", "call_args_full", "tail"],
+        ["consola", "PERIOD", "console_method", "call_args_full"],
     ],
     "console_method": [
         ["escribir"],
@@ -93,16 +102,11 @@ GRAMMAR = {
         ["CLOSING_PAR"],  # epsylon
     ],
 
-    "tail": [
-        ["SEMICOLON"],
-        ["epsylon"],  # epsylon
-    ],
-
     # CLAVE T25: declare_or_assign separado de expr stmt
     # var_type obligatorio para declaraciones, sin ε en var_type aquí
     "declare_or_assign": [
-        ["decl_kw", "IDENT", "declare_continuation", "tail"],
-        ["IDENT", "identifier_tail_assign", "tail"],
+        ["decl_kw", "IDENT", "declare_continuation"],
+        ["IDENT", "identifier_tail_assign"],
     ],
 
     "decl_kw": [
@@ -140,7 +144,13 @@ GRAMMAR = {
         ["crear_instance"]
     ],
     "crear_instance": [
-        ["crear", "IDENT", "call_args_full"],
+        ["crear", "crear_tail", "call_args_full"],
+    ],
+    "crear_tail": [
+        ["IDENT"],
+        ["Arreglo"],
+        ["Matriz"],
+        ["Cadena"],
     ],
     "create_object": [
         ["OPENING_KEY", "object_body", "CLOSING_KEY"],
@@ -160,7 +170,7 @@ GRAMMAR = {
     # CLAVE T21: bifurca en COLON (propiedad) vs OPENING_PAR (método)
     "object_entry_tail": [
         ["COLON", "value"],
-        ["params", "simple_block_return"],
+        ["params", "simple_block"],
     ],
 
     # CLAVE T28: value acepta arrow functions (a, b) => expr
@@ -193,36 +203,24 @@ GRAMMAR = {
         ["elegir", "OPENING_PAR", "expr", "CLOSING_PAR", "OPENING_KEY", "cases", "default_case", "CLOSING_KEY"],
     ],
     "cases": [
-        ["caso", "expr", "simple_block_break_continue", "cases"],
+        ["caso", "expr", "simple_block", "cases"],
         ["epsylon"],  # epsylon
     ],
     "default_case": [
-        ["porDefecto", "simple_block_break_continue"],
+        ["porDefecto", "simple_block"],
         ["epsylon"],  # epsylon
-    ],
-    "simple_block_break_continue": [
-        ["OPENING_KEY", "code_block_break_continue", "CLOSING_KEY"],
-    ],
-    "code_block_break_continue": [
-        ["code_line_break_continue", "code_block_break_continue"],
-        ["epsylon"],  # epsylon
-    ],
-    "code_line_break_continue": [
-        ["romper",    "tail"],
-        ["continuar", "tail"],
-        ["block_line"],
     ],
     "for_loop": [
-        ["para", "OPENING_PAR", "expr", "SEMICOLON", "expr", "SEMICOLON", "expr", "CLOSING_PAR", "simple_block_break_continue"],
+        ["para", "OPENING_PAR", "expr", "SEMICOLON", "expr", "SEMICOLON", "expr", "CLOSING_PAR", "simple_block"],
     ],
     "while_loop": [
-        ["mientras", "OPENING_PAR", "expr", "CLOSING_PAR", "simple_block_break_continue"],
+        ["mientras", "OPENING_PAR", "expr", "CLOSING_PAR", "simple_block"],
     ],
     "do_while_loop": [
-        ["hacer", "simple_block_break_continue", "mientras", "OPENING_PAR", "expr", "CLOSING_PAR", "tail"],
+        ["hacer", "simple_block", "mientras", "OPENING_PAR", "expr", "CLOSING_PAR"],
     ],
     "function": [
-        ["funcion", "IDENT", "params", "simple_block_return"],
+        ["funcion", "IDENT", "params", "simple_block"],
     ],
     "params": [
         ["OPENING_PAR", "empty_params"],
@@ -234,21 +232,6 @@ GRAMMAR = {
     "params_tail": [
         ["COMMA", "IDENT", "params_tail"],
         ["CLOSING_PAR"],
-    ],
-    "simple_block_return": [
-        ["OPENING_KEY", "code_block_return", "CLOSING_KEY"],
-    ],
-    "code_block_return": [
-        ["code_line_return", "code_block_return"],
-        ["epsylon"],  # epsylon
-    ],
-    "code_line_return": [
-        ["retornar", "return_tail", "tail"],
-        ["block_line"],
-    ],
-    "return_tail": [
-        ["expr"],
-        ["epsylon"],  # epsylon
     ],
     "try_catch": [
         ["intentar", "simple_block", "capturar", "OPENING_PAR", "IDENT", "CLOSING_PAR", "simple_block"],
@@ -406,7 +389,7 @@ GRAMMAR = {
         ["epsylon"],  # epsylon
     ],
     "simple_expr": [
-        ["expr", "tail"],
+        ["expr"],
     ],
     
     # Expresiones arg ---------

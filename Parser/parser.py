@@ -137,10 +137,8 @@ TOKEN_REPR_SORT_KEY = {}
 for kind, repr_ in TOKEN_KIND_REPR.items():
     if kind.isupper() and not repr_[0].isalpha():
         TOKEN_REPR_SORT_KEY[repr_] = f"tkn_{kind.lower()}"
-    elif kind == "NuN":
-        TOKEN_REPR_SORT_KEY[repr_] = "nu"  # "NuN" se ordena literalmente
     else:
-        TOKEN_REPR_SORT_KEY[repr_] = repr_.lower()
+        TOKEN_REPR_SORT_KEY[repr_] = repr_
 
 class SintaxError(Exception):
     pass
@@ -199,7 +197,7 @@ class Parser:
         if self.token.kind == "STR": self.token.lexeme = self.token.lexeme[1:-1]
         if isinstance(expected_token, list):
             expected_token = [TOKEN_KIND_REPR[e] if e in TOKEN_KIND_REPR else e for e in expected_token]
-            expected_token.sort(key=lambda s: TOKEN_REPR_SORT_KEY.get(s, s.lower()))
+            expected_token.sort(key=lambda s: TOKEN_REPR_SORT_KEY.get(s, s))
             expected_token = [f"\"{t}\"" for t in expected_token]
             expected_token = ", ".join(expected_token)
         else:

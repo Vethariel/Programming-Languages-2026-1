@@ -114,7 +114,7 @@ si (entrada === indefinido) {
 "name": "Test 13",
 "input": """\
 1>2 ? ? consola.escribir("a") : 1;""",
-"expected": '<1:7> Error sintactico: se encontro: "?"; se esperaba: "Arreglo", "Booleano", "Cadena", "cadena_de_caracteres", "consola", "falso", "id", "indefinido", "Infinito", "Mate", "Matriz", "NuN", "nulo", "Numero", "-", "!", "[", "{", "(", "+", "valor_numérico", "verdadero".',
+"expected": '<1:7> Error sintactico: se encontro: "?"; se esperaba: "Arreglo", "Booleano", "Cadena", "Infinito", "Mate", "Matriz", "NuN", "Numero", "cadena_de_caracteres", "consola", "falso", "id", "indefinido", "nulo", "-", "!", "[", "{", "(", "+", "valor_numérico", "verdadero".',
     },
     {
 "name": "Test 14",
@@ -126,6 +126,18 @@ hacer {
     i = i + 1;
 } mientras i < 5;""",
 "expected": '<6:12> Error sintactico: se encontro: "i"; se esperaba: "(".',
+    },
+    {
+"name": "Test 15",
+"input": """\
+/*
+
+como se creaban objetos?
+
+
+*/
+A = crear""",
+"expected": '<8:1> Error sintactico: se encontro: "final de archivo"; se esperaba: "Arreglo", "Cadena", "Matriz", "id".',
     },
     {
 "name": "Test 17",
@@ -197,13 +209,13 @@ si (condicion) {
 "input": """\
 // No es lo mismo declarar que actualizar
 const variable += 70;""",
-"expected": '<2:16> Error sintactico: se encontro: "+="; se esperaba: "Arreglo", "Booleano", "Cadena", "cadena_de_caracteres", "consola", "const", "continuar", "elegir", "falso", "final de archivo", "funcion", "hacer", "id", "indefinido", "Infinito", "intentar", "Mate", "Matriz", "mientras", "mut", "NuN", "nulo", "Numero", "para", "retornar", "romper", "si", "=", ",", "-", "!", "[", "{", "(", "+", ";", "valor_numérico", "var", "verdadero".',
+"expected": '<2:16> Error sintactico: se encontro: "+="; se esperaba: "Arreglo", "Booleano", "Cadena", "Infinito", "Mate", "Matriz", "NuN", "Numero", "cadena_de_caracteres", "consola", "const", "continuar", "elegir", "falso", "final de archivo", "funcion", "hacer", "id", "indefinido", "intentar", "mientras", "mut", "nulo", "para", "retornar", "romper", "si", "=", ",", "-", "!", "[", "{", "(", "+", ";", "valor_numérico", "var", "verdadero".',
     },
     {
 "name": "Test 26",
 "input": """\
 si(){}""",
-"expected": '<1:4> Error sintactico: se encontro: ")"; se esperaba: "Arreglo", "Booleano", "Cadena", "cadena_de_caracteres", "falso", "id", "indefinido", "Infinito", "Mate", "Matriz", "NuN", "nulo", "Numero", "-", "!", "[", "{", "(", "+", "valor_numérico", "verdadero".',
+"expected": '<1:4> Error sintactico: se encontro: ")"; se esperaba: "Arreglo", "Booleano", "Cadena", "Infinito", "Mate", "Matriz", "NuN", "Numero", "cadena_de_caracteres", "falso", "id", "indefinido", "nulo", "-", "!", "[", "{", "(", "+", "valor_numérico", "verdadero".',
     },
     {
 "name": "Test 28",
@@ -217,6 +229,12 @@ const operaciones = {
 const tipo = "suma";
 
 funcion_.inventada(operaciones[tipo](10, 5));""",
+"expected": 'El analisis sintactico ha finalizado exitosamente.',
+    },
+    {
+"name": "Test 40",
+"input": """\
+;;;;;;;;;;;;;;;""",
 "expected": 'El analisis sintactico ha finalizado exitosamente.',
     },
 ]

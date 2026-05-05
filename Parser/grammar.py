@@ -1,480 +1,310 @@
 GRAMMAR = {
     "start": [
-        ["code_block", "EOF"],
-    ],
-    "code_block": [
-        ["code_line", "code_block"],
-        ["epsylon"],  # epsylon
-    ],
-    "code_line": [
-        #["console_use"],
-        ["simple_block"],
-        ["declare_or_assign"],
-        ["conditional"],
-        ["switch"],
-        ["for_loop"],
-        ["while_loop"],
-        ["do_while_loop"],
-        ["function"],
-        ["try_catch"],
-        ["expr"],
-        ["retornar", "return_tail"],
-        ["romper"],
-        ["continuar"],
-        ["empty_line"],
-    ],
-    "empty_line": [
-        ["SEMICOLON"],
-    ],
-    "return_tail": [
-        ["expr"],
-        ["epsylon"],
-    ],
-    "block_line": [
-        #["console_use"],
-        ["simple_block"],
-        ["declare_or_assign_block"],  # <--- Exclusivo para bloques
-        ["conditional"],
-        ["switch"],
-        ["for_loop"],
-        ["while_loop"],
-        ["do_while_loop"],
-        ["function"],
-        ["try_catch"],
-        ["expr"],
-        ["retornar", "return_tail"],
-        ["romper"],
-        ["continuar"],
-        ["empty_line"],
-    ],
-    # Duplicamos las reglas de asignación con nombres separados
-    "declare_or_assign_block": [
-        ["decl_kw", "IDENT", "more_declare_block", "declare_tail_block"],
-        ["IDENT", "identifier_tail_assign"],
-    ],
-    "more_declare_block": [
-        ["COMMA", "IDENT", "more_declare_block"],
-        ["epsylon"], 
-    ],
-    "declare_tail_block": [
-        ["ASSIGN", "expr_or_object"],
-        ["epsylon"],  
-    ],
-    "block_statements": [
-        ["block_line", "block_statements"],
-        ["epsylon"],  # Aquí sí esperará el "}"
-    ],
-    "simple_block": [
-        ["OPENING_KEY", "block_statements", "CLOSING_KEY"],
-    ],
-    "console_use": [
-        ["consola", "PERIOD", "console_method", "call_args_full"],
-    ],
-    "console_method": [
-        ["escribir"],
-        ["error"],
-        ["afirmar"],
-        ["limpiar"],
-        ["agrupar"],
-        ["info"],
-        ["tabla"],
-    ],
-
-    # CLAVE T17: call_args_full permite múltiples argumentos separados por coma
-    # y reporta el FIRST completo de expr cuando falla (operadores incluidos)
-    "call_args_full": [
-        ["OPENING_PAR", "call_empty_args"],
-    ],
-    "call_empty_args": [
-        ["arg_expr", "call_args_tail"],
-        ["CLOSING_PAR"],  # epsylon
-    ],
-    "call_args_tail": [
-        ["COMMA", "arg_expr", "call_args_tail"],
-        ["CLOSING_PAR"],  # epsylon
+        ["global_code", "EOF"],
     ],
     
-    "simple_call": [
-        ["OPENING_PAR", "simple_call_tail"],
+    "global_code": [
+        ["g_stmt", "global_code"],
+        ["epsylon"]
     ],
-    "simple_call_tail": [
-        ["arg_expr", "CLOSING_PAR"],
-        ["CLOSING_PAR"],  # epsylon
+    "block_code": [
+        ["b_stmt", "block_code"],
+        ["epsylon"]
+    ],
+    
+    # Usamos expr (expresión general) en las estructuras para no contaminar arg_expr
+    "g_stmt": [
+        ["decl_keyword", "g_decl_list", "g_semicolon_opt"], 
+        ["si", "OPENING_PAR", "expr", "CLOSING_PAR", "block_stmt", "g_sino_opt"],                    
+        ["mientras", "OPENING_PAR", "expr", "CLOSING_PAR", "block_stmt"],              
+        ["hacer", "block_stmt", "mientras", "OPENING_PAR", "expr", "CLOSING_PAR", "g_semicolon_opt"],        
+        ["para", "OPENING_PAR", "para_init", "SEMICOLON", "expr_opt", "SEMICOLON", "expr_opt", "CLOSING_PAR", "block_stmt"],
+        ["elegir", "OPENING_PAR", "expr", "CLOSING_PAR", "OPENING_KEY", "casos_list", "CLOSING_KEY"],
+        ["romper", "g_semicolon_opt"],
+        ["continuar", "g_semicolon_opt"],
+        ["intentar", "block_stmt", "capturar", "block_stmt"],              
+        ["funcion", "IDENT", "OPENING_PAR", "params_opt", "CLOSING_PAR", "block_stmt"],               
+        ["block_stmt"],                 
+        ["retornar", "expr_opt", "g_semicolon_opt"], 
+        ["consola_call", "g_semicolon_opt"],              
+        ["expr", "g_semicolon_opt"],             
+        ["SEMICOLON"]                           
+    ],
+    "g_decl_list": [
+        ["IDENT", "g_decl_init", "g_decl_list_prime"] 
+    ],
+    "g_decl_init": [
+        ["ASSIGN", "expr_or_crear"],
+        ["epsylon"]
+    ],
+    "g_decl_list_prime": [
+        ["COMMA", "g_decl_list"], 
+        ["epsylon"]
+    ],
+    "g_semicolon_opt": [
+        ["SEMICOLON"],
+        ["epsylon"]
+    ],
+    "g_sino_opt": [
+        ["sino", "g_sino_tail"],
+        ["epsylon"]
+    ],
+    "g_sino_tail": [
+        ["si", "OPENING_PAR", "expr", "CLOSING_PAR", "block_stmt", "g_sino_opt"],
+        ["block_stmt"] 
     ],
 
-    # CLAVE T25: declare_or_assign separado de expr stmt
-    # var_type obligatorio para declaraciones, sin ε en var_type aquí
-    "declare_or_assign": [
-        ["decl_kw", "IDENT", "declare_continuation"],
-        ["IDENT", "identifier_tail_assign"],
+    "b_stmt": [
+        ["decl_keyword", "b_decl_list", "b_semicolon_opt"], 
+        ["si", "OPENING_PAR", "expr", "CLOSING_PAR", "block_stmt", "b_sino_opt"],                    
+        ["mientras", "OPENING_PAR", "expr", "CLOSING_PAR", "block_stmt"],              
+        ["hacer", "block_stmt", "mientras", "OPENING_PAR", "expr", "CLOSING_PAR", "b_semicolon_opt"],        
+        ["para", "OPENING_PAR", "para_init", "SEMICOLON", "expr_opt", "SEMICOLON", "expr_opt", "CLOSING_PAR", "block_stmt"],
+        ["elegir", "OPENING_PAR", "expr", "CLOSING_PAR", "OPENING_KEY", "casos_list", "CLOSING_KEY"],
+        ["romper", "b_semicolon_opt"],
+        ["continuar", "b_semicolon_opt"],
+        ["intentar", "block_stmt", "capturar", "block_stmt"],              
+        ["funcion", "IDENT", "OPENING_PAR", "params_opt", "CLOSING_PAR", "block_stmt"],               
+        ["block_stmt"],                 
+        ["retornar", "expr_opt", "b_semicolon_opt"], 
+        ["consola_call", "b_semicolon_opt"],              
+        ["expr", "b_semicolon_opt"],             
+        ["SEMICOLON"]                           
+    ],
+    "b_decl_list": [
+        ["IDENT", "b_decl_init", "b_decl_list_prime"] 
+    ],
+    "b_decl_init": [
+        ["ASSIGN", "expr_or_crear"],
+        ["epsylon"]
+    ],
+    "b_decl_list_prime": [
+        ["COMMA", "b_decl_list"], 
+        ["epsylon"]
+    ],
+    "b_semicolon_opt": [
+        ["SEMICOLON"],
+        ["epsylon"]
+    ],
+    "b_sino_opt": [
+        ["sino", "b_sino_tail"],
+        ["epsylon"]
+    ],
+    "b_sino_tail": [
+        ["si", "OPENING_PAR", "expr", "CLOSING_PAR", "block_stmt", "b_sino_opt"],
+        ["block_stmt"] 
     ],
 
-    "decl_kw": [
-        ["mut"],
-        ["var"],
-        ["const"],
+    "decl_keyword": [
+        ["var"], ["mut"], ["const"]
+    ],
+    
+    "expr_or_crear": [
+        ["crear", "crear_type", "crear_args_opt"],
+        ["expr"]
+    ],
+    "crear_args_opt": [
+        ["OPENING_PAR", "args_opt", "CLOSING_PAR"],
+        ["epsylon"]
+    ],
+    "crear_type": [
+        ["IDENT"], ["Arreglo"], ["Cadena"], ["Matriz"]
     ],
 
-    "declare_continuation": [
-        ["COMMA", "IDENT", "declare_continuation"],
-        ["ASSIGN", "expr_or_object"],
+    "para_init": [
+        ["decl_keyword", "b_decl_list"],
+        ["expr_opt"]
+    ],
+    "casos_list": [
+        ["caso", "expr", "COLON", "block_code", "casos_list"],
+        ["porDefecto", "COLON", "block_code"],
+        ["epsylon"]
+    ],
+    "block_stmt": [
+        ["OPENING_KEY", "block_code", "CLOSING_KEY"]
+    ],
+
+    # ── Expresiones Globales ────────────────────────────────────────────────────
+    "expr_opt": [
+        ["expr"],
+        ["epsylon"]
+    ],
+    "expr": [
+        ["factor", "expr_prime"]
+    ],
+    "expr_prime": [
+        ["PLUS", "factor", "expr_prime"],
+        ["MINUS", "factor", "expr_prime"],
+        ["TIMES", "factor", "expr_prime"],
+        ["DIV", "factor", "expr_prime"],
+        ["MOD", "factor", "expr_prime"],
+        ["POWER", "factor", "expr_prime"],
+        ["EQUAL", "factor", "expr_prime"],
+        ["STRICT_EQUAL", "factor", "expr_prime"],
+        ["NEQ", "factor", "expr_prime"],
+        ["STRICT_NEQ", "factor", "expr_prime"],
+        ["LESS", "factor", "expr_prime"],
+        ["GREATER", "factor", "expr_prime"],
+        ["LEQ", "factor", "expr_prime"],
+        ["GEQ", "factor", "expr_prime"],
+        ["AND", "factor", "expr_prime"],
+        ["OR", "factor", "expr_prime"],
+        ["TERNARY", "ternary_mid_expr", "COLON", "expr_or_consola"], 
+        ["epsylon"]
+    ],
+    "expr_or_consola": [
+        ["expr"],
+        ["consola_call"]
+    ],
+
+    # ── Expresiones Internas Estrictas (EXCLUSIVAS para los argumentos) ─────────
+    "arg_expr": [
+        ["factor", "arg_expr_prime"]
+    ],
+    "arg_expr_prime": [
+        ["PLUS", "factor", "arg_expr_prime"],
+        ["MINUS", "factor", "arg_expr_prime"],
+        ["TIMES", "factor", "arg_expr_prime"],
+        ["DIV", "factor", "arg_expr_prime"],
+        ["MOD", "factor", "arg_expr_prime"],
+        ["POWER", "factor", "arg_expr_prime"],
+        ["EQUAL", "factor", "arg_expr_prime"],
+        ["STRICT_EQUAL", "factor", "arg_expr_prime"],
+        ["NEQ", "factor", "arg_expr_prime"],
+        ["STRICT_NEQ", "factor", "arg_expr_prime"],
+        ["LESS", "factor", "arg_expr_prime"],
+        ["GREATER", "factor", "arg_expr_prime"],
+        ["LEQ", "factor", "arg_expr_prime"],
+        ["GEQ", "factor", "arg_expr_prime"],
+        ["AND", "factor", "arg_expr_prime"],
+        ["OR", "factor", "arg_expr_prime"],
+        ["TERNARY", "ternary_mid_expr", "COLON", "arg_expr_or_consola"], 
+        ["epsylon"]
+    ],
+    "arg_expr_or_consola": [
+        ["arg_expr"],
+        ["consola_call"]
+    ],
+
+    # ── Expresiones Medias de Ternario (Atrapan el COLON) ───────────────────────
+    "ternary_mid_expr": [
+        ["factor", "ternary_mid_expr_prime"],
+        ["consola_call"]
+    ],
+    "ternary_mid_expr_prime": [
+        ["PLUS", "factor", "ternary_mid_expr_prime"],
+        ["MINUS", "factor", "ternary_mid_expr_prime"],
+        ["TIMES", "factor", "ternary_mid_expr_prime"],
+        ["DIV", "factor", "ternary_mid_expr_prime"],
+        ["MOD", "factor", "ternary_mid_expr_prime"],
+        ["POWER", "factor", "ternary_mid_expr_prime"],
+        ["EQUAL", "factor", "ternary_mid_expr_prime"],
+        ["STRICT_EQUAL", "factor", "ternary_mid_expr_prime"],
+        ["NEQ", "factor", "ternary_mid_expr_prime"],
+        ["STRICT_NEQ", "factor", "ternary_mid_expr_prime"],
+        ["LESS", "factor", "ternary_mid_expr_prime"],
+        ["GREATER", "factor", "ternary_mid_expr_prime"],
+        ["LEQ", "factor", "ternary_mid_expr_prime"],
+        ["GEQ", "factor", "ternary_mid_expr_prime"],
+        ["AND", "factor", "ternary_mid_expr_prime"],
+        ["OR", "factor", "ternary_mid_expr_prime"],
+        ["TERNARY", "ternary_mid_expr", "COLON", "ternary_mid_expr"], 
         ["epsylon"]
     ],
 
-    # identifier_tail para asignaciones standalone (x = ..., x += ...)
-    # solo se usa cuando el stmt empieza con IDENT sin keyword
-    "identifier_tail_assign": [
-        ["ASSIGN",       "expr_or_object"],
-        ["PLUS_ASSIGN",  "expr"],
-        ["MINUS_ASSIGN", "expr"],
-        ["TIMES_ASSIGN", "expr"],
-        ["DIV_ASSIGN",   "expr"],
-        ["MOD_ASSIGN",   "expr"],
-        ["POWER_ASSIGN", "expr"],
-        ["OPENING_BRA",  "expr", "CLOSING_BRA", "identifier_tail_assign"],
-        ["PERIOD",       "IDENT", "identifier_tail_assign"],
-        ["call_args_full", "identifier_tail_assign"],
-        ["epsylon"],  # epsylon — expr stmt pura (solo el IDENT)
-    ],
-
-    # CLAVE T21/T28: expr_or_object acepta objeto literal con { }
-    "expr_or_object": [
-        ["create_object"],
-        ["expr"],
-        ["crear_instance"]
-    ],
-    "crear_instance": [
-        ["crear", "crear_tail", "call_args_full"],
-    ],
-    "crear_tail": [
-        ["IDENT"],
-        ["Arreglo"],
-        ["Matriz"],
-        ["Cadena"],
-    ],
-    "create_object": [
-        ["OPENING_KEY", "object_body", "CLOSING_KEY"],
-    ],
-    "object_body": [
-        ["object_entry", "object_body_tail"],
-        ["epsylon"],  # epsylon
-    ],
-    "object_body_tail": [
-        ["COMMA", "object_entry", "object_body_tail"],
-        ["epsylon"],  # epsylon
-    ],
-    "object_entry": [
-        ["IDENT", "object_entry_tail"],
-    ],
-
-    # CLAVE T21: bifurca en COLON (propiedad) vs OPENING_PAR (método)
-    "object_entry_tail": [
-        ["COLON", "value"],
-        ["params", "simple_block"],
-    ],
-
-    # CLAVE T28: value acepta arrow functions (a, b) => expr
-    # y también objetos anidados
-    "value": [
-        ["params", "ARROW", "arrow_function_body"],
-        ["create_object"],
-        ["expr"],
-    ],
-
-    # CLAVE T28: arrow_function_body acepta bloque o expr (sin objeto directo)
-    # Un objeto como body de arrow requiere paréntesis: x => ({})
-    "arrow_function_body": [
-        ["simple_block"],
-        ["expr"],
-    ],
-
-    "conditional": [
-        ["si", "OPENING_PAR", "arg_expr", "CLOSING_PAR", "simple_block", "conditional_alter"],
-    ],
-    "conditional_alter": [
-        ["sino", "conditional_alter_tail"],
-        ["epsylon"],  # epsylon
-    ],
-    "conditional_alter_tail": [
-        ["si", "OPENING_PAR", "arg_expr", "CLOSING_PAR", "simple_block", "conditional_alter"],
-        ["simple_block"],
-    ],
-    "switch": [
-        ["elegir", "OPENING_PAR", "expr", "CLOSING_PAR", "OPENING_KEY", "cases", "default_case", "CLOSING_KEY"],
-    ],
-    "cases": [
-        ["caso", "expr", "simple_block", "cases"],
-        ["epsylon"],  # epsylon
-    ],
-    "default_case": [
-        ["porDefecto", "simple_block"],
-        ["epsylon"],  # epsylon
-    ],
-    "for_loop": [
-        ["para", "OPENING_PAR", "expr", "SEMICOLON", "expr", "SEMICOLON", "expr", "CLOSING_PAR", "simple_block"],
-    ],
-    "while_loop": [
-        ["mientras", "OPENING_PAR", "expr", "CLOSING_PAR", "simple_block"],
-    ],
-    "do_while_loop": [
-        ["hacer", "simple_block", "mientras", "OPENING_PAR", "expr", "CLOSING_PAR"],
-    ],
-    "function": [
-        ["funcion", "IDENT", "params", "simple_block"],
-    ],
-    "params": [
-        ["OPENING_PAR", "empty_params"],
-    ],
-    "empty_params": [
-        ["CLOSING_PAR"],
-        ["IDENT", "params_tail"],
-    ],
-    "params_tail": [
-        ["COMMA", "IDENT", "params_tail"],
-        ["CLOSING_PAR"],
-    ],
-    "try_catch": [
-        ["intentar", "simple_block", "capturar", "OPENING_PAR", "IDENT", "CLOSING_PAR", "simple_block"],
-    ],
-
-    # ── Expresiones ──────────────────────────────────────────────────────────
-    "expr": [
-        ["expr_ternary"],
-    ],
-    "expr_ternary": [
-        ["expr_or_and", "expr_ternary_tail"],
-    ],
-    "expr_ternary_tail": [
-        ["TERNARY", "expr_or_and", "COLON", "expr_ternary"],
-        ["epsylon"],  # epsylon
-    ],
-
-    # CLAVE T13: incluir OR/AND/NULLISH en la cadena de precedencia
-    # para que aparezcan en el FIRST set cuando se reporta error
-    "expr_or_and": [
-        ["expr_eq", "expr_or_and_tail"],
-    ],
-    "expr_or_and_tail": [
-        ["OR",      "expr_eq", "expr_or_and_tail"],
-        ["AND",     "expr_eq", "expr_or_and_tail"],
-        ["epsylon"],  # epsylon
-    ],
-
-    "expr_eq": [
-        ["expr_rel", "expr_eq_tail"],
-    ],
-    "equality": [
-        ["EQUAL"],
-        ["NEQ"],
-        ["STRICT_EQUAL"],
-        ["STRICT_NEQ"],
-    ],
-    "expr_eq_tail": [
-        ["equality", "expr_eq"],
-        ["epsylon"],  # epsylon
-    ],
-    "expr_rel": [
-        ["expr_add", "expr_rel_tail"],
-    ],
-    "relational": [
-        ["LESS"],
-        ["GREATER"],
-        ["LEQ"],
-        ["GEQ"],
-    ],
-    "expr_rel_tail": [
-        ["relational", "expr_rel"],
-        ["epsylon"],  # epsylon
-    ],
-    "expr_add": [
-        ["expr_mult", "expr_add_tail"],
-    ],
-    "add": [
-        ["PLUS"],
-        ["MINUS"],
-    ],
-    "expr_add_tail": [
-        ["add", "expr_mult", "expr_add_tail"],
-        ["epsylon"],  # epsylon
-    ],
-    "expr_mult": [
-        ["expr_expo", "expr_mult_tail"],
-    ],
-    "mult": [
-        ["TIMES"],
-        ["DIV"],
-        ["MOD"],
-    ],
-    "expr_mult_tail": [
-        ["mult", "expr_expo", "expr_mult_tail"],
-        ["epsylon"],  # epsylon
-    ],
-    "expr_expo": [
-        ["expr_unary", "expr_expo_tail"],
-    ],
-    "expr_expo_tail": [
-        ["POWER", "expr_expo"],
-        ["epsylon"],  # epsylon
-    ],
-
-    # CLAVE T13/T26: expr_unary incluye MINUS, PLUS, NOT
-    # para que aparezcan en el FIRST set de expr
-    "expr_unary": [
-        ["MINUS", "expr_unary"],
-        ["PLUS",  "expr_unary"],
-        ["NOT",   "expr_unary"],
-        ["expr_group"],
-    ],
-
-    # CLAVE T13/T26: expr_group incluye consola y objeto { }
-    # para que aparezcan en el FIRST set reportado
-    "expr_group": [
-        ["OPENING_PAR", "expr", "CLOSING_PAR"],
-        ["consola_call"],
-        ["create_object"],
-        ["element"],
-    ],
-
-    # consola dentro de expresión (para T13: consola aparece en FIRST de expr)
     "consola_call": [
-        ["consola", "PERIOD", "console_method", "OPENING_PAR", "arg_expr", "CLOSING_PAR",],
+        ["consola", "PERIOD", "consola_method", "OPENING_PAR", "args_opt", "CLOSING_PAR"]
+    ],
+    "consola_method": [
+        ["afirmar"], ["agrupar"], ["error"], ["escribir"], 
+        ["info"], ["limpiar"], ["tabla"]
     ],
 
-    "element": [
-        ["identifier"],
-        ["array"],
+    # ── Factores Limpios (Sin crear, ++, ni --) ─────────────────────────────────
+    "factor": [
+        ["IDENT", "factor_tail"],
+        ["Mate", "factor_tail"], ["Numero", "factor_tail"], 
+        ["Arreglo", "factor_tail"], ["Cadena", "factor_tail"], 
+        ["Matriz", "factor_tail"], ["Booleano", "factor_tail"], 
+        ["OPENING_PAR", "args_opt", "CLOSING_PAR", "factor_tail"],
+        ["OPENING_BRA", "array_args_opt", "CLOSING_BRA", "factor_tail"], 
+        ["OPENING_KEY", "obj_elements", "CLOSING_KEY"],
+        
         ["NUMBER"],
         ["STR"],
-        ["indefinido"],
-        ["verdadero"],
-        ["falso"],
-        ["nulo"],
-        ["NuN"],
-        ["Infinito"],
-        ["classes_use"],
+        ["verdadero"], ["falso"], ["nulo"], ["indefinido"], 
+        ["Infinito"], ["NuN"], 
+
+        ["MINUS", "factor"],
+        ["PLUS", "factor"],
+        ["NOT", "factor"]
     ],
-    "classes_use": [
-        ["classes", "classes_tail"],
+    "factor_tail": [
+        ["OPENING_PAR", "args_opt", "CLOSING_PAR", "factor_tail"],
+        ["OPENING_BRA", "expr", "CLOSING_BRA", "factor_tail"],
+        ["PERIOD", "IDENT", "factor_tail"],
+        ["ASSIGN", "expr_or_crear"],
+        ["PLUS_ASSIGN", "expr"],
+        ["MINUS_ASSIGN", "expr"],
+        ["TIMES_ASSIGN", "expr"],
+        ["DIV_ASSIGN", "expr"],
+        ["MOD_ASSIGN", "expr"],
+        ["POWER_ASSIGN", "expr"],
+        ["ARROW", "arrow_body"],
+        
+        # Test 19 solucionado: i++ y i-- admitidos como sufijos válidos de identificadores
+        ["INCREMENT", "factor_tail"],
+        ["DECREMENT", "factor_tail"],
+        
+        ["epsylon"]
     ],
-    "classes": [
-        ["Numero"],
-        ["Mate"],
-        ["Matriz"],
-        ["Arreglo"],
-        ["Booleano"],
-        ["Cadena"],
+    "arrow_body": [
+        ["block_stmt"],
+        ["expr"]
     ],
-    "classes_tail": [
-        ["PERIOD", "IDENT", "classes_tail"],
-        ["epsylon"],  # epsylon
+
+    # ── Estructuras con Siguientes Protegidos ───────────────────────────────────
+    "params_opt": [
+        ["IDENT", "params_prime"],
+        ["epsylon"]
     ],
-    "identifier": [
-        ["IDENT", "identifier_tail"],
-    ],
-    "identifier_tail": [
-        ["call_args_full",  "identifier_tail"],
-        ["OPENING_BRA", "expr", "CLOSING_BRA", "identifier_tail"],
-        ["PERIOD",      "IDENT",               "identifier_tail"],
-        ["epsylon"],  # epsylon — NO incluye ASSIGN aquí (evita ambigüedad con declare_or_assign)
-    ],
-    "array": [
-        ["OPENING_BRA", "array_tail", "CLOSING_BRA"],
-    ],
-    "array_tail": [
-        ["expr", "more_array_tail"],
-        ["epsylon"],  # epsylon
-    ],
-    "more_array_tail": [
-        ["COMMA", "array_tail"],
-        ["epsylon"],  # epsylon
-    ],
-    "simple_expr": [
-        ["expr"],
+    "params_prime": [
+        ["COMMA", "IDENT", "params_prime"],
+        ["epsylon"]
     ],
     
-    # Expresiones arg ---------
+    "args_opt": [
+        ["arg_expr", "args_prime"],
+        ["epsylon"]
+    ],
+    "args_prime": [
+        ["COMMA", "arg_expr", "args_prime"],
+        ["epsylon"]
+    ],
     
-    "arg_expr": [
-        ["arg_expr_ternary"],
+    "array_args_opt": [
+        ["expr", "array_args_prime"],
+        ["epsylon"]
     ],
-    "arg_expr_ternary": [
-        ["arg_expr_or_and", "arg_expr_ternary_tail"],
+    "array_args_prime": [
+        ["COMMA", "expr", "array_args_prime"],
+        ["epsylon"]
     ],
-    "arg_expr_ternary_tail": [
-        ["TERNARY", "expr", "COLON", "arg_expr_ternary"],
-        ["epsylon"],  # epsylon
+    
+    "obj_elements": [
+        ["IDENT", "obj_tail", "obj_prime"],
+        ["epsylon"]
     ],
-
-    # CLAVE T13: incluir OR/AND/NULLISH en la cadena de precedencia
-    # para que aparezcan en el FIRST set cuando se reporta error
-    "arg_expr_or_and": [
-        ["arg_expr_eq", "arg_expr_or_and_tail"],
+    "obj_tail": [
+        ["COLON", "expr"],
+        ["OPENING_PAR", "params_opt", "CLOSING_PAR", "block_stmt"]
     ],
-    "arg_expr_or_and_tail": [
-        ["OR",      "arg_expr_eq", "arg_expr_or_and_tail"],
-        ["AND",     "arg_expr_eq", "arg_expr_or_and_tail"],
-        ["epsylon"],  # epsylon
+    "obj_prime": [
+        ["COMMA", "IDENT", "obj_tail", "obj_prime"],
+        ["epsylon"]
     ],
-
-    "arg_expr_eq": [
-        ["arg_expr_rel", "arg_expr_eq_tail"],
-    ],
-
-    "arg_expr_eq_tail": [
-        ["equality", "arg_expr_eq"],
-        ["epsylon"],  # epsylon
-    ],
-    "arg_expr_rel": [
-        ["arg_expr_add", "arg_expr_rel_tail"],
-    ],
-
-    "arg_expr_rel_tail": [
-        ["relational", "arg_expr_rel"],
-        ["epsylon"],  # epsylon
-    ],
-    "arg_expr_add": [
-        ["arg_expr_mult", "arg_expr_add_tail"],
-    ],
-
-    "arg_expr_add_tail": [
-        ["add", "arg_expr_mult", "arg_expr_add_tail"],
-        ["epsylon"],  # epsylon
-    ],
-    "arg_expr_mult": [
-        ["arg_expr_expo", "arg_expr_mult_tail"],
-    ],
-
-    "arg_expr_mult_tail": [
-        ["mult", "arg_expr_expo", "arg_expr_mult_tail"],
-        ["epsylon"],  # epsylon
-    ],
-    "arg_expr_expo": [
-        ["arg_expr_unary", "arg_expr_expo_tail"],
-    ],
-    "arg_expr_expo_tail": [
-        ["POWER", "arg_expr_expo"],
-        ["epsylon"],  # epsylon
-    ],
-
-    # CLAVE T13/T26: arg_expr_unary incluye MINUS, PLUS, NOT
-    # para que aparezcan en el FIRST set de arg_expr
-    "arg_expr_unary": [
-        ["MINUS", "arg_expr_unary"],
-        ["PLUS",  "arg_expr_unary"],
-        ["NOT",   "arg_expr_unary"],
-        ["arg_expr_group"],
-    ],
-
-    # CLAVE T13/T26: arg_expr_group incluye consola y objeto { }
-    # para que aparezcan en el FIRST set reportado
-    "arg_expr_group": [
-        ["OPENING_PAR", "arg_expr", "CLOSING_PAR"],
-        ["create_object"],
-        ["element"],
-    ],
-
-
 }
+
 
 class Grammar:
     def __init__(self):

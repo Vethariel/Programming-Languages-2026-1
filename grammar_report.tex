@@ -1,0 +1,482 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,provide=*]{babel}
+\usepackage[margin=1.5cm,top=2cm]{geometry}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{courier}
+\usepackage[protrusion=true,expansion=false]{microtype}
+\setlength{\headheight}{14.5pt}
+\addtolength{\topmargin}{-2.5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\textit{Reporte de Gramática}}
+\lhead{\textit{BNF}}
+\rfoot{\thepage}
+\definecolor{ntcolor}{RGB}{0,70,127}
+\definecolor{okcolor}{RGB}{0,120,0}
+
+\begin{document}
+\begin{center}
+  {\LARGE\textbf{Reporte de Gramática}}\\[0.4em]
+  {\large Forma de Backus-Naur (BNF)}\\[0.3em]
+  {\large Daniel Alonso Gracia Pinto}\\[0.2em]
+  \textit{2026-05-05 16:03:17}
+\end{center}
+\vspace{0.5em}\hrule\vspace{1em}
+\section*{1.\ Reglas de Producción y Conjuntos de Predicción}
+{\footnotesize
+\begin{longtable}{@{} p{2.0cm} p{6.9cm} p{6.9cm} @{}}
+  \toprule
+  \textbf{No terminal} & \textbf{Producción} & \textbf{Pred. Set} \\
+  \midrule \endhead
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$start$\rangle$}} & $::=$~$\langle$global\_code$\rangle$ \texttt{EOF} & \{Arreglo, Booleano, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$global\_\allowbreak{}code$\rangle$}} & $::=$~$\langle$g\_stmt$\rangle$ $\langle$global\_code$\rangle$ & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+   & $\mid$~$\varepsilon$ & \{EOF\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$block\_\allowbreak{}code$\rangle$}} & $::=$~$\langle$b\_stmt$\rangle$ $\langle$block\_code$\rangle$ & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+   & $\mid$~$\varepsilon$ & \{CLOSING\_KEY, caso, porDefecto\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$g\_\allowbreak{}stmt$\rangle$}} & $::=$~$\langle$decl\_keyword$\rangle$ $\langle$g\_decl\_list$\rangle$ $\langle$g\_semicolon\_opt$\rangle$ & \{const, mut, var\} \\
+   & $\mid$~\texttt{si} \texttt{OPENING\_PAR} $\langle$expr$\rangle$ \texttt{CLOSING\_PAR} $\langle$block\_stmt$\rangle$ $\langle$g\_sino\_opt$\rangle$ & \{si\} \\
+   & $\mid$~\texttt{mientras} \texttt{OPENING\_PAR} $\langle$expr$\rangle$ \texttt{CLOSING\_PAR} $\langle$block\_stmt$\rangle$ & \{mientras\} \\
+   & $\mid$~\texttt{hacer} $\langle$block\_stmt$\rangle$ \texttt{mientras} \texttt{OPENING\_PAR} $\langle$expr$\rangle$ \texttt{CLOSING\_PAR} $\langle$g\_semicolon\_opt$\rangle$ & \{hacer\} \\
+   & $\mid$~\texttt{para} \texttt{OPENING\_PAR} $\langle$para\_init$\rangle$ \texttt{SEMICOLON} $\langle$expr\_opt$\rangle$ \texttt{SEMICOLON} $\langle$expr\_opt$\rangle$ \texttt{CLOSING\_PAR} $\langle$block\_stmt$\rangle$ & \{para\} \\
+   & $\mid$~\texttt{elegir} \texttt{OPENING\_PAR} $\langle$expr$\rangle$ \texttt{CLOSING\_PAR} \texttt{OPENING\_KEY} $\langle$casos\_list$\rangle$ \texttt{CLOSING\_KEY} & \{elegir\} \\
+   & $\mid$~\texttt{romper} $\langle$g\_semicolon\_opt$\rangle$ & \{romper\} \\
+   & $\mid$~\texttt{continuar} $\langle$g\_semicolon\_opt$\rangle$ & \{continuar\} \\
+   & $\mid$~\texttt{intentar} $\langle$block\_stmt$\rangle$ \texttt{capturar} $\langle$block\_stmt$\rangle$ & \{intentar\} \\
+   & $\mid$~\texttt{funcion} \texttt{IDENT} \texttt{OPENING\_PAR} $\langle$params\_opt$\rangle$ \texttt{CLOSING\_PAR} $\langle$block\_stmt$\rangle$ & \{funcion\} \\
+   & $\mid$~$\langle$block\_stmt$\rangle$ & \{OPENING\_KEY\} \\
+   & $\mid$~\texttt{retornar} $\langle$expr\_opt$\rangle$ $\langle$g\_semicolon\_opt$\rangle$ & \{retornar\} \\
+   & $\mid$~$\langle$consola\_call$\rangle$ $\langle$g\_semicolon\_opt$\rangle$ & \{consola\} \\
+   & $\mid$~$\langle$expr$\rangle$ $\langle$g\_semicolon\_opt$\rangle$ & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+   & $\mid$~\texttt{SEMICOLON} & \{SEMICOLON\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$g\_\allowbreak{}decl\_\allowbreak{}list$\rangle$}} & $::=$~\texttt{IDENT} $\langle$g\_decl\_init$\rangle$ $\langle$g\_decl\_list\_prime$\rangle$ & \{IDENT\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$g\_\allowbreak{}decl\_\allowbreak{}init$\rangle$}} & $::=$~\texttt{ASSIGN} $\langle$expr\_or\_crear$\rangle$ & \{ASSIGN\} \\
+   & $\mid$~$\varepsilon$ & \{Arreglo, Booleano, COMMA, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$g\_\allowbreak{}decl\_\allowbreak{}list\_\allowbreak{}prime$\rangle$}} & $::=$~\texttt{COMMA} $\langle$g\_decl\_list$\rangle$ & \{COMMA\} \\
+   & $\mid$~$\varepsilon$ & \{Arreglo, Booleano, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$g\_\allowbreak{}semicolon\_\allowbreak{}opt$\rangle$}} & $::=$~\texttt{SEMICOLON} & \{SEMICOLON\} \\
+   & $\mid$~$\varepsilon$ & \{Arreglo, Booleano, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$g\_\allowbreak{}sino\_\allowbreak{}opt$\rangle$}} & $::=$~\texttt{sino} $\langle$g\_sino\_tail$\rangle$ & \{sino\} \\
+   & $\mid$~$\varepsilon$ & \{Arreglo, Booleano, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$g\_\allowbreak{}sino\_\allowbreak{}tail$\rangle$}} & $::=$~\texttt{si} \texttt{OPENING\_PAR} $\langle$expr$\rangle$ \texttt{CLOSING\_PAR} $\langle$block\_stmt$\rangle$ $\langle$g\_sino\_opt$\rangle$ & \{si\} \\
+   & $\mid$~$\langle$block\_stmt$\rangle$ & \{OPENING\_KEY\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$b\_\allowbreak{}stmt$\rangle$}} & $::=$~$\langle$decl\_keyword$\rangle$ $\langle$b\_decl\_list$\rangle$ $\langle$b\_semicolon\_opt$\rangle$ & \{const, mut, var\} \\
+   & $\mid$~\texttt{si} \texttt{OPENING\_PAR} $\langle$expr$\rangle$ \texttt{CLOSING\_PAR} $\langle$block\_stmt$\rangle$ $\langle$b\_sino\_opt$\rangle$ & \{si\} \\
+   & $\mid$~\texttt{mientras} \texttt{OPENING\_PAR} $\langle$expr$\rangle$ \texttt{CLOSING\_PAR} $\langle$block\_stmt$\rangle$ & \{mientras\} \\
+   & $\mid$~\texttt{hacer} $\langle$block\_stmt$\rangle$ \texttt{mientras} \texttt{OPENING\_PAR} $\langle$expr$\rangle$ \texttt{CLOSING\_PAR} $\langle$b\_semicolon\_opt$\rangle$ & \{hacer\} \\
+   & $\mid$~\texttt{para} \texttt{OPENING\_PAR} $\langle$para\_init$\rangle$ \texttt{SEMICOLON} $\langle$expr\_opt$\rangle$ \texttt{SEMICOLON} $\langle$expr\_opt$\rangle$ \texttt{CLOSING\_PAR} $\langle$block\_stmt$\rangle$ & \{para\} \\
+   & $\mid$~\texttt{elegir} \texttt{OPENING\_PAR} $\langle$expr$\rangle$ \texttt{CLOSING\_PAR} \texttt{OPENING\_KEY} $\langle$casos\_list$\rangle$ \texttt{CLOSING\_KEY} & \{elegir\} \\
+   & $\mid$~\texttt{romper} $\langle$b\_semicolon\_opt$\rangle$ & \{romper\} \\
+   & $\mid$~\texttt{continuar} $\langle$b\_semicolon\_opt$\rangle$ & \{continuar\} \\
+   & $\mid$~\texttt{intentar} $\langle$block\_stmt$\rangle$ \texttt{capturar} $\langle$block\_stmt$\rangle$ & \{intentar\} \\
+   & $\mid$~\texttt{funcion} \texttt{IDENT} \texttt{OPENING\_PAR} $\langle$params\_opt$\rangle$ \texttt{CLOSING\_PAR} $\langle$block\_stmt$\rangle$ & \{funcion\} \\
+   & $\mid$~$\langle$block\_stmt$\rangle$ & \{OPENING\_KEY\} \\
+   & $\mid$~\texttt{retornar} $\langle$expr\_opt$\rangle$ $\langle$b\_semicolon\_opt$\rangle$ & \{retornar\} \\
+   & $\mid$~$\langle$consola\_call$\rangle$ $\langle$b\_semicolon\_opt$\rangle$ & \{consola\} \\
+   & $\mid$~$\langle$expr$\rangle$ $\langle$b\_semicolon\_opt$\rangle$ & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+   & $\mid$~\texttt{SEMICOLON} & \{SEMICOLON\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$b\_\allowbreak{}decl\_\allowbreak{}list$\rangle$}} & $::=$~\texttt{IDENT} $\langle$b\_decl\_init$\rangle$ $\langle$b\_decl\_list\_prime$\rangle$ & \{IDENT\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$b\_\allowbreak{}decl\_\allowbreak{}init$\rangle$}} & $::=$~\texttt{ASSIGN} $\langle$expr\_or\_crear$\rangle$ & \{ASSIGN\} \\
+   & $\mid$~$\varepsilon$ & \{Arreglo, Booleano, CLOSING\_KEY, COMMA, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$b\_\allowbreak{}decl\_\allowbreak{}list\_\allowbreak{}prime$\rangle$}} & $::=$~\texttt{COMMA} $\langle$b\_decl\_list$\rangle$ & \{COMMA\} \\
+   & $\mid$~$\varepsilon$ & \{Arreglo, Booleano, CLOSING\_KEY, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$b\_\allowbreak{}semicolon\_\allowbreak{}opt$\rangle$}} & $::=$~\texttt{SEMICOLON} & \{SEMICOLON\} \\
+   & $\mid$~$\varepsilon$ & \{Arreglo, Booleano, CLOSING\_KEY, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$b\_\allowbreak{}sino\_\allowbreak{}opt$\rangle$}} & $::=$~\texttt{sino} $\langle$b\_sino\_tail$\rangle$ & \{sino\} \\
+   & $\mid$~$\varepsilon$ & \{Arreglo, Booleano, CLOSING\_KEY, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$b\_\allowbreak{}sino\_\allowbreak{}tail$\rangle$}} & $::=$~\texttt{si} \texttt{OPENING\_PAR} $\langle$expr$\rangle$ \texttt{CLOSING\_PAR} $\langle$block\_stmt$\rangle$ $\langle$b\_sino\_opt$\rangle$ & \{si\} \\
+   & $\mid$~$\langle$block\_stmt$\rangle$ & \{OPENING\_KEY\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$decl\_\allowbreak{}keyword$\rangle$}} & $::=$~\texttt{var} & \{var\} \\
+   & $\mid$~\texttt{mut} & \{mut\} \\
+   & $\mid$~\texttt{const} & \{const\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$expr\_\allowbreak{}or\_\allowbreak{}crear$\rangle$}} & $::=$~\texttt{crear} $\langle$crear\_type$\rangle$ $\langle$crear\_args\_opt$\rangle$ & \{crear\} \\
+   & $\mid$~$\langle$expr$\rangle$ & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$crear\_\allowbreak{}args\_\allowbreak{}opt$\rangle$}} & $::=$~\texttt{OPENING\_PAR} $\langle$args\_opt$\rangle$ \texttt{CLOSING\_PAR} & \{OPENING\_PAR\} \\
+   & $\mid$~$\varepsilon$ & \{AND, Arreglo, Booleano, CLOSING\_BRA, CLOSING\_KEY, CLOSING\_PAR, COLON, COMMA, Cadena, DIV, EOF, EQUAL, GEQ, GREATER, IDENT, Infinito, LEQ, LESS, MINUS, MOD, Mate, Matriz, NEQ, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, OR, PLUS, POWER, SEMICOLON, STR, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$crear\_\allowbreak{}type$\rangle$}} & $::=$~\texttt{IDENT} & \{IDENT\} \\
+   & $\mid$~\texttt{Arreglo} & \{Arreglo\} \\
+   & $\mid$~\texttt{Cadena} & \{Cadena\} \\
+   & $\mid$~\texttt{Matriz} & \{Matriz\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$para\_\allowbreak{}init$\rangle$}} & $::=$~$\langle$decl\_keyword$\rangle$ $\langle$b\_decl\_list$\rangle$ & \{const, mut, var\} \\
+   & $\mid$~$\langle$expr\_opt$\rangle$ & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, falso, indefinido, nulo, verdadero\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$casos\_\allowbreak{}list$\rangle$}} & $::=$~\texttt{caso} $\langle$expr$\rangle$ \texttt{COLON} $\langle$block\_code$\rangle$ $\langle$casos\_list$\rangle$ & \{caso\} \\
+   & $\mid$~\texttt{porDefecto} \texttt{COLON} $\langle$block\_code$\rangle$ & \{porDefecto\} \\
+   & $\mid$~$\varepsilon$ & \{CLOSING\_KEY\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$block\_\allowbreak{}stmt$\rangle$}} & $::=$~\texttt{OPENING\_KEY} $\langle$block\_code$\rangle$ \texttt{CLOSING\_KEY} & \{OPENING\_KEY\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$expr\_\allowbreak{}opt$\rangle$}} & $::=$~$\langle$expr$\rangle$ & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+   & $\mid$~$\varepsilon$ & \{Arreglo, Booleano, CLOSING\_KEY, CLOSING\_PAR, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$expr$\rangle$}} & $::=$~$\langle$factor$\rangle$ $\langle$expr\_prime$\rangle$ & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$expr\_\allowbreak{}prime$\rangle$}} & $::=$~\texttt{PLUS} $\langle$factor$\rangle$ $\langle$expr\_prime$\rangle$ & \{PLUS\} \\
+   & $\mid$~\texttt{MINUS} $\langle$factor$\rangle$ $\langle$expr\_prime$\rangle$ & \{MINUS\} \\
+   & $\mid$~\texttt{TIMES} $\langle$factor$\rangle$ $\langle$expr\_prime$\rangle$ & \{TIMES\} \\
+   & $\mid$~\texttt{DIV} $\langle$factor$\rangle$ $\langle$expr\_prime$\rangle$ & \{DIV\} \\
+   & $\mid$~\texttt{MOD} $\langle$factor$\rangle$ $\langle$expr\_prime$\rangle$ & \{MOD\} \\
+   & $\mid$~\texttt{POWER} $\langle$factor$\rangle$ $\langle$expr\_prime$\rangle$ & \{POWER\} \\
+   & $\mid$~\texttt{EQUAL} $\langle$factor$\rangle$ $\langle$expr\_prime$\rangle$ & \{EQUAL\} \\
+   & $\mid$~\texttt{STRICT\_EQUAL} $\langle$factor$\rangle$ $\langle$expr\_prime$\rangle$ & \{STRICT\_EQUAL\} \\
+   & $\mid$~\texttt{NEQ} $\langle$factor$\rangle$ $\langle$expr\_prime$\rangle$ & \{NEQ\} \\
+   & $\mid$~\texttt{STRICT\_NEQ} $\langle$factor$\rangle$ $\langle$expr\_prime$\rangle$ & \{STRICT\_NEQ\} \\
+   & $\mid$~\texttt{LESS} $\langle$factor$\rangle$ $\langle$expr\_prime$\rangle$ & \{LESS\} \\
+   & $\mid$~\texttt{GREATER} $\langle$factor$\rangle$ $\langle$expr\_prime$\rangle$ & \{GREATER\} \\
+   & $\mid$~\texttt{LEQ} $\langle$factor$\rangle$ $\langle$expr\_prime$\rangle$ & \{LEQ\} \\
+   & $\mid$~\texttt{GEQ} $\langle$factor$\rangle$ $\langle$expr\_prime$\rangle$ & \{GEQ\} \\
+   & $\mid$~\texttt{AND} $\langle$factor$\rangle$ $\langle$expr\_prime$\rangle$ & \{AND\} \\
+   & $\mid$~\texttt{OR} $\langle$factor$\rangle$ $\langle$expr\_prime$\rangle$ & \{OR\} \\
+   & $\mid$~\texttt{TERNARY} $\langle$ternary\_mid\_expr$\rangle$ \texttt{COLON} $\langle$expr\_or\_consola$\rangle$ & \{TERNARY\} \\
+   & $\mid$~$\varepsilon$ & \{AND, Arreglo, Booleano, CLOSING\_BRA, CLOSING\_KEY, CLOSING\_PAR, COLON, COMMA, Cadena, DIV, EOF, EQUAL, GEQ, GREATER, IDENT, Infinito, LEQ, LESS, MINUS, MOD, Mate, Matriz, NEQ, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, OR, PLUS, POWER, SEMICOLON, STR, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$expr\_\allowbreak{}or\_\allowbreak{}consola$\rangle$}} & $::=$~$\langle$expr$\rangle$ & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+   & $\mid$~$\langle$consola\_call$\rangle$ & \{consola\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$arg\_\allowbreak{}expr$\rangle$}} & $::=$~$\langle$factor$\rangle$ $\langle$arg\_expr\_prime$\rangle$ & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$arg\_\allowbreak{}expr\_\allowbreak{}prime$\rangle$}} & $::=$~\texttt{PLUS} $\langle$factor$\rangle$ $\langle$arg\_expr\_prime$\rangle$ & \{PLUS\} \\
+   & $\mid$~\texttt{MINUS} $\langle$factor$\rangle$ $\langle$arg\_expr\_prime$\rangle$ & \{MINUS\} \\
+   & $\mid$~\texttt{TIMES} $\langle$factor$\rangle$ $\langle$arg\_expr\_prime$\rangle$ & \{TIMES\} \\
+   & $\mid$~\texttt{DIV} $\langle$factor$\rangle$ $\langle$arg\_expr\_prime$\rangle$ & \{DIV\} \\
+   & $\mid$~\texttt{MOD} $\langle$factor$\rangle$ $\langle$arg\_expr\_prime$\rangle$ & \{MOD\} \\
+   & $\mid$~\texttt{POWER} $\langle$factor$\rangle$ $\langle$arg\_expr\_prime$\rangle$ & \{POWER\} \\
+   & $\mid$~\texttt{EQUAL} $\langle$factor$\rangle$ $\langle$arg\_expr\_prime$\rangle$ & \{EQUAL\} \\
+   & $\mid$~\texttt{STRICT\_EQUAL} $\langle$factor$\rangle$ $\langle$arg\_expr\_prime$\rangle$ & \{STRICT\_EQUAL\} \\
+   & $\mid$~\texttt{NEQ} $\langle$factor$\rangle$ $\langle$arg\_expr\_prime$\rangle$ & \{NEQ\} \\
+   & $\mid$~\texttt{STRICT\_NEQ} $\langle$factor$\rangle$ $\langle$arg\_expr\_prime$\rangle$ & \{STRICT\_NEQ\} \\
+   & $\mid$~\texttt{LESS} $\langle$factor$\rangle$ $\langle$arg\_expr\_prime$\rangle$ & \{LESS\} \\
+   & $\mid$~\texttt{GREATER} $\langle$factor$\rangle$ $\langle$arg\_expr\_prime$\rangle$ & \{GREATER\} \\
+   & $\mid$~\texttt{LEQ} $\langle$factor$\rangle$ $\langle$arg\_expr\_prime$\rangle$ & \{LEQ\} \\
+   & $\mid$~\texttt{GEQ} $\langle$factor$\rangle$ $\langle$arg\_expr\_prime$\rangle$ & \{GEQ\} \\
+   & $\mid$~\texttt{AND} $\langle$factor$\rangle$ $\langle$arg\_expr\_prime$\rangle$ & \{AND\} \\
+   & $\mid$~\texttt{OR} $\langle$factor$\rangle$ $\langle$arg\_expr\_prime$\rangle$ & \{OR\} \\
+   & $\mid$~\texttt{TERNARY} $\langle$ternary\_mid\_expr$\rangle$ \texttt{COLON} $\langle$arg\_expr\_or\_consola$\rangle$ & \{TERNARY\} \\
+   & $\mid$~$\varepsilon$ & \{CLOSING\_PAR, COMMA\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$arg\_\allowbreak{}expr\_\allowbreak{}or\_\allowbreak{}consola$\rangle$}} & $::=$~$\langle$arg\_expr$\rangle$ & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+   & $\mid$~$\langle$consola\_call$\rangle$ & \{consola\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$ternary\_\allowbreak{}mid\_\allowbreak{}expr$\rangle$}} & $::=$~$\langle$factor$\rangle$ $\langle$ternary\_mid\_expr\_prime$\rangle$ & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+   & $\mid$~$\langle$consola\_call$\rangle$ & \{consola\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$ternary\_\allowbreak{}mid\_\allowbreak{}expr\_\allowbreak{}prime$\rangle$}} & $::=$~\texttt{PLUS} $\langle$factor$\rangle$ $\langle$ternary\_mid\_expr\_prime$\rangle$ & \{PLUS\} \\
+   & $\mid$~\texttt{MINUS} $\langle$factor$\rangle$ $\langle$ternary\_mid\_expr\_prime$\rangle$ & \{MINUS\} \\
+   & $\mid$~\texttt{TIMES} $\langle$factor$\rangle$ $\langle$ternary\_mid\_expr\_prime$\rangle$ & \{TIMES\} \\
+   & $\mid$~\texttt{DIV} $\langle$factor$\rangle$ $\langle$ternary\_mid\_expr\_prime$\rangle$ & \{DIV\} \\
+   & $\mid$~\texttt{MOD} $\langle$factor$\rangle$ $\langle$ternary\_mid\_expr\_prime$\rangle$ & \{MOD\} \\
+   & $\mid$~\texttt{POWER} $\langle$factor$\rangle$ $\langle$ternary\_mid\_expr\_prime$\rangle$ & \{POWER\} \\
+   & $\mid$~\texttt{EQUAL} $\langle$factor$\rangle$ $\langle$ternary\_mid\_expr\_prime$\rangle$ & \{EQUAL\} \\
+   & $\mid$~\texttt{STRICT\_EQUAL} $\langle$factor$\rangle$ $\langle$ternary\_mid\_expr\_prime$\rangle$ & \{STRICT\_EQUAL\} \\
+   & $\mid$~\texttt{NEQ} $\langle$factor$\rangle$ $\langle$ternary\_mid\_expr\_prime$\rangle$ & \{NEQ\} \\
+   & $\mid$~\texttt{STRICT\_NEQ} $\langle$factor$\rangle$ $\langle$ternary\_mid\_expr\_prime$\rangle$ & \{STRICT\_NEQ\} \\
+   & $\mid$~\texttt{LESS} $\langle$factor$\rangle$ $\langle$ternary\_mid\_expr\_prime$\rangle$ & \{LESS\} \\
+   & $\mid$~\texttt{GREATER} $\langle$factor$\rangle$ $\langle$ternary\_mid\_expr\_prime$\rangle$ & \{GREATER\} \\
+   & $\mid$~\texttt{LEQ} $\langle$factor$\rangle$ $\langle$ternary\_mid\_expr\_prime$\rangle$ & \{LEQ\} \\
+   & $\mid$~\texttt{GEQ} $\langle$factor$\rangle$ $\langle$ternary\_mid\_expr\_prime$\rangle$ & \{GEQ\} \\
+   & $\mid$~\texttt{AND} $\langle$factor$\rangle$ $\langle$ternary\_mid\_expr\_prime$\rangle$ & \{AND\} \\
+   & $\mid$~\texttt{OR} $\langle$factor$\rangle$ $\langle$ternary\_mid\_expr\_prime$\rangle$ & \{OR\} \\
+   & $\mid$~\texttt{TERNARY} $\langle$ternary\_mid\_expr$\rangle$ \texttt{COLON} $\langle$ternary\_mid\_expr$\rangle$ & \{TERNARY\} \\
+   & $\mid$~$\varepsilon$ & \{COLON\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$consola\_\allowbreak{}call$\rangle$}} & $::=$~\texttt{consola} \texttt{PERIOD} $\langle$consola\_method$\rangle$ \texttt{OPENING\_PAR} $\langle$args\_opt$\rangle$ \texttt{CLOSING\_PAR} & \{consola\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$consola\_\allowbreak{}method$\rangle$}} & $::=$~\texttt{afirmar} & \{afirmar\} \\
+   & $\mid$~\texttt{agrupar} & \{agrupar\} \\
+   & $\mid$~\texttt{error} & \{error\} \\
+   & $\mid$~\texttt{escribir} & \{escribir\} \\
+   & $\mid$~\texttt{info} & \{info\} \\
+   & $\mid$~\texttt{limpiar} & \{limpiar\} \\
+   & $\mid$~\texttt{tabla} & \{tabla\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$factor$\rangle$}} & $::=$~\texttt{IDENT} $\langle$factor\_tail$\rangle$ & \{IDENT\} \\
+   & $\mid$~\texttt{Mate} $\langle$factor\_tail$\rangle$ & \{Mate\} \\
+   & $\mid$~\texttt{Numero} $\langle$factor\_tail$\rangle$ & \{Numero\} \\
+   & $\mid$~\texttt{Arreglo} $\langle$factor\_tail$\rangle$ & \{Arreglo\} \\
+   & $\mid$~\texttt{Cadena} $\langle$factor\_tail$\rangle$ & \{Cadena\} \\
+   & $\mid$~\texttt{Matriz} $\langle$factor\_tail$\rangle$ & \{Matriz\} \\
+   & $\mid$~\texttt{Booleano} $\langle$factor\_tail$\rangle$ & \{Booleano\} \\
+   & $\mid$~\texttt{OPENING\_PAR} $\langle$args\_opt$\rangle$ \texttt{CLOSING\_PAR} $\langle$factor\_tail$\rangle$ & \{OPENING\_PAR\} \\
+   & $\mid$~\texttt{OPENING\_BRA} $\langle$array\_args\_opt$\rangle$ \texttt{CLOSING\_BRA} $\langle$factor\_tail$\rangle$ & \{OPENING\_BRA\} \\
+   & $\mid$~\texttt{OPENING\_KEY} $\langle$obj\_elements$\rangle$ \texttt{CLOSING\_KEY} & \{OPENING\_KEY\} \\
+   & $\mid$~\texttt{NUMBER} & \{NUMBER\} \\
+   & $\mid$~\texttt{STR} & \{STR\} \\
+   & $\mid$~\texttt{verdadero} & \{verdadero\} \\
+   & $\mid$~\texttt{falso} & \{falso\} \\
+   & $\mid$~\texttt{nulo} & \{nulo\} \\
+   & $\mid$~\texttt{indefinido} & \{indefinido\} \\
+   & $\mid$~\texttt{Infinito} & \{Infinito\} \\
+   & $\mid$~\texttt{NuN} & \{NuN\} \\
+   & $\mid$~\texttt{MINUS} $\langle$factor$\rangle$ & \{MINUS\} \\
+   & $\mid$~\texttt{PLUS} $\langle$factor$\rangle$ & \{PLUS\} \\
+   & $\mid$~\texttt{NOT} $\langle$factor$\rangle$ & \{NOT\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$factor\_\allowbreak{}tail$\rangle$}} & $::=$~\texttt{OPENING\_PAR} $\langle$args\_opt$\rangle$ \texttt{CLOSING\_PAR} $\langle$factor\_tail$\rangle$ & \{OPENING\_PAR\} \\
+   & $\mid$~\texttt{OPENING\_BRA} $\langle$expr$\rangle$ \texttt{CLOSING\_BRA} $\langle$factor\_tail$\rangle$ & \{OPENING\_BRA\} \\
+   & $\mid$~\texttt{PERIOD} \texttt{IDENT} $\langle$factor\_tail$\rangle$ & \{PERIOD\} \\
+   & $\mid$~\texttt{ASSIGN} $\langle$expr\_or\_crear$\rangle$ & \{ASSIGN\} \\
+   & $\mid$~\texttt{PLUS\_ASSIGN} $\langle$expr$\rangle$ & \{PLUS\_ASSIGN\} \\
+   & $\mid$~\texttt{MINUS\_ASSIGN} $\langle$expr$\rangle$ & \{MINUS\_ASSIGN\} \\
+   & $\mid$~\texttt{TIMES\_ASSIGN} $\langle$expr$\rangle$ & \{TIMES\_ASSIGN\} \\
+   & $\mid$~\texttt{DIV\_ASSIGN} $\langle$expr$\rangle$ & \{DIV\_ASSIGN\} \\
+   & $\mid$~\texttt{MOD\_ASSIGN} $\langle$expr$\rangle$ & \{MOD\_ASSIGN\} \\
+   & $\mid$~\texttt{POWER\_ASSIGN} $\langle$expr$\rangle$ & \{POWER\_ASSIGN\} \\
+   & $\mid$~\texttt{ARROW} $\langle$arrow\_body$\rangle$ & \{ARROW\} \\
+   & $\mid$~\texttt{INCREMENT} $\langle$factor\_tail$\rangle$ & \{INCREMENT\} \\
+   & $\mid$~\texttt{DECREMENT} $\langle$factor\_tail$\rangle$ & \{DECREMENT\} \\
+   & $\mid$~$\varepsilon$ & \{AND, Arreglo, Booleano, CLOSING\_BRA, CLOSING\_KEY, CLOSING\_PAR, COLON, COMMA, Cadena, DIV, EOF, EQUAL, GEQ, GREATER, IDENT, Infinito, LEQ, LESS, MINUS, MOD, Mate, Matriz, NEQ, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, OR, PLUS, POWER, SEMICOLON, STR, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$arrow\_\allowbreak{}body$\rangle$}} & $::=$~$\langle$block\_stmt$\rangle$ & \{OPENING\_KEY\} \\
+   & $\mid$~$\langle$expr$\rangle$ & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$params\_\allowbreak{}opt$\rangle$}} & $::=$~\texttt{IDENT} $\langle$params\_prime$\rangle$ & \{IDENT\} \\
+   & $\mid$~$\varepsilon$ & \{CLOSING\_PAR\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$params\_\allowbreak{}prime$\rangle$}} & $::=$~\texttt{COMMA} \texttt{IDENT} $\langle$params\_prime$\rangle$ & \{COMMA\} \\
+   & $\mid$~$\varepsilon$ & \{CLOSING\_PAR\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$args\_\allowbreak{}opt$\rangle$}} & $::=$~$\langle$arg\_expr$\rangle$ $\langle$args\_prime$\rangle$ & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+   & $\mid$~$\varepsilon$ & \{CLOSING\_PAR\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$args\_\allowbreak{}prime$\rangle$}} & $::=$~\texttt{COMMA} $\langle$arg\_expr$\rangle$ $\langle$args\_prime$\rangle$ & \{COMMA\} \\
+   & $\mid$~$\varepsilon$ & \{CLOSING\_PAR\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$array\_\allowbreak{}args\_\allowbreak{}opt$\rangle$}} & $::=$~$\langle$expr$\rangle$ $\langle$array\_args\_prime$\rangle$ & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+   & $\mid$~$\varepsilon$ & \{CLOSING\_BRA\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$array\_\allowbreak{}args\_\allowbreak{}prime$\rangle$}} & $::=$~\texttt{COMMA} $\langle$expr$\rangle$ $\langle$array\_args\_prime$\rangle$ & \{COMMA\} \\
+   & $\mid$~$\varepsilon$ & \{CLOSING\_BRA\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$obj\_\allowbreak{}elements$\rangle$}} & $::=$~\texttt{IDENT} $\langle$obj\_tail$\rangle$ $\langle$obj\_prime$\rangle$ & \{IDENT\} \\
+   & $\mid$~$\varepsilon$ & \{CLOSING\_KEY\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$obj\_\allowbreak{}tail$\rangle$}} & $::=$~\texttt{COLON} $\langle$expr$\rangle$ & \{COLON\} \\
+   & $\mid$~\texttt{OPENING\_PAR} $\langle$params\_opt$\rangle$ \texttt{CLOSING\_PAR} $\langle$block\_stmt$\rangle$ & \{OPENING\_PAR\} \\
+  \midrule
+  \textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$obj\_\allowbreak{}prime$\rangle$}} & $::=$~\texttt{COMMA} \texttt{IDENT} $\langle$obj\_tail$\rangle$ $\langle$obj\_prime$\rangle$ & \{COMMA\} \\
+   & $\mid$~$\varepsilon$ & \{CLOSING\_KEY\} \\
+  \midrule
+  \bottomrule
+\end{longtable}
+}
+
+\section*{2.\ Predicción Total por No Terminal}
+{\footnotesize
+\begin{longtable}{@{} p{3.5cm} p{13cm} @{}}
+  \toprule
+  \textbf{No terminal} & \textbf{Pred. Set total} \\
+  \midrule \endhead
+  \parbox[t]{3.3cm}{\raggedright$\langle$start$\rangle$} & \{Arreglo, Booleano, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$global\_\allowbreak{}code$\rangle$} & \{Arreglo, Booleano, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$block\_\allowbreak{}code$\rangle$} & \{Arreglo, Booleano, CLOSING\_KEY, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}stmt$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}decl\_\allowbreak{}list$\rangle$} & \{IDENT\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}decl\_\allowbreak{}init$\rangle$} & \{ASSIGN, Arreglo, Booleano, COMMA, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}decl\_\allowbreak{}list\_\allowbreak{}prime$\rangle$} & \{Arreglo, Booleano, COMMA, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}semicolon\_\allowbreak{}opt$\rangle$} & \{Arreglo, Booleano, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}sino\_\allowbreak{}opt$\rangle$} & \{Arreglo, Booleano, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, sino, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}sino\_\allowbreak{}tail$\rangle$} & \{OPENING\_KEY, si\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}stmt$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}decl\_\allowbreak{}list$\rangle$} & \{IDENT\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}decl\_\allowbreak{}init$\rangle$} & \{ASSIGN, Arreglo, Booleano, CLOSING\_KEY, COMMA, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}decl\_\allowbreak{}list\_\allowbreak{}prime$\rangle$} & \{Arreglo, Booleano, CLOSING\_KEY, COMMA, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}semicolon\_\allowbreak{}opt$\rangle$} & \{Arreglo, Booleano, CLOSING\_KEY, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}sino\_\allowbreak{}opt$\rangle$} & \{Arreglo, Booleano, CLOSING\_KEY, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, sino, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}sino\_\allowbreak{}tail$\rangle$} & \{OPENING\_KEY, si\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$decl\_\allowbreak{}keyword$\rangle$} & \{const, mut, var\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$expr\_\allowbreak{}or\_\allowbreak{}crear$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, crear, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$crear\_\allowbreak{}args\_\allowbreak{}opt$\rangle$} & \{AND, Arreglo, Booleano, CLOSING\_BRA, CLOSING\_KEY, CLOSING\_PAR, COLON, COMMA, Cadena, DIV, EOF, EQUAL, GEQ, GREATER, IDENT, Infinito, LEQ, LESS, MINUS, MOD, Mate, Matriz, NEQ, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, OR, PLUS, POWER, SEMICOLON, STR, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$crear\_\allowbreak{}type$\rangle$} & \{Arreglo, Cadena, IDENT, Matriz\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$para\_\allowbreak{}init$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, const, falso, indefinido, mut, nulo, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$casos\_\allowbreak{}list$\rangle$} & \{CLOSING\_KEY, caso, porDefecto\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$block\_\allowbreak{}stmt$\rangle$} & \{OPENING\_KEY\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$expr\_\allowbreak{}opt$\rangle$} & \{Arreglo, Booleano, CLOSING\_KEY, CLOSING\_PAR, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$expr$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$expr\_\allowbreak{}prime$\rangle$} & \{AND, Arreglo, Booleano, CLOSING\_BRA, CLOSING\_KEY, CLOSING\_PAR, COLON, COMMA, Cadena, DIV, EOF, EQUAL, GEQ, GREATER, IDENT, Infinito, LEQ, LESS, MINUS, MOD, Mate, Matriz, NEQ, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, OR, PLUS, POWER, SEMICOLON, STR, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$expr\_\allowbreak{}or\_\allowbreak{}consola$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, consola, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$arg\_\allowbreak{}expr$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$arg\_\allowbreak{}expr\_\allowbreak{}prime$\rangle$} & \{AND, CLOSING\_PAR, COMMA, DIV, EQUAL, GEQ, GREATER, LEQ, LESS, MINUS, MOD, NEQ, OR, PLUS, POWER, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$arg\_\allowbreak{}expr\_\allowbreak{}or\_\allowbreak{}consola$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, consola, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$ternary\_\allowbreak{}mid\_\allowbreak{}expr$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, consola, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$ternary\_\allowbreak{}mid\_\allowbreak{}expr\_\allowbreak{}prime$\rangle$} & \{AND, COLON, DIV, EQUAL, GEQ, GREATER, LEQ, LESS, MINUS, MOD, NEQ, OR, PLUS, POWER, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$consola\_\allowbreak{}call$\rangle$} & \{consola\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$consola\_\allowbreak{}method$\rangle$} & \{afirmar, agrupar, error, escribir, info, limpiar, tabla\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$factor$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$factor\_\allowbreak{}tail$\rangle$} & \{AND, ARROW, ASSIGN, Arreglo, Booleano, CLOSING\_BRA, CLOSING\_KEY, CLOSING\_PAR, COLON, COMMA, Cadena, DECREMENT, DIV, DIV\_ASSIGN, EOF, EQUAL, GEQ, GREATER, IDENT, INCREMENT, Infinito, LEQ, LESS, MINUS, MINUS\_ASSIGN, MOD, MOD\_ASSIGN, Mate, Matriz, NEQ, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, OR, PERIOD, PLUS, PLUS\_ASSIGN, POWER, POWER\_ASSIGN, SEMICOLON, STR, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, TIMES\_ASSIGN, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$arrow\_\allowbreak{}body$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$params\_\allowbreak{}opt$\rangle$} & \{CLOSING\_PAR, IDENT\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$params\_\allowbreak{}prime$\rangle$} & \{CLOSING\_PAR, COMMA\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$args\_\allowbreak{}opt$\rangle$} & \{Arreglo, Booleano, CLOSING\_PAR, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$args\_\allowbreak{}prime$\rangle$} & \{CLOSING\_PAR, COMMA\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$array\_\allowbreak{}args\_\allowbreak{}opt$\rangle$} & \{Arreglo, Booleano, CLOSING\_BRA, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$array\_\allowbreak{}args\_\allowbreak{}prime$\rangle$} & \{CLOSING\_BRA, COMMA\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$obj\_\allowbreak{}elements$\rangle$} & \{CLOSING\_KEY, IDENT\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$obj\_\allowbreak{}tail$\rangle$} & \{COLON, OPENING\_PAR\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$obj\_\allowbreak{}prime$\rangle$} & \{CLOSING\_KEY, COMMA\} \\
+  \bottomrule
+\end{longtable}
+}
+
+\section*{3.\ Conjuntos FIRST}
+{\footnotesize
+\begin{longtable}{@{} p{3.5cm} p{13cm} @{}}
+  \toprule
+  \textbf{Símbolo} & \textbf{FIRST} \\
+  \midrule \endhead
+  \parbox[t]{3.3cm}{\raggedright$\langle$start$\rangle$} & \{Arreglo, Booleano, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$global\_\allowbreak{}code$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, $\varepsilon$, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$block\_\allowbreak{}code$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, $\varepsilon$, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}stmt$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}decl\_\allowbreak{}list$\rangle$} & \{IDENT\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}decl\_\allowbreak{}init$\rangle$} & \{ASSIGN, $\varepsilon$\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}decl\_\allowbreak{}list\_\allowbreak{}prime$\rangle$} & \{COMMA, $\varepsilon$\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}semicolon\_\allowbreak{}opt$\rangle$} & \{SEMICOLON, $\varepsilon$\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}sino\_\allowbreak{}opt$\rangle$} & \{$\varepsilon$, sino\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}sino\_\allowbreak{}tail$\rangle$} & \{OPENING\_KEY, si\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}stmt$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}decl\_\allowbreak{}list$\rangle$} & \{IDENT\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}decl\_\allowbreak{}init$\rangle$} & \{ASSIGN, $\varepsilon$\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}decl\_\allowbreak{}list\_\allowbreak{}prime$\rangle$} & \{COMMA, $\varepsilon$\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}semicolon\_\allowbreak{}opt$\rangle$} & \{SEMICOLON, $\varepsilon$\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}sino\_\allowbreak{}opt$\rangle$} & \{$\varepsilon$, sino\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}sino\_\allowbreak{}tail$\rangle$} & \{OPENING\_KEY, si\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$decl\_\allowbreak{}keyword$\rangle$} & \{const, mut, var\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$expr\_\allowbreak{}or\_\allowbreak{}crear$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, crear, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$crear\_\allowbreak{}args\_\allowbreak{}opt$\rangle$} & \{OPENING\_PAR, $\varepsilon$\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$crear\_\allowbreak{}type$\rangle$} & \{Arreglo, Cadena, IDENT, Matriz\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$para\_\allowbreak{}init$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, const, $\varepsilon$, falso, indefinido, mut, nulo, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$casos\_\allowbreak{}list$\rangle$} & \{caso, $\varepsilon$, porDefecto\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$block\_\allowbreak{}stmt$\rangle$} & \{OPENING\_KEY\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$expr\_\allowbreak{}opt$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, $\varepsilon$, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$expr$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$expr\_\allowbreak{}prime$\rangle$} & \{AND, DIV, EQUAL, GEQ, GREATER, LEQ, LESS, MINUS, MOD, NEQ, OR, PLUS, POWER, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, $\varepsilon$\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$expr\_\allowbreak{}or\_\allowbreak{}consola$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, consola, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$arg\_\allowbreak{}expr$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$arg\_\allowbreak{}expr\_\allowbreak{}prime$\rangle$} & \{AND, DIV, EQUAL, GEQ, GREATER, LEQ, LESS, MINUS, MOD, NEQ, OR, PLUS, POWER, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, $\varepsilon$\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$arg\_\allowbreak{}expr\_\allowbreak{}or\_\allowbreak{}consola$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, consola, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$ternary\_\allowbreak{}mid\_\allowbreak{}expr$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, consola, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$ternary\_\allowbreak{}mid\_\allowbreak{}expr\_\allowbreak{}prime$\rangle$} & \{AND, DIV, EQUAL, GEQ, GREATER, LEQ, LESS, MINUS, MOD, NEQ, OR, PLUS, POWER, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, $\varepsilon$\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$consola\_\allowbreak{}call$\rangle$} & \{consola\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$consola\_\allowbreak{}method$\rangle$} & \{afirmar, agrupar, error, escribir, info, limpiar, tabla\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$factor$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$factor\_\allowbreak{}tail$\rangle$} & \{ARROW, ASSIGN, DECREMENT, DIV\_ASSIGN, INCREMENT, MINUS\_ASSIGN, MOD\_ASSIGN, OPENING\_BRA, OPENING\_PAR, PERIOD, PLUS\_ASSIGN, POWER\_ASSIGN, TIMES\_ASSIGN, $\varepsilon$\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$arrow\_\allowbreak{}body$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$params\_\allowbreak{}opt$\rangle$} & \{IDENT, $\varepsilon$\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$params\_\allowbreak{}prime$\rangle$} & \{COMMA, $\varepsilon$\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$args\_\allowbreak{}opt$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, $\varepsilon$, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$args\_\allowbreak{}prime$\rangle$} & \{COMMA, $\varepsilon$\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$array\_\allowbreak{}args\_\allowbreak{}opt$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, $\varepsilon$, falso, indefinido, nulo, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$array\_\allowbreak{}args\_\allowbreak{}prime$\rangle$} & \{COMMA, $\varepsilon$\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$obj\_\allowbreak{}elements$\rangle$} & \{IDENT, $\varepsilon$\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$obj\_\allowbreak{}tail$\rangle$} & \{COLON, OPENING\_PAR\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$obj\_\allowbreak{}prime$\rangle$} & \{COMMA, $\varepsilon$\} \\
+  \bottomrule
+\end{longtable}
+}
+
+\section*{4.\ Conjuntos FOLLOW}
+{\footnotesize
+\begin{longtable}{@{} p{3.5cm} p{13cm} @{}}
+  \toprule
+  \textbf{Símbolo} & \textbf{FOLLOW} \\
+  \midrule \endhead
+  \parbox[t]{3.3cm}{\raggedright$\langle$start$\rangle$} & \{EOF\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$global\_\allowbreak{}code$\rangle$} & \{EOF\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$block\_\allowbreak{}code$\rangle$} & \{CLOSING\_KEY, caso, porDefecto\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}stmt$\rangle$} & \{Arreglo, Booleano, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}decl\_\allowbreak{}list$\rangle$} & \{Arreglo, Booleano, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}decl\_\allowbreak{}init$\rangle$} & \{Arreglo, Booleano, COMMA, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}decl\_\allowbreak{}list\_\allowbreak{}prime$\rangle$} & \{Arreglo, Booleano, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}semicolon\_\allowbreak{}opt$\rangle$} & \{Arreglo, Booleano, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}sino\_\allowbreak{}opt$\rangle$} & \{Arreglo, Booleano, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$g\_\allowbreak{}sino\_\allowbreak{}tail$\rangle$} & \{Arreglo, Booleano, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}stmt$\rangle$} & \{Arreglo, Booleano, CLOSING\_KEY, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}decl\_\allowbreak{}list$\rangle$} & \{Arreglo, Booleano, CLOSING\_KEY, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}decl\_\allowbreak{}init$\rangle$} & \{Arreglo, Booleano, CLOSING\_KEY, COMMA, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}decl\_\allowbreak{}list\_\allowbreak{}prime$\rangle$} & \{Arreglo, Booleano, CLOSING\_KEY, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}semicolon\_\allowbreak{}opt$\rangle$} & \{Arreglo, Booleano, CLOSING\_KEY, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}sino\_\allowbreak{}opt$\rangle$} & \{Arreglo, Booleano, CLOSING\_KEY, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$b\_\allowbreak{}sino\_\allowbreak{}tail$\rangle$} & \{Arreglo, Booleano, CLOSING\_KEY, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$decl\_\allowbreak{}keyword$\rangle$} & \{IDENT\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$expr\_\allowbreak{}or\_\allowbreak{}crear$\rangle$} & \{AND, Arreglo, Booleano, CLOSING\_BRA, CLOSING\_KEY, CLOSING\_PAR, COLON, COMMA, Cadena, DIV, EOF, EQUAL, GEQ, GREATER, IDENT, Infinito, LEQ, LESS, MINUS, MOD, Mate, Matriz, NEQ, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, OR, PLUS, POWER, SEMICOLON, STR, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$crear\_\allowbreak{}args\_\allowbreak{}opt$\rangle$} & \{AND, Arreglo, Booleano, CLOSING\_BRA, CLOSING\_KEY, CLOSING\_PAR, COLON, COMMA, Cadena, DIV, EOF, EQUAL, GEQ, GREATER, IDENT, Infinito, LEQ, LESS, MINUS, MOD, Mate, Matriz, NEQ, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, OR, PLUS, POWER, SEMICOLON, STR, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$crear\_\allowbreak{}type$\rangle$} & \{AND, Arreglo, Booleano, CLOSING\_BRA, CLOSING\_KEY, CLOSING\_PAR, COLON, COMMA, Cadena, DIV, EOF, EQUAL, GEQ, GREATER, IDENT, Infinito, LEQ, LESS, MINUS, MOD, Mate, Matriz, NEQ, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, OR, PLUS, POWER, SEMICOLON, STR, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$para\_\allowbreak{}init$\rangle$} & \{SEMICOLON\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$casos\_\allowbreak{}list$\rangle$} & \{CLOSING\_KEY\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$block\_\allowbreak{}stmt$\rangle$} & \{AND, Arreglo, Booleano, CLOSING\_BRA, CLOSING\_KEY, CLOSING\_PAR, COLON, COMMA, Cadena, DIV, EOF, EQUAL, GEQ, GREATER, IDENT, Infinito, LEQ, LESS, MINUS, MOD, Mate, Matriz, NEQ, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, OR, PLUS, POWER, SEMICOLON, STR, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, capturar, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, sino, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$expr\_\allowbreak{}opt$\rangle$} & \{Arreglo, Booleano, CLOSING\_KEY, CLOSING\_PAR, Cadena, EOF, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, SEMICOLON, STR, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$expr$\rangle$} & \{AND, Arreglo, Booleano, CLOSING\_BRA, CLOSING\_KEY, CLOSING\_PAR, COLON, COMMA, Cadena, DIV, EOF, EQUAL, GEQ, GREATER, IDENT, Infinito, LEQ, LESS, MINUS, MOD, Mate, Matriz, NEQ, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, OR, PLUS, POWER, SEMICOLON, STR, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$expr\_\allowbreak{}prime$\rangle$} & \{AND, Arreglo, Booleano, CLOSING\_BRA, CLOSING\_KEY, CLOSING\_PAR, COLON, COMMA, Cadena, DIV, EOF, EQUAL, GEQ, GREATER, IDENT, Infinito, LEQ, LESS, MINUS, MOD, Mate, Matriz, NEQ, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, OR, PLUS, POWER, SEMICOLON, STR, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$expr\_\allowbreak{}or\_\allowbreak{}consola$\rangle$} & \{AND, Arreglo, Booleano, CLOSING\_BRA, CLOSING\_KEY, CLOSING\_PAR, COLON, COMMA, Cadena, DIV, EOF, EQUAL, GEQ, GREATER, IDENT, Infinito, LEQ, LESS, MINUS, MOD, Mate, Matriz, NEQ, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, OR, PLUS, POWER, SEMICOLON, STR, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$arg\_\allowbreak{}expr$\rangle$} & \{CLOSING\_PAR, COMMA\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$arg\_\allowbreak{}expr\_\allowbreak{}prime$\rangle$} & \{CLOSING\_PAR, COMMA\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$arg\_\allowbreak{}expr\_\allowbreak{}or\_\allowbreak{}consola$\rangle$} & \{CLOSING\_PAR, COMMA\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$ternary\_\allowbreak{}mid\_\allowbreak{}expr$\rangle$} & \{COLON\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$ternary\_\allowbreak{}mid\_\allowbreak{}expr\_\allowbreak{}prime$\rangle$} & \{COLON\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$consola\_\allowbreak{}call$\rangle$} & \{AND, Arreglo, Booleano, CLOSING\_BRA, CLOSING\_KEY, CLOSING\_PAR, COLON, COMMA, Cadena, DIV, EOF, EQUAL, GEQ, GREATER, IDENT, Infinito, LEQ, LESS, MINUS, MOD, Mate, Matriz, NEQ, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, OR, PLUS, POWER, SEMICOLON, STR, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$consola\_\allowbreak{}method$\rangle$} & \{OPENING\_PAR\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$factor$\rangle$} & \{AND, Arreglo, Booleano, CLOSING\_BRA, CLOSING\_KEY, CLOSING\_PAR, COLON, COMMA, Cadena, DIV, EOF, EQUAL, GEQ, GREATER, IDENT, Infinito, LEQ, LESS, MINUS, MOD, Mate, Matriz, NEQ, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, OR, PLUS, POWER, SEMICOLON, STR, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$factor\_\allowbreak{}tail$\rangle$} & \{AND, Arreglo, Booleano, CLOSING\_BRA, CLOSING\_KEY, CLOSING\_PAR, COLON, COMMA, Cadena, DIV, EOF, EQUAL, GEQ, GREATER, IDENT, Infinito, LEQ, LESS, MINUS, MOD, Mate, Matriz, NEQ, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, OR, PLUS, POWER, SEMICOLON, STR, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$arrow\_\allowbreak{}body$\rangle$} & \{AND, Arreglo, Booleano, CLOSING\_BRA, CLOSING\_KEY, CLOSING\_PAR, COLON, COMMA, Cadena, DIV, EOF, EQUAL, GEQ, GREATER, IDENT, Infinito, LEQ, LESS, MINUS, MOD, Mate, Matriz, NEQ, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, OR, PLUS, POWER, SEMICOLON, STR, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES, caso, consola, const, continuar, elegir, falso, funcion, hacer, indefinido, intentar, mientras, mut, nulo, para, porDefecto, retornar, romper, si, var, verdadero\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$params\_\allowbreak{}opt$\rangle$} & \{CLOSING\_PAR\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$params\_\allowbreak{}prime$\rangle$} & \{CLOSING\_PAR\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$args\_\allowbreak{}opt$\rangle$} & \{CLOSING\_PAR\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$args\_\allowbreak{}prime$\rangle$} & \{CLOSING\_PAR\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$array\_\allowbreak{}args\_\allowbreak{}opt$\rangle$} & \{CLOSING\_BRA\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$array\_\allowbreak{}args\_\allowbreak{}prime$\rangle$} & \{CLOSING\_BRA\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$obj\_\allowbreak{}elements$\rangle$} & \{CLOSING\_KEY\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$obj\_\allowbreak{}tail$\rangle$} & \{CLOSING\_KEY, COMMA\} \\
+  \parbox[t]{3.3cm}{\raggedright$\langle$obj\_\allowbreak{}prime$\rangle$} & \{CLOSING\_KEY\} \\
+  \bottomrule
+\end{longtable}
+}
+
+\section*{5.\ Conflictos}
+
+{\footnotesize
+\begin{longtable}{@{} p{3.5cm} p{13cm} @{}}
+  \toprule
+  \textbf{No terminal} & \textbf{Tokens en conflicto} \\
+  \midrule \endhead
+  \textcolor{red}{\raggedright$\langle$g\_stmt$\rangle$} & \{OPENING\_KEY\} \\
+  \textcolor{red}{\raggedright$\langle$g\_semicolon\_opt$\rangle$} & \{SEMICOLON\} \\
+  \textcolor{red}{\raggedright$\langle$b\_stmt$\rangle$} & \{OPENING\_KEY\} \\
+  \textcolor{red}{\raggedright$\langle$b\_semicolon\_opt$\rangle$} & \{SEMICOLON\} \\
+  \textcolor{red}{\raggedright$\langle$crear\_args\_opt$\rangle$} & \{OPENING\_PAR\} \\
+  \textcolor{red}{\raggedright$\langle$expr\_opt$\rangle$} & \{Arreglo, Booleano, Cadena, IDENT, Infinito, MINUS, Mate, Matriz, NOT, NUMBER, NuN, Numero, OPENING\_BRA, OPENING\_KEY, OPENING\_PAR, PLUS, STR, falso, indefinido, nulo, verdadero\} \\
+  \textcolor{red}{\raggedright$\langle$expr\_prime$\rangle$} & \{AND, DIV, EQUAL, GEQ, GREATER, LEQ, LESS, MINUS, MOD, NEQ, OR, PLUS, POWER, STRICT\_EQUAL, STRICT\_NEQ, TERNARY, TIMES\} \\
+  \textcolor{red}{\raggedright$\langle$factor\_tail$\rangle$} & \{OPENING\_BRA, OPENING\_PAR\} \\
+  \textcolor{red}{\raggedright$\langle$arrow\_body$\rangle$} & \{OPENING\_KEY\} \\
+  \bottomrule
+\end{longtable}
+}
+
+\end{document}

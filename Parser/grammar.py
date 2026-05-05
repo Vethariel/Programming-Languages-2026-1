@@ -447,66 +447,178 @@ class Grammar:
 from datetime import datetime
 
 
-def write_grammar_report(grammar, filepath="grammar_report.txt"):
-    """
-    Escribe el reporte de la gramática en un archivo .txt,
-    sobreescribiéndolo cada vez que se llame.
-    """
-    lines = list()
+def write_grammar_report(grammar, filepath="grammar_report.tex", author="Daniel Alonso Gracia Pinto"):
+    from datetime import datetime
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # ─── Encabezado ───────────────────────────────────────────────
-    lines.append("=" * 60)
-    lines.append(f"  REPORTE DE GRAMÁTICA  —  {now}")
-    lines.append("=" * 60)
+    def pred_set_to_latex(s):
+        if not s:
+            return r"\{\}"
+        items = sorted(str(x) for x in s)
+        escaped = []
+        for item in items:
+            if item == "epsylon":
+                escaped.append(r"$\varepsilon$")
+            else:
+                escaped.append(item.replace('_', r'\_'))
+        return r"\{" + ", ".join(escaped) + r"\}"
 
-    # ─── Reglas y conjuntos de predicción por producción ──────────
-    lines.append("\n[1] REGLAS Y CONJUNTOS DE PREDICCIÓN\n")
-    lines.append(f"  {'No terminal':<20} {'Producción':<30} {'Pred. Set'}")
-    lines.append(f"  {'-'*20} {'-'*30} {'-'*20}")
+    def tok_latex(tok):
+        if tok == "epsylon":
+            return r"$\varepsilon$"
+        if tok in grammar.grammar:
+            return r"$\langle$" + tok.replace('_', r'\_') + r"$\rangle$"
+        return r"\texttt{" + tok.replace('_', r'\_') + "}"
 
-    for key, value in grammar.grammar.items():
-        for rule in value["rules"]:
-            prod  = " ".join(rule["rule"]) if isinstance(rule["rule"], list) else str(rule["rule"])
-            preds = str(rule["pred_set"])
-            lines.append(f"  {key:<20} {prod:<30} {preds}")
+    def prod_latex(rule):
+        tokens = rule if isinstance(rule, list) else [str(rule)]
+        return " ".join(tok_latex(t) for t in tokens)
 
-    # ─── Predicción total por no terminal ─────────────────────────
-    lines.append("\n[2] PREDICCIÓN TOTAL POR NO TERMINAL\n")
-    lines.append(f"  {'No terminal':<20} {'Pred. Set total'}")
-    lines.append(f"  {'-'*20} {'-'*30}")
+    def nt_cell(nt):
+        escaped = nt.replace('_', r'\_\allowbreak{}')
+        return (r"\textcolor{ntcolor}{\parbox[t]{1.8cm}{\raggedright$\langle$"
+                + escaped + r"$\rangle$}}")
 
-    for key, value in grammar.grammar.items():
-        lines.append(f"  {key:<20} {value['total_pred_set']}")
+    def nt_plain(nt):
+        escaped = nt.replace('_', r'\_\allowbreak{}')
+        return r"\parbox[t]{3.3cm}{\raggedright$\langle$" + escaped + r"$\rangle$}"
 
-    # ─── Primeros ─────────────────────────────────────────────────
-    lines.append("\n[3] CONJUNTOS PRIMEROS (FIRST)\n")
-    for symbol, first in grammar.first_set.items():
-        lines.append(f"  FIRST({symbol:<18}) = {first}")
+    lines = []
 
-    # ─── Siguientes ───────────────────────────────────────────────
-    lines.append("\n[4] CONJUNTOS SIGUIENTES (FOLLOW)\n")
-    for symbol, follow in grammar.follow_set.items():
-        lines.append(f"  FOLLOW({symbol:<17}) = {follow}")
+    # ── Preámbulo ─────────────────────────────────────────────────────────────
+    lines += [
+        r"\documentclass[10pt]{article}",
+        r"\usepackage[utf8]{inputenc}",
+        r"\usepackage[T1]{fontenc}",
+        r"\usepackage[spanish,provide=*]{babel}",
+        r"\usepackage[margin=1.5cm,top=2cm]{geometry}",
+        r"\usepackage{booktabs}",
+        r"\usepackage{longtable}",
+        r"\usepackage{array}",
+        r"\usepackage{xcolor}",
+        r"\usepackage{fancyhdr}",
+        r"\usepackage{amsmath}",
+        r"\usepackage{amssymb}",
+        r"\usepackage{courier}",
+        r"\usepackage[protrusion=true,expansion=false]{microtype}",
+        r"\setlength{\headheight}{14.5pt}",
+        r"\addtolength{\topmargin}{-2.5pt}",
+        r"\pagestyle{fancy}",
+        r"\fancyhf{}",
+        r"\rhead{\textit{Reporte de Gramática}}",
+        r"\lhead{\textit{BNF}}",
+        r"\rfoot{\thepage}",
+        r"\definecolor{ntcolor}{RGB}{0,70,127}",
+        r"\definecolor{okcolor}{RGB}{0,120,0}",
+        r"",
+        r"\begin{document}",
+        r"\begin{center}",
+        r"  {\LARGE\textbf{Reporte de Gramática}}\\[0.4em]",
+        r"  {\large Forma de Backus-Naur (BNF)}\\[0.3em]",
+        f"  {{\\large {author}}}\\\\[0.2em]",
+        f"  \\textit{{{now}}}",
+        r"\end{center}",
+        r"\vspace{0.5em}\hrule\vspace{1em}",
+    ]
 
-    # ─── Conflictos ───────────────────────────────────────────────
-    lines.append("\n[5] CONFLICTOS\n")
+    # ── Sección 1: Reglas BNF ─────────────────────────────────────────────────
+    # Columna 1 usa p{} para permitir word-wrap en no terminales largos
+    lines += [
+        r"\section*{1.\ Reglas de Producción y Conjuntos de Predicción}",
+        r"{\footnotesize",
+        # No terminal 2cm, producción y pred set 6.9cm cada una
+        r"\begin{longtable}{@{} p{2.0cm} p{6.9cm} p{6.9cm} @{}}",
+        r"  \toprule",
+        r"  \textbf{No terminal} & \textbf{Producción} & \textbf{Pred. Set} \\",
+        r"  \midrule \endhead",
+    ]
+
+    for nt, values in grammar.grammar.items():
+        for i, rule in enumerate(values["rules"]):
+            lhs = nt_cell(nt) if i == 0 else ""
+            sep = r"$::=$" if i == 0 else r"$\mid$"
+            prod = prod_latex(rule["rule"])
+            pred = pred_set_to_latex(rule["pred_set"])
+            lines.append(f"  {lhs} & {sep}~{prod} & {pred} \\\\")
+        lines.append(r"  \midrule")
+
+    lines += [r"  \bottomrule", r"\end{longtable}", r"}", r""]
+
+    # ── Sección 2: Predicción total ───────────────────────────────────────────
+    lines += [
+        r"\section*{2.\ Predicción Total por No Terminal}",
+        r"{\footnotesize",
+        r"\begin{longtable}{@{} p{3.5cm} p{13cm} @{}}",
+        r"  \toprule",
+        r"  \textbf{No terminal} & \textbf{Pred. Set total} \\",
+        r"  \midrule \endhead",
+    ]
+    for nt, values in grammar.grammar.items():
+        lines.append(
+            f"  {nt_plain(nt)} & {pred_set_to_latex(values['total_pred_set'])} \\\\"
+        )
+    lines += [r"  \bottomrule", r"\end{longtable}", r"}", r""]
+
+    # ── Sección 3: FIRST ──────────────────────────────────────────────────────
+    lines += [
+        r"\section*{3.\ Conjuntos FIRST}",
+        r"{\footnotesize",
+        r"\begin{longtable}{@{} p{3.5cm} p{13cm} @{}}",
+        r"  \toprule",
+        r"  \textbf{Símbolo} & \textbf{FIRST} \\",
+        r"  \midrule \endhead",
+    ]
+    for sym, first in grammar.first_set.items():
+        lines.append(
+            f"  {nt_plain(sym)} & {pred_set_to_latex(first)} \\\\"
+        )
+    lines += [r"  \bottomrule", r"\end{longtable}", r"}", r""]
+
+    # ── Sección 4: FOLLOW ─────────────────────────────────────────────────────
+    lines += [
+        r"\section*{4.\ Conjuntos FOLLOW}",
+        r"{\footnotesize",
+        r"\begin{longtable}{@{} p{3.5cm} p{13cm} @{}}",
+        r"  \toprule",
+        r"  \textbf{Símbolo} & \textbf{FOLLOW} \\",
+        r"  \midrule \endhead",
+    ]
+    for sym, follow in grammar.follow_set.items():
+        lines.append(
+            f"  {nt_plain(sym)} & {pred_set_to_latex(follow)} \\\\"
+        )
+    lines += [r"  \bottomrule", r"\end{longtable}", r"}", r""]
+
+    # ── Sección 5: Conflictos ─────────────────────────────────────────────────
+    lines += [r"\section*{5.\ Conflictos}", r""]
     if grammar.conflicts:
-        for conflict, item in grammar.conflicts.items():
-            lines.append(f"  ⚠  {conflict} = {item}")
+        lines += [
+            r"{\footnotesize",
+            r"\begin{longtable}{@{} p{3.5cm} p{13cm} @{}}",
+            r"  \toprule",
+            r"  \textbf{No terminal} & \textbf{Tokens en conflicto} \\",
+            r"  \midrule \endhead",
+        ]
+        for nt, tokens in grammar.conflicts.items():
+            escaped = nt.replace('_', r'\_')
+            nt_fmt = (r"\textcolor{red}{\raggedright$\langle$"
+                      + escaped + r"$\rangle$}")
+            lines.append(f"  {nt_fmt} & {pred_set_to_latex(tokens)} \\\\")
+        lines += [r"  \bottomrule", r"\end{longtable}", r"}"]
     else:
-        lines.append("  ✔  Sin conflictos detectados.")
+        lines.append(
+            r"\textcolor{okcolor}{\textbf{$\checkmark$~Sin conflictos detectados.}}"
+        )
 
-    lines.append("\n" + "=" * 60 + "\n")
+    lines += [r"", r"\end{document}", r""]
 
-    # ─── Escritura ────────────────────────────────────────────────
     with open(filepath, "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
-
-
+                    
+        
 def main():
     grammar = Grammar()
-    write_grammar_report(grammar, filepath="grammar_report.txt")
+    write_grammar_report(grammar)
     
 if __name__ == "__main__":
     main()

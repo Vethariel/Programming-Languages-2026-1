@@ -1268,9 +1268,18 @@ public class EsJSParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class ExprContext extends ParserRuleContext {
-		public FactorContext factor() {
-			return getRuleContext(FactorContext.class,0);
+		public ExprContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
 		}
+		@Override public int getRuleIndex() { return RULE_expr; }
+	 
+		public ExprContext() { }
+		public void copyFrom(ExprContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExprAritmeticaContext extends ExprContext {
 		public List<ExprContext> expr() {
 			return getRuleContexts(ExprContext.class);
 		}
@@ -1282,22 +1291,66 @@ public class EsJSParser extends Parser {
 		public TerminalNode TIMES() { return getToken(EsJSParser.TIMES, 0); }
 		public TerminalNode DIV() { return getToken(EsJSParser.DIV, 0); }
 		public TerminalNode MOD() { return getToken(EsJSParser.MOD, 0); }
-		public TerminalNode EQUAL() { return getToken(EsJSParser.EQUAL, 0); }
-		public TerminalNode STRICT_EQ() { return getToken(EsJSParser.STRICT_EQ, 0); }
-		public TerminalNode NEQ() { return getToken(EsJSParser.NEQ, 0); }
-		public TerminalNode STRICT_NEQ() { return getToken(EsJSParser.STRICT_NEQ, 0); }
+		public ExprAritmeticaContext(ExprContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExprFactorContext extends ExprContext {
+		public FactorContext factor() {
+			return getRuleContext(FactorContext.class,0);
+		}
+		public ExprFactorContext(ExprContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExprRelacionalContext extends ExprContext {
+		public List<ExprContext> expr() {
+			return getRuleContexts(ExprContext.class);
+		}
+		public ExprContext expr(int i) {
+			return getRuleContext(ExprContext.class,i);
+		}
 		public TerminalNode LESS() { return getToken(EsJSParser.LESS, 0); }
 		public TerminalNode GREATER() { return getToken(EsJSParser.GREATER, 0); }
 		public TerminalNode LEQ() { return getToken(EsJSParser.LEQ, 0); }
 		public TerminalNode GEQ() { return getToken(EsJSParser.GEQ, 0); }
-		public TerminalNode AND() { return getToken(EsJSParser.AND, 0); }
-		public TerminalNode OR() { return getToken(EsJSParser.OR, 0); }
+		public ExprRelacionalContext(ExprContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExprIgualdadContext extends ExprContext {
+		public List<ExprContext> expr() {
+			return getRuleContexts(ExprContext.class);
+		}
+		public ExprContext expr(int i) {
+			return getRuleContext(ExprContext.class,i);
+		}
+		public TerminalNode EQUAL() { return getToken(EsJSParser.EQUAL, 0); }
+		public TerminalNode STRICT_EQ() { return getToken(EsJSParser.STRICT_EQ, 0); }
+		public TerminalNode NEQ() { return getToken(EsJSParser.NEQ, 0); }
+		public TerminalNode STRICT_NEQ() { return getToken(EsJSParser.STRICT_NEQ, 0); }
+		public ExprIgualdadContext(ExprContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExprTernarioContext extends ExprContext {
+		public List<ExprContext> expr() {
+			return getRuleContexts(ExprContext.class);
+		}
+		public ExprContext expr(int i) {
+			return getRuleContext(ExprContext.class,i);
+		}
 		public TerminalNode TERNARY() { return getToken(EsJSParser.TERNARY, 0); }
 		public TerminalNode COLON() { return getToken(EsJSParser.COLON, 0); }
-		public ExprContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
+		public ExprTernarioContext(ExprContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class ExprLogicaContext extends ExprContext {
+		public List<ExprContext> expr() {
+			return getRuleContexts(ExprContext.class);
 		}
-		@Override public int getRuleIndex() { return RULE_expr; }
+		public ExprContext expr(int i) {
+			return getRuleContext(ExprContext.class,i);
+		}
+		public TerminalNode AND() { return getToken(EsJSParser.AND, 0); }
+		public TerminalNode OR() { return getToken(EsJSParser.OR, 0); }
+		public ExprLogicaContext(ExprContext ctx) { copyFrom(ctx); }
 	}
 
 	public final ExprContext expr() throws RecognitionException {
@@ -1317,6 +1370,10 @@ public class EsJSParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			{
+			_localctx = new ExprFactorContext(_localctx);
+			_ctx = _localctx;
+			_prevctx = _localctx;
+
 			setState(227);
 			factor(0);
 			}
@@ -1334,7 +1391,7 @@ public class EsJSParser extends Parser {
 					switch ( getInterpreter().adaptivePredict(_input,25,_ctx) ) {
 					case 1:
 						{
-						_localctx = new ExprContext(_parentctx, _parentState);
+						_localctx = new ExprAritmeticaContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(229);
 						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
@@ -1354,7 +1411,7 @@ public class EsJSParser extends Parser {
 						break;
 					case 2:
 						{
-						_localctx = new ExprContext(_parentctx, _parentState);
+						_localctx = new ExprIgualdadContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(232);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
@@ -1374,7 +1431,7 @@ public class EsJSParser extends Parser {
 						break;
 					case 3:
 						{
-						_localctx = new ExprContext(_parentctx, _parentState);
+						_localctx = new ExprRelacionalContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(235);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
@@ -1394,7 +1451,7 @@ public class EsJSParser extends Parser {
 						break;
 					case 4:
 						{
-						_localctx = new ExprContext(_parentctx, _parentState);
+						_localctx = new ExprLogicaContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(238);
 						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
@@ -1414,7 +1471,7 @@ public class EsJSParser extends Parser {
 						break;
 					case 5:
 						{
-						_localctx = new ExprContext(_parentctx, _parentState);
+						_localctx = new ExprTernarioContext(new ExprContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(241);
 						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
@@ -1450,47 +1507,99 @@ public class EsJSParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class FactorContext extends ParserRuleContext {
-		public TerminalNode LPAREN() { return getToken(EsJSParser.LPAREN, 0); }
-		public ArgsOptContext argsOpt() {
-			return getRuleContext(ArgsOptContext.class,0);
+		public FactorContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
 		}
-		public TerminalNode RPAREN() { return getToken(EsJSParser.RPAREN, 0); }
+		@Override public int getRuleIndex() { return RULE_factor; }
+	 
+		public FactorContext() { }
+		public void copyFrom(FactorContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorAccesoContext extends FactorContext {
+		public FactorContext factor() {
+			return getRuleContext(FactorContext.class,0);
+		}
+		public TerminalNode PERIOD() { return getToken(EsJSParser.PERIOD, 0); }
+		public TerminalNode ID() { return getToken(EsJSParser.ID, 0); }
+		public FactorAccesoContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorArregloBuiltinContext extends FactorContext {
+		public TerminalNode ARREGLO() { return getToken(EsJSParser.ARREGLO, 0); }
+		public FactorArregloBuiltinContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorFalsoContext extends FactorContext {
+		public TerminalNode FALSO() { return getToken(EsJSParser.FALSO, 0); }
+		public FactorFalsoContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorVerdaderoContext extends FactorContext {
+		public TerminalNode VERDADERO() { return getToken(EsJSParser.VERDADERO, 0); }
+		public FactorVerdaderoContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorNuloContext extends FactorContext {
+		public TerminalNode NULO() { return getToken(EsJSParser.NULO, 0); }
+		public FactorNuloContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorMatrizBuiltinContext extends FactorContext {
+		public TerminalNode MATRIZ() { return getToken(EsJSParser.MATRIZ, 0); }
+		public FactorMatrizBuiltinContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorArregloContext extends FactorContext {
 		public TerminalNode LBRACKET() { return getToken(EsJSParser.LBRACKET, 0); }
 		public ArrayArgsOptContext arrayArgsOpt() {
 			return getRuleContext(ArrayArgsOptContext.class,0);
 		}
 		public TerminalNode RBRACKET() { return getToken(EsJSParser.RBRACKET, 0); }
+		public FactorArregloContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorCadenaBuiltinContext extends FactorContext {
+		public TerminalNode CADENA() { return getToken(EsJSParser.CADENA, 0); }
+		public FactorCadenaBuiltinContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorMateContext extends FactorContext {
+		public TerminalNode MATE() { return getToken(EsJSParser.MATE, 0); }
+		public FactorMateContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorFlechaContext extends FactorContext {
+		public FactorContext factor() {
+			return getRuleContext(FactorContext.class,0);
+		}
+		public TerminalNode ARROW() { return getToken(EsJSParser.ARROW, 0); }
+		public ArrowBodyContext arrowBody() {
+			return getRuleContext(ArrowBodyContext.class,0);
+		}
+		public FactorFlechaContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorInfinitoContext extends FactorContext {
+		public TerminalNode INFINITO() { return getToken(EsJSParser.INFINITO, 0); }
+		public FactorInfinitoContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorObjetoContext extends FactorContext {
 		public TerminalNode LBRACE() { return getToken(EsJSParser.LBRACE, 0); }
 		public ObjElementsContext objElements() {
 			return getRuleContext(ObjElementsContext.class,0);
 		}
 		public TerminalNode RBRACE() { return getToken(EsJSParser.RBRACE, 0); }
+		public FactorObjetoContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorAsignacionContext extends FactorContext {
 		public FactorContext factor() {
 			return getRuleContext(FactorContext.class,0);
 		}
-		public TerminalNode MINUS() { return getToken(EsJSParser.MINUS, 0); }
-		public TerminalNode PLUS() { return getToken(EsJSParser.PLUS, 0); }
-		public TerminalNode NOT() { return getToken(EsJSParser.NOT, 0); }
-		public TerminalNode ID() { return getToken(EsJSParser.ID, 0); }
-		public TerminalNode NUMBER() { return getToken(EsJSParser.NUMBER, 0); }
-		public TerminalNode STRING() { return getToken(EsJSParser.STRING, 0); }
-		public TerminalNode VERDADERO() { return getToken(EsJSParser.VERDADERO, 0); }
-		public TerminalNode FALSO() { return getToken(EsJSParser.FALSO, 0); }
-		public TerminalNode NULO() { return getToken(EsJSParser.NULO, 0); }
-		public TerminalNode INDEFINIDO() { return getToken(EsJSParser.INDEFINIDO, 0); }
-		public TerminalNode INFINITO() { return getToken(EsJSParser.INFINITO, 0); }
-		public TerminalNode NAN() { return getToken(EsJSParser.NAN, 0); }
-		public TerminalNode MATE() { return getToken(EsJSParser.MATE, 0); }
-		public TerminalNode NUMERO() { return getToken(EsJSParser.NUMERO, 0); }
-		public TerminalNode ARREGLO() { return getToken(EsJSParser.ARREGLO, 0); }
-		public TerminalNode CADENA() { return getToken(EsJSParser.CADENA, 0); }
-		public TerminalNode MATRIZ() { return getToken(EsJSParser.MATRIZ, 0); }
-		public TerminalNode BOOLEANO() { return getToken(EsJSParser.BOOLEANO, 0); }
-		public TerminalNode AMBIENTE() { return getToken(EsJSParser.AMBIENTE, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public TerminalNode PERIOD() { return getToken(EsJSParser.PERIOD, 0); }
 		public ExprOCrearContext exprOCrear() {
 			return getRuleContext(ExprOCrearContext.class,0);
 		}
@@ -1500,16 +1609,99 @@ public class EsJSParser extends Parser {
 		public TerminalNode TIMES_ASSIGN() { return getToken(EsJSParser.TIMES_ASSIGN, 0); }
 		public TerminalNode DIV_ASSIGN() { return getToken(EsJSParser.DIV_ASSIGN, 0); }
 		public TerminalNode MOD_ASSIGN() { return getToken(EsJSParser.MOD_ASSIGN, 0); }
-		public TerminalNode ARROW() { return getToken(EsJSParser.ARROW, 0); }
-		public ArrowBodyContext arrowBody() {
-			return getRuleContext(ArrowBodyContext.class,0);
+		public FactorAsignacionContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorIndiceContext extends FactorContext {
+		public FactorContext factor() {
+			return getRuleContext(FactorContext.class,0);
+		}
+		public TerminalNode LBRACKET() { return getToken(EsJSParser.LBRACKET, 0); }
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
+		}
+		public TerminalNode RBRACKET() { return getToken(EsJSParser.RBRACKET, 0); }
+		public FactorIndiceContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorNanContext extends FactorContext {
+		public TerminalNode NAN() { return getToken(EsJSParser.NAN, 0); }
+		public FactorNanContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorIndefinidoContext extends FactorContext {
+		public TerminalNode INDEFINIDO() { return getToken(EsJSParser.INDEFINIDO, 0); }
+		public FactorIndefinidoContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorIdContext extends FactorContext {
+		public TerminalNode ID() { return getToken(EsJSParser.ID, 0); }
+		public FactorIdContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorNumeroBuiltinContext extends FactorContext {
+		public TerminalNode NUMERO() { return getToken(EsJSParser.NUMERO, 0); }
+		public FactorNumeroBuiltinContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorAmbienteContext extends FactorContext {
+		public TerminalNode AMBIENTE() { return getToken(EsJSParser.AMBIENTE, 0); }
+		public FactorAmbienteContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorPrefijoContext extends FactorContext {
+		public FactorContext factor() {
+			return getRuleContext(FactorContext.class,0);
+		}
+		public TerminalNode MINUS() { return getToken(EsJSParser.MINUS, 0); }
+		public TerminalNode PLUS() { return getToken(EsJSParser.PLUS, 0); }
+		public TerminalNode NOT() { return getToken(EsJSParser.NOT, 0); }
+		public FactorPrefijoContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorNumeroContext extends FactorContext {
+		public TerminalNode NUMBER() { return getToken(EsJSParser.NUMBER, 0); }
+		public FactorNumeroContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorGrupoContext extends FactorContext {
+		public TerminalNode LPAREN() { return getToken(EsJSParser.LPAREN, 0); }
+		public ArgsOptContext argsOpt() {
+			return getRuleContext(ArgsOptContext.class,0);
+		}
+		public TerminalNode RPAREN() { return getToken(EsJSParser.RPAREN, 0); }
+		public FactorGrupoContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorStringContext extends FactorContext {
+		public TerminalNode STRING() { return getToken(EsJSParser.STRING, 0); }
+		public FactorStringContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorBooleanoBuiltinContext extends FactorContext {
+		public TerminalNode BOOLEANO() { return getToken(EsJSParser.BOOLEANO, 0); }
+		public FactorBooleanoBuiltinContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorPostfijoContext extends FactorContext {
+		public FactorContext factor() {
+			return getRuleContext(FactorContext.class,0);
 		}
 		public TerminalNode INCREMENT() { return getToken(EsJSParser.INCREMENT, 0); }
 		public TerminalNode DECREMENT() { return getToken(EsJSParser.DECREMENT, 0); }
-		public FactorContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
+		public FactorPostfijoContext(FactorContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
+	public static class FactorLlamadaContext extends FactorContext {
+		public FactorContext factor() {
+			return getRuleContext(FactorContext.class,0);
 		}
-		@Override public int getRuleIndex() { return RULE_factor; }
+		public TerminalNode LPAREN() { return getToken(EsJSParser.LPAREN, 0); }
+		public ArgsOptContext argsOpt() {
+			return getRuleContext(ArgsOptContext.class,0);
+		}
+		public TerminalNode RPAREN() { return getToken(EsJSParser.RPAREN, 0); }
+		public FactorLlamadaContext(FactorContext ctx) { copyFrom(ctx); }
 	}
 
 	public final FactorContext factor() throws RecognitionException {
@@ -1533,6 +1725,10 @@ public class EsJSParser extends Parser {
 			switch (_input.LA(1)) {
 			case LPAREN:
 				{
+				_localctx = new FactorGrupoContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+
 				setState(253);
 				match(LPAREN);
 				setState(254);
@@ -1543,6 +1739,9 @@ public class EsJSParser extends Parser {
 				break;
 			case LBRACKET:
 				{
+				_localctx = new FactorArregloContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(257);
 				match(LBRACKET);
 				setState(258);
@@ -1553,6 +1752,9 @@ public class EsJSParser extends Parser {
 				break;
 			case LBRACE:
 				{
+				_localctx = new FactorObjetoContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(261);
 				match(LBRACE);
 				setState(262);
@@ -1565,6 +1767,9 @@ public class EsJSParser extends Parser {
 			case MINUS:
 			case NOT:
 				{
+				_localctx = new FactorPrefijoContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(265);
 				_la = _input.LA(1);
 				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 294985775592767488L) != 0)) ) {
@@ -1581,96 +1786,144 @@ public class EsJSParser extends Parser {
 				break;
 			case ID:
 				{
+				_localctx = new FactorIdContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(267);
 				match(ID);
 				}
 				break;
 			case NUMBER:
 				{
+				_localctx = new FactorNumeroContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(268);
 				match(NUMBER);
 				}
 				break;
 			case STRING:
 				{
+				_localctx = new FactorStringContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(269);
 				match(STRING);
 				}
 				break;
 			case VERDADERO:
 				{
+				_localctx = new FactorVerdaderoContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(270);
 				match(VERDADERO);
 				}
 				break;
 			case FALSO:
 				{
+				_localctx = new FactorFalsoContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(271);
 				match(FALSO);
 				}
 				break;
 			case NULO:
 				{
+				_localctx = new FactorNuloContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(272);
 				match(NULO);
 				}
 				break;
 			case INDEFINIDO:
 				{
+				_localctx = new FactorIndefinidoContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(273);
 				match(INDEFINIDO);
 				}
 				break;
 			case INFINITO:
 				{
+				_localctx = new FactorInfinitoContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(274);
 				match(INFINITO);
 				}
 				break;
 			case NAN:
 				{
+				_localctx = new FactorNanContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(275);
 				match(NAN);
 				}
 				break;
 			case MATE:
 				{
+				_localctx = new FactorMateContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(276);
 				match(MATE);
 				}
 				break;
 			case NUMERO:
 				{
+				_localctx = new FactorNumeroBuiltinContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(277);
 				match(NUMERO);
 				}
 				break;
 			case ARREGLO:
 				{
+				_localctx = new FactorArregloBuiltinContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(278);
 				match(ARREGLO);
 				}
 				break;
 			case CADENA:
 				{
+				_localctx = new FactorCadenaBuiltinContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(279);
 				match(CADENA);
 				}
 				break;
 			case MATRIZ:
 				{
+				_localctx = new FactorMatrizBuiltinContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(280);
 				match(MATRIZ);
 				}
 				break;
 			case BOOLEANO:
 				{
+				_localctx = new FactorBooleanoBuiltinContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(281);
 				match(BOOLEANO);
 				}
 				break;
 			case AMBIENTE:
 				{
+				_localctx = new FactorAmbienteContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(282);
 				match(AMBIENTE);
 				}
@@ -1692,7 +1945,7 @@ public class EsJSParser extends Parser {
 					switch ( getInterpreter().adaptivePredict(_input,28,_ctx) ) {
 					case 1:
 						{
-						_localctx = new FactorContext(_parentctx, _parentState);
+						_localctx = new FactorLlamadaContext(new FactorContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_factor);
 						setState(285);
 						if (!(precpred(_ctx, 26))) throw new FailedPredicateException(this, "precpred(_ctx, 26)");
@@ -1706,7 +1959,7 @@ public class EsJSParser extends Parser {
 						break;
 					case 2:
 						{
-						_localctx = new FactorContext(_parentctx, _parentState);
+						_localctx = new FactorIndiceContext(new FactorContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_factor);
 						setState(290);
 						if (!(precpred(_ctx, 25))) throw new FailedPredicateException(this, "precpred(_ctx, 25)");
@@ -1720,7 +1973,7 @@ public class EsJSParser extends Parser {
 						break;
 					case 3:
 						{
-						_localctx = new FactorContext(_parentctx, _parentState);
+						_localctx = new FactorAccesoContext(new FactorContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_factor);
 						setState(295);
 						if (!(precpred(_ctx, 24))) throw new FailedPredicateException(this, "precpred(_ctx, 24)");
@@ -1732,7 +1985,7 @@ public class EsJSParser extends Parser {
 						break;
 					case 4:
 						{
-						_localctx = new FactorContext(_parentctx, _parentState);
+						_localctx = new FactorAsignacionContext(new FactorContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_factor);
 						setState(298);
 						if (!(precpred(_ctx, 23))) throw new FailedPredicateException(this, "precpred(_ctx, 23)");
@@ -1752,7 +2005,7 @@ public class EsJSParser extends Parser {
 						break;
 					case 5:
 						{
-						_localctx = new FactorContext(_parentctx, _parentState);
+						_localctx = new FactorFlechaContext(new FactorContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_factor);
 						setState(301);
 						if (!(precpred(_ctx, 22))) throw new FailedPredicateException(this, "precpred(_ctx, 22)");
@@ -1764,7 +2017,7 @@ public class EsJSParser extends Parser {
 						break;
 					case 6:
 						{
-						_localctx = new FactorContext(_parentctx, _parentState);
+						_localctx = new FactorPostfijoContext(new FactorContext(_parentctx, _parentState));
 						pushNewRecursionContext(_localctx, _startState, RULE_factor);
 						setState(304);
 						if (!(precpred(_ctx, 21))) throw new FailedPredicateException(this, "precpred(_ctx, 21)");

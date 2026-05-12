@@ -1538,9 +1538,20 @@ class EsJSParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def factor(self):
-            return self.getTypedRuleContext(EsJSParser.FactorContext,0)
 
+        def getRuleIndex(self):
+            return EsJSParser.RULE_expr
+
+     
+        def copyFrom(self, ctx:ParserRuleContext):
+            super().copyFrom(ctx)
+
+
+    class ExprAritmeticaContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
 
         def expr(self, i:int=None):
             if i is None:
@@ -1548,72 +1559,189 @@ class EsJSParser ( Parser ):
             else:
                 return self.getTypedRuleContext(EsJSParser.ExprContext,i)
 
-
         def PLUS(self):
             return self.getToken(EsJSParser.PLUS, 0)
-
         def MINUS(self):
             return self.getToken(EsJSParser.MINUS, 0)
-
         def TIMES(self):
             return self.getToken(EsJSParser.TIMES, 0)
-
         def DIV(self):
             return self.getToken(EsJSParser.DIV, 0)
-
         def MOD(self):
             return self.getToken(EsJSParser.MOD, 0)
 
-        def EQUAL(self):
-            return self.getToken(EsJSParser.EQUAL, 0)
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExprAritmetica" ):
+                listener.enterExprAritmetica(self)
 
-        def STRICT_EQ(self):
-            return self.getToken(EsJSParser.STRICT_EQ, 0)
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExprAritmetica" ):
+                listener.exitExprAritmetica(self)
 
-        def NEQ(self):
-            return self.getToken(EsJSParser.NEQ, 0)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExprAritmetica" ):
+                return visitor.visitExprAritmetica(self)
+            else:
+                return visitor.visitChildren(self)
 
-        def STRICT_NEQ(self):
-            return self.getToken(EsJSParser.STRICT_NEQ, 0)
+
+    class ExprFactorContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def factor(self):
+            return self.getTypedRuleContext(EsJSParser.FactorContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExprFactor" ):
+                listener.enterExprFactor(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExprFactor" ):
+                listener.exitExprFactor(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExprFactor" ):
+                return visitor.visitExprFactor(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class ExprRelacionalContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(EsJSParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(EsJSParser.ExprContext,i)
 
         def LESS(self):
             return self.getToken(EsJSParser.LESS, 0)
-
         def GREATER(self):
             return self.getToken(EsJSParser.GREATER, 0)
-
         def LEQ(self):
             return self.getToken(EsJSParser.LEQ, 0)
-
         def GEQ(self):
             return self.getToken(EsJSParser.GEQ, 0)
 
-        def AND(self):
-            return self.getToken(EsJSParser.AND, 0)
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExprRelacional" ):
+                listener.enterExprRelacional(self)
 
-        def OR(self):
-            return self.getToken(EsJSParser.OR, 0)
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExprRelacional" ):
+                listener.exitExprRelacional(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExprRelacional" ):
+                return visitor.visitExprRelacional(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class ExprIgualdadContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(EsJSParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(EsJSParser.ExprContext,i)
+
+        def EQUAL(self):
+            return self.getToken(EsJSParser.EQUAL, 0)
+        def STRICT_EQ(self):
+            return self.getToken(EsJSParser.STRICT_EQ, 0)
+        def NEQ(self):
+            return self.getToken(EsJSParser.NEQ, 0)
+        def STRICT_NEQ(self):
+            return self.getToken(EsJSParser.STRICT_NEQ, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExprIgualdad" ):
+                listener.enterExprIgualdad(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExprIgualdad" ):
+                listener.exitExprIgualdad(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExprIgualdad" ):
+                return visitor.visitExprIgualdad(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class ExprTernarioContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(EsJSParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(EsJSParser.ExprContext,i)
 
         def TERNARY(self):
             return self.getToken(EsJSParser.TERNARY, 0)
-
         def COLON(self):
             return self.getToken(EsJSParser.COLON, 0)
 
-        def getRuleIndex(self):
-            return EsJSParser.RULE_expr
-
         def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterExpr" ):
-                listener.enterExpr(self)
+            if hasattr( listener, "enterExprTernario" ):
+                listener.enterExprTernario(self)
 
         def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitExpr" ):
-                listener.exitExpr(self)
+            if hasattr( listener, "exitExprTernario" ):
+                listener.exitExprTernario(self)
 
         def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitExpr" ):
-                return visitor.visitExpr(self)
+            if hasattr( visitor, "visitExprTernario" ):
+                return visitor.visitExprTernario(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class ExprLogicaContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(EsJSParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(EsJSParser.ExprContext,i)
+
+        def AND(self):
+            return self.getToken(EsJSParser.AND, 0)
+        def OR(self):
+            return self.getToken(EsJSParser.OR, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExprLogica" ):
+                listener.enterExprLogica(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExprLogica" ):
+                listener.exitExprLogica(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExprLogica" ):
+                return visitor.visitExprLogica(self)
             else:
                 return visitor.visitChildren(self)
 
@@ -1629,6 +1757,10 @@ class EsJSParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
+            localctx = EsJSParser.ExprFactorContext(self, localctx)
+            self._ctx = localctx
+            _prevctx = localctx
+
             self.state = 227
             self.factor(0)
             self._ctx.stop = self._input.LT(-1)
@@ -1644,7 +1776,7 @@ class EsJSParser ( Parser ):
                     self._errHandler.sync(self)
                     la_ = self._interp.adaptivePredict(self._input,25,self._ctx)
                     if la_ == 1:
-                        localctx = EsJSParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = EsJSParser.ExprAritmeticaContext(self, EsJSParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 229
                         if not self.precpred(self._ctx, 6):
@@ -1662,7 +1794,7 @@ class EsJSParser ( Parser ):
                         pass
 
                     elif la_ == 2:
-                        localctx = EsJSParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = EsJSParser.ExprIgualdadContext(self, EsJSParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 232
                         if not self.precpred(self._ctx, 5):
@@ -1680,7 +1812,7 @@ class EsJSParser ( Parser ):
                         pass
 
                     elif la_ == 3:
-                        localctx = EsJSParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = EsJSParser.ExprRelacionalContext(self, EsJSParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 235
                         if not self.precpred(self._ctx, 4):
@@ -1698,7 +1830,7 @@ class EsJSParser ( Parser ):
                         pass
 
                     elif la_ == 4:
-                        localctx = EsJSParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = EsJSParser.ExprLogicaContext(self, EsJSParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 238
                         if not self.precpred(self._ctx, 3):
@@ -1716,7 +1848,7 @@ class EsJSParser ( Parser ):
                         pass
 
                     elif la_ == 5:
-                        localctx = EsJSParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = EsJSParser.ExprTernarioContext(self, EsJSParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 241
                         if not self.precpred(self._ctx, 2):
@@ -1753,153 +1885,705 @@ class EsJSParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def LPAREN(self):
-            return self.getToken(EsJSParser.LPAREN, 0)
-
-        def argsOpt(self):
-            return self.getTypedRuleContext(EsJSParser.ArgsOptContext,0)
-
-
-        def RPAREN(self):
-            return self.getToken(EsJSParser.RPAREN, 0)
-
-        def LBRACKET(self):
-            return self.getToken(EsJSParser.LBRACKET, 0)
-
-        def arrayArgsOpt(self):
-            return self.getTypedRuleContext(EsJSParser.ArrayArgsOptContext,0)
-
-
-        def RBRACKET(self):
-            return self.getToken(EsJSParser.RBRACKET, 0)
-
-        def LBRACE(self):
-            return self.getToken(EsJSParser.LBRACE, 0)
-
-        def objElements(self):
-            return self.getTypedRuleContext(EsJSParser.ObjElementsContext,0)
-
-
-        def RBRACE(self):
-            return self.getToken(EsJSParser.RBRACE, 0)
-
-        def factor(self):
-            return self.getTypedRuleContext(EsJSParser.FactorContext,0)
-
-
-        def MINUS(self):
-            return self.getToken(EsJSParser.MINUS, 0)
-
-        def PLUS(self):
-            return self.getToken(EsJSParser.PLUS, 0)
-
-        def NOT(self):
-            return self.getToken(EsJSParser.NOT, 0)
-
-        def ID(self):
-            return self.getToken(EsJSParser.ID, 0)
-
-        def NUMBER(self):
-            return self.getToken(EsJSParser.NUMBER, 0)
-
-        def STRING(self):
-            return self.getToken(EsJSParser.STRING, 0)
-
-        def VERDADERO(self):
-            return self.getToken(EsJSParser.VERDADERO, 0)
-
-        def FALSO(self):
-            return self.getToken(EsJSParser.FALSO, 0)
-
-        def NULO(self):
-            return self.getToken(EsJSParser.NULO, 0)
-
-        def INDEFINIDO(self):
-            return self.getToken(EsJSParser.INDEFINIDO, 0)
-
-        def INFINITO(self):
-            return self.getToken(EsJSParser.INFINITO, 0)
-
-        def NAN(self):
-            return self.getToken(EsJSParser.NAN, 0)
-
-        def MATE(self):
-            return self.getToken(EsJSParser.MATE, 0)
-
-        def NUMERO(self):
-            return self.getToken(EsJSParser.NUMERO, 0)
-
-        def ARREGLO(self):
-            return self.getToken(EsJSParser.ARREGLO, 0)
-
-        def CADENA(self):
-            return self.getToken(EsJSParser.CADENA, 0)
-
-        def MATRIZ(self):
-            return self.getToken(EsJSParser.MATRIZ, 0)
-
-        def BOOLEANO(self):
-            return self.getToken(EsJSParser.BOOLEANO, 0)
-
-        def AMBIENTE(self):
-            return self.getToken(EsJSParser.AMBIENTE, 0)
-
-        def expr(self):
-            return self.getTypedRuleContext(EsJSParser.ExprContext,0)
-
-
-        def PERIOD(self):
-            return self.getToken(EsJSParser.PERIOD, 0)
-
-        def exprOCrear(self):
-            return self.getTypedRuleContext(EsJSParser.ExprOCrearContext,0)
-
-
-        def ASSIGN(self):
-            return self.getToken(EsJSParser.ASSIGN, 0)
-
-        def PLUS_ASSIGN(self):
-            return self.getToken(EsJSParser.PLUS_ASSIGN, 0)
-
-        def MINUS_ASSIGN(self):
-            return self.getToken(EsJSParser.MINUS_ASSIGN, 0)
-
-        def TIMES_ASSIGN(self):
-            return self.getToken(EsJSParser.TIMES_ASSIGN, 0)
-
-        def DIV_ASSIGN(self):
-            return self.getToken(EsJSParser.DIV_ASSIGN, 0)
-
-        def MOD_ASSIGN(self):
-            return self.getToken(EsJSParser.MOD_ASSIGN, 0)
-
-        def ARROW(self):
-            return self.getToken(EsJSParser.ARROW, 0)
-
-        def arrowBody(self):
-            return self.getTypedRuleContext(EsJSParser.ArrowBodyContext,0)
-
-
-        def INCREMENT(self):
-            return self.getToken(EsJSParser.INCREMENT, 0)
-
-        def DECREMENT(self):
-            return self.getToken(EsJSParser.DECREMENT, 0)
 
         def getRuleIndex(self):
             return EsJSParser.RULE_factor
 
+     
+        def copyFrom(self, ctx:ParserRuleContext):
+            super().copyFrom(ctx)
+
+
+    class FactorAccesoContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def factor(self):
+            return self.getTypedRuleContext(EsJSParser.FactorContext,0)
+
+        def PERIOD(self):
+            return self.getToken(EsJSParser.PERIOD, 0)
+        def ID(self):
+            return self.getToken(EsJSParser.ID, 0)
+
         def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterFactor" ):
-                listener.enterFactor(self)
+            if hasattr( listener, "enterFactorAcceso" ):
+                listener.enterFactorAcceso(self)
 
         def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitFactor" ):
-                listener.exitFactor(self)
+            if hasattr( listener, "exitFactorAcceso" ):
+                listener.exitFactorAcceso(self)
 
         def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitFactor" ):
-                return visitor.visitFactor(self)
+            if hasattr( visitor, "visitFactorAcceso" ):
+                return visitor.visitFactorAcceso(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorArregloBuiltinContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def ARREGLO(self):
+            return self.getToken(EsJSParser.ARREGLO, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorArregloBuiltin" ):
+                listener.enterFactorArregloBuiltin(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorArregloBuiltin" ):
+                listener.exitFactorArregloBuiltin(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorArregloBuiltin" ):
+                return visitor.visitFactorArregloBuiltin(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorFalsoContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def FALSO(self):
+            return self.getToken(EsJSParser.FALSO, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorFalso" ):
+                listener.enterFactorFalso(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorFalso" ):
+                listener.exitFactorFalso(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorFalso" ):
+                return visitor.visitFactorFalso(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorVerdaderoContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def VERDADERO(self):
+            return self.getToken(EsJSParser.VERDADERO, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorVerdadero" ):
+                listener.enterFactorVerdadero(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorVerdadero" ):
+                listener.exitFactorVerdadero(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorVerdadero" ):
+                return visitor.visitFactorVerdadero(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorNuloContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def NULO(self):
+            return self.getToken(EsJSParser.NULO, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorNulo" ):
+                listener.enterFactorNulo(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorNulo" ):
+                listener.exitFactorNulo(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorNulo" ):
+                return visitor.visitFactorNulo(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorMatrizBuiltinContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def MATRIZ(self):
+            return self.getToken(EsJSParser.MATRIZ, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorMatrizBuiltin" ):
+                listener.enterFactorMatrizBuiltin(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorMatrizBuiltin" ):
+                listener.exitFactorMatrizBuiltin(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorMatrizBuiltin" ):
+                return visitor.visitFactorMatrizBuiltin(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorArregloContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def LBRACKET(self):
+            return self.getToken(EsJSParser.LBRACKET, 0)
+        def arrayArgsOpt(self):
+            return self.getTypedRuleContext(EsJSParser.ArrayArgsOptContext,0)
+
+        def RBRACKET(self):
+            return self.getToken(EsJSParser.RBRACKET, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorArreglo" ):
+                listener.enterFactorArreglo(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorArreglo" ):
+                listener.exitFactorArreglo(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorArreglo" ):
+                return visitor.visitFactorArreglo(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorCadenaBuiltinContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def CADENA(self):
+            return self.getToken(EsJSParser.CADENA, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorCadenaBuiltin" ):
+                listener.enterFactorCadenaBuiltin(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorCadenaBuiltin" ):
+                listener.exitFactorCadenaBuiltin(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorCadenaBuiltin" ):
+                return visitor.visitFactorCadenaBuiltin(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorMateContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def MATE(self):
+            return self.getToken(EsJSParser.MATE, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorMate" ):
+                listener.enterFactorMate(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorMate" ):
+                listener.exitFactorMate(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorMate" ):
+                return visitor.visitFactorMate(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorFlechaContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def factor(self):
+            return self.getTypedRuleContext(EsJSParser.FactorContext,0)
+
+        def ARROW(self):
+            return self.getToken(EsJSParser.ARROW, 0)
+        def arrowBody(self):
+            return self.getTypedRuleContext(EsJSParser.ArrowBodyContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorFlecha" ):
+                listener.enterFactorFlecha(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorFlecha" ):
+                listener.exitFactorFlecha(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorFlecha" ):
+                return visitor.visitFactorFlecha(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorInfinitoContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def INFINITO(self):
+            return self.getToken(EsJSParser.INFINITO, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorInfinito" ):
+                listener.enterFactorInfinito(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorInfinito" ):
+                listener.exitFactorInfinito(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorInfinito" ):
+                return visitor.visitFactorInfinito(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorObjetoContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def LBRACE(self):
+            return self.getToken(EsJSParser.LBRACE, 0)
+        def objElements(self):
+            return self.getTypedRuleContext(EsJSParser.ObjElementsContext,0)
+
+        def RBRACE(self):
+            return self.getToken(EsJSParser.RBRACE, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorObjeto" ):
+                listener.enterFactorObjeto(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorObjeto" ):
+                listener.exitFactorObjeto(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorObjeto" ):
+                return visitor.visitFactorObjeto(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorAsignacionContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def factor(self):
+            return self.getTypedRuleContext(EsJSParser.FactorContext,0)
+
+        def exprOCrear(self):
+            return self.getTypedRuleContext(EsJSParser.ExprOCrearContext,0)
+
+        def ASSIGN(self):
+            return self.getToken(EsJSParser.ASSIGN, 0)
+        def PLUS_ASSIGN(self):
+            return self.getToken(EsJSParser.PLUS_ASSIGN, 0)
+        def MINUS_ASSIGN(self):
+            return self.getToken(EsJSParser.MINUS_ASSIGN, 0)
+        def TIMES_ASSIGN(self):
+            return self.getToken(EsJSParser.TIMES_ASSIGN, 0)
+        def DIV_ASSIGN(self):
+            return self.getToken(EsJSParser.DIV_ASSIGN, 0)
+        def MOD_ASSIGN(self):
+            return self.getToken(EsJSParser.MOD_ASSIGN, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorAsignacion" ):
+                listener.enterFactorAsignacion(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorAsignacion" ):
+                listener.exitFactorAsignacion(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorAsignacion" ):
+                return visitor.visitFactorAsignacion(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorIndiceContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def factor(self):
+            return self.getTypedRuleContext(EsJSParser.FactorContext,0)
+
+        def LBRACKET(self):
+            return self.getToken(EsJSParser.LBRACKET, 0)
+        def expr(self):
+            return self.getTypedRuleContext(EsJSParser.ExprContext,0)
+
+        def RBRACKET(self):
+            return self.getToken(EsJSParser.RBRACKET, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorIndice" ):
+                listener.enterFactorIndice(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorIndice" ):
+                listener.exitFactorIndice(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorIndice" ):
+                return visitor.visitFactorIndice(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorNanContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def NAN(self):
+            return self.getToken(EsJSParser.NAN, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorNan" ):
+                listener.enterFactorNan(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorNan" ):
+                listener.exitFactorNan(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorNan" ):
+                return visitor.visitFactorNan(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorIndefinidoContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def INDEFINIDO(self):
+            return self.getToken(EsJSParser.INDEFINIDO, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorIndefinido" ):
+                listener.enterFactorIndefinido(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorIndefinido" ):
+                listener.exitFactorIndefinido(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorIndefinido" ):
+                return visitor.visitFactorIndefinido(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorIdContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def ID(self):
+            return self.getToken(EsJSParser.ID, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorId" ):
+                listener.enterFactorId(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorId" ):
+                listener.exitFactorId(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorId" ):
+                return visitor.visitFactorId(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorNumeroBuiltinContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def NUMERO(self):
+            return self.getToken(EsJSParser.NUMERO, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorNumeroBuiltin" ):
+                listener.enterFactorNumeroBuiltin(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorNumeroBuiltin" ):
+                listener.exitFactorNumeroBuiltin(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorNumeroBuiltin" ):
+                return visitor.visitFactorNumeroBuiltin(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorAmbienteContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def AMBIENTE(self):
+            return self.getToken(EsJSParser.AMBIENTE, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorAmbiente" ):
+                listener.enterFactorAmbiente(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorAmbiente" ):
+                listener.exitFactorAmbiente(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorAmbiente" ):
+                return visitor.visitFactorAmbiente(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorPrefijoContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def factor(self):
+            return self.getTypedRuleContext(EsJSParser.FactorContext,0)
+
+        def MINUS(self):
+            return self.getToken(EsJSParser.MINUS, 0)
+        def PLUS(self):
+            return self.getToken(EsJSParser.PLUS, 0)
+        def NOT(self):
+            return self.getToken(EsJSParser.NOT, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorPrefijo" ):
+                listener.enterFactorPrefijo(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorPrefijo" ):
+                listener.exitFactorPrefijo(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorPrefijo" ):
+                return visitor.visitFactorPrefijo(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorNumeroContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def NUMBER(self):
+            return self.getToken(EsJSParser.NUMBER, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorNumero" ):
+                listener.enterFactorNumero(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorNumero" ):
+                listener.exitFactorNumero(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorNumero" ):
+                return visitor.visitFactorNumero(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorGrupoContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def LPAREN(self):
+            return self.getToken(EsJSParser.LPAREN, 0)
+        def argsOpt(self):
+            return self.getTypedRuleContext(EsJSParser.ArgsOptContext,0)
+
+        def RPAREN(self):
+            return self.getToken(EsJSParser.RPAREN, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorGrupo" ):
+                listener.enterFactorGrupo(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorGrupo" ):
+                listener.exitFactorGrupo(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorGrupo" ):
+                return visitor.visitFactorGrupo(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorStringContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def STRING(self):
+            return self.getToken(EsJSParser.STRING, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorString" ):
+                listener.enterFactorString(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorString" ):
+                listener.exitFactorString(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorString" ):
+                return visitor.visitFactorString(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorBooleanoBuiltinContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def BOOLEANO(self):
+            return self.getToken(EsJSParser.BOOLEANO, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorBooleanoBuiltin" ):
+                listener.enterFactorBooleanoBuiltin(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorBooleanoBuiltin" ):
+                listener.exitFactorBooleanoBuiltin(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorBooleanoBuiltin" ):
+                return visitor.visitFactorBooleanoBuiltin(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorPostfijoContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def factor(self):
+            return self.getTypedRuleContext(EsJSParser.FactorContext,0)
+
+        def INCREMENT(self):
+            return self.getToken(EsJSParser.INCREMENT, 0)
+        def DECREMENT(self):
+            return self.getToken(EsJSParser.DECREMENT, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorPostfijo" ):
+                listener.enterFactorPostfijo(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorPostfijo" ):
+                listener.exitFactorPostfijo(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorPostfijo" ):
+                return visitor.visitFactorPostfijo(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class FactorLlamadaContext(FactorContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a EsJSParser.FactorContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def factor(self):
+            return self.getTypedRuleContext(EsJSParser.FactorContext,0)
+
+        def LPAREN(self):
+            return self.getToken(EsJSParser.LPAREN, 0)
+        def argsOpt(self):
+            return self.getTypedRuleContext(EsJSParser.ArgsOptContext,0)
+
+        def RPAREN(self):
+            return self.getToken(EsJSParser.RPAREN, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterFactorLlamada" ):
+                listener.enterFactorLlamada(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitFactorLlamada" ):
+                listener.exitFactorLlamada(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFactorLlamada" ):
+                return visitor.visitFactorLlamada(self)
             else:
                 return visitor.visitChildren(self)
 
@@ -1919,6 +2603,10 @@ class EsJSParser ( Parser ):
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [59]:
+                localctx = EsJSParser.FactorGrupoContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
+
                 self.state = 253
                 self.match(EsJSParser.LPAREN)
                 self.state = 254
@@ -1927,6 +2615,9 @@ class EsJSParser ( Parser ):
                 self.match(EsJSParser.RPAREN)
                 pass
             elif token in [63]:
+                localctx = EsJSParser.FactorArregloContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 257
                 self.match(EsJSParser.LBRACKET)
                 self.state = 258
@@ -1935,6 +2626,9 @@ class EsJSParser ( Parser ):
                 self.match(EsJSParser.RBRACKET)
                 pass
             elif token in [61]:
+                localctx = EsJSParser.FactorObjetoContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 261
                 self.match(EsJSParser.LBRACE)
                 self.state = 262
@@ -1943,6 +2637,9 @@ class EsJSParser ( Parser ):
                 self.match(EsJSParser.RBRACE)
                 pass
             elif token in [51, 52, 58]:
+                localctx = EsJSParser.FactorPrefijoContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 265
                 _la = self._input.LA(1)
                 if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 294985775592767488) != 0)):
@@ -1954,66 +2651,114 @@ class EsJSParser ( Parser ):
                 self.factor(17)
                 pass
             elif token in [71]:
+                localctx = EsJSParser.FactorIdContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 267
                 self.match(EsJSParser.ID)
                 pass
             elif token in [69]:
+                localctx = EsJSParser.FactorNumeroContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 268
                 self.match(EsJSParser.NUMBER)
                 pass
             elif token in [70]:
+                localctx = EsJSParser.FactorStringContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 269
                 self.match(EsJSParser.STRING)
                 pass
             elif token in [28]:
+                localctx = EsJSParser.FactorVerdaderoContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 270
                 self.match(EsJSParser.VERDADERO)
                 pass
             elif token in [29]:
+                localctx = EsJSParser.FactorFalsoContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 271
                 self.match(EsJSParser.FALSO)
                 pass
             elif token in [30]:
+                localctx = EsJSParser.FactorNuloContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 272
                 self.match(EsJSParser.NULO)
                 pass
             elif token in [31]:
+                localctx = EsJSParser.FactorIndefinidoContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 273
                 self.match(EsJSParser.INDEFINIDO)
                 pass
             elif token in [32]:
+                localctx = EsJSParser.FactorInfinitoContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 274
                 self.match(EsJSParser.INFINITO)
                 pass
             elif token in [27]:
+                localctx = EsJSParser.FactorNanContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 275
                 self.match(EsJSParser.NAN)
                 pass
             elif token in [23]:
+                localctx = EsJSParser.FactorMateContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 276
                 self.match(EsJSParser.MATE)
                 pass
             elif token in [24]:
+                localctx = EsJSParser.FactorNumeroBuiltinContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 277
                 self.match(EsJSParser.NUMERO)
                 pass
             elif token in [20]:
+                localctx = EsJSParser.FactorArregloBuiltinContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 278
                 self.match(EsJSParser.ARREGLO)
                 pass
             elif token in [21]:
+                localctx = EsJSParser.FactorCadenaBuiltinContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 279
                 self.match(EsJSParser.CADENA)
                 pass
             elif token in [22]:
+                localctx = EsJSParser.FactorMatrizBuiltinContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 280
                 self.match(EsJSParser.MATRIZ)
                 pass
             elif token in [25]:
+                localctx = EsJSParser.FactorBooleanoBuiltinContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 281
                 self.match(EsJSParser.BOOLEANO)
                 pass
             elif token in [14]:
+                localctx = EsJSParser.FactorAmbienteContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 282
                 self.match(EsJSParser.AMBIENTE)
                 pass
@@ -2033,7 +2778,7 @@ class EsJSParser ( Parser ):
                     self._errHandler.sync(self)
                     la_ = self._interp.adaptivePredict(self._input,28,self._ctx)
                     if la_ == 1:
-                        localctx = EsJSParser.FactorContext(self, _parentctx, _parentState)
+                        localctx = EsJSParser.FactorLlamadaContext(self, EsJSParser.FactorContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_factor)
                         self.state = 285
                         if not self.precpred(self._ctx, 26):
@@ -2048,7 +2793,7 @@ class EsJSParser ( Parser ):
                         pass
 
                     elif la_ == 2:
-                        localctx = EsJSParser.FactorContext(self, _parentctx, _parentState)
+                        localctx = EsJSParser.FactorIndiceContext(self, EsJSParser.FactorContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_factor)
                         self.state = 290
                         if not self.precpred(self._ctx, 25):
@@ -2063,7 +2808,7 @@ class EsJSParser ( Parser ):
                         pass
 
                     elif la_ == 3:
-                        localctx = EsJSParser.FactorContext(self, _parentctx, _parentState)
+                        localctx = EsJSParser.FactorAccesoContext(self, EsJSParser.FactorContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_factor)
                         self.state = 295
                         if not self.precpred(self._ctx, 24):
@@ -2076,7 +2821,7 @@ class EsJSParser ( Parser ):
                         pass
 
                     elif la_ == 4:
-                        localctx = EsJSParser.FactorContext(self, _parentctx, _parentState)
+                        localctx = EsJSParser.FactorAsignacionContext(self, EsJSParser.FactorContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_factor)
                         self.state = 298
                         if not self.precpred(self._ctx, 23):
@@ -2094,7 +2839,7 @@ class EsJSParser ( Parser ):
                         pass
 
                     elif la_ == 5:
-                        localctx = EsJSParser.FactorContext(self, _parentctx, _parentState)
+                        localctx = EsJSParser.FactorFlechaContext(self, EsJSParser.FactorContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_factor)
                         self.state = 301
                         if not self.precpred(self._ctx, 22):
@@ -2107,7 +2852,7 @@ class EsJSParser ( Parser ):
                         pass
 
                     elif la_ == 6:
-                        localctx = EsJSParser.FactorContext(self, _parentctx, _parentState)
+                        localctx = EsJSParser.FactorPostfijoContext(self, EsJSParser.FactorContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_factor)
                         self.state = 304
                         if not self.precpred(self._ctx, 21):

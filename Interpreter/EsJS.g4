@@ -159,30 +159,42 @@ exprOCrear
 crearType : ID | ARREGLO | CADENA | MATRIZ ;
 
 expr
-    : expr ('+'|'-'|'*'|'/'|'%') expr
-    | expr ('=='|'==='|'!='|'!==') expr
-    | expr ('<'|'>'|'<='|'>=') expr
-    | expr (AND|OR) expr
-    | expr TERNARY expr COLON expr
-    | factor
+    : expr ('+'|'-'|'*'|'/'|'%') expr       # exprAritmetica
+    | expr ('=='|'==='|'!='|'!==') expr      # exprIgualdad
+    | expr ('<'|'>'|'<='|'>=') expr          # exprRelacional
+    | expr (AND|OR) expr                     # exprLogica
+    | expr TERNARY expr COLON expr           # exprTernario
+    | factor                                 # exprFactor
     ;
 
 factor
-    : factor LPAREN argsOpt RPAREN                   // llamada
-    | factor LBRACKET expr RBRACKET                  // índice
-    | factor PERIOD ID                               // acceso propiedad
+    : factor LPAREN argsOpt RPAREN                                          # factorLlamada
+    | factor LBRACKET expr RBRACKET                                         # factorIndice
+    | factor PERIOD ID                                                      # factorAcceso
     | factor (ASSIGN|PLUS_ASSIGN|MINUS_ASSIGN
-             |TIMES_ASSIGN|DIV_ASSIGN|MOD_ASSIGN) exprOCrear  // asignación
-    | factor ARROW arrowBody                         // flecha
-    | factor (INCREMENT|DECREMENT)                   // sufijo
-    | LPAREN argsOpt RPAREN                          // grupo/lambda params
-    | LBRACKET arrayArgsOpt RBRACKET                 // arreglo literal
-    | LBRACE objElements RBRACE                      // objeto literal
-    | (MINUS|PLUS|NOT) factor                        // prefijo
-    | ID | NUMBER | STRING
-    | VERDADERO | FALSO | NULO | INDEFINIDO | INFINITO | NAN
-    | MATE | NUMERO | ARREGLO | CADENA | MATRIZ | BOOLEANO
-    | AMBIENTE
+             |TIMES_ASSIGN|DIV_ASSIGN|MOD_ASSIGN) exprOCrear               # factorAsignacion
+    | factor ARROW arrowBody                                                # factorFlecha
+    | factor (INCREMENT|DECREMENT)                                          # factorPostfijo
+    | LPAREN argsOpt RPAREN                                                 # factorGrupo
+    | LBRACKET arrayArgsOpt RBRACKET                                        # factorArreglo
+    | LBRACE objElements RBRACE                                             # factorObjeto
+    | (MINUS|PLUS|NOT) factor                                               # factorPrefijo
+    | ID                                                                    # factorId
+    | NUMBER                                                                # factorNumero
+    | STRING                                                                # factorString
+    | VERDADERO                                                             # factorVerdadero
+    | FALSO                                                                 # factorFalso
+    | NULO                                                                  # factorNulo
+    | INDEFINIDO                                                            # factorIndefinido
+    | INFINITO                                                              # factorInfinito
+    | NAN                                                                   # factorNan
+    | MATE                                                                  # factorMate
+    | NUMERO                                                                # factorNumeroBuiltin
+    | ARREGLO                                                               # factorArregloBuiltin
+    | CADENA                                                                # factorCadenaBuiltin
+    | MATRIZ                                                                # factorMatrizBuiltin
+    | BOOLEANO                                                              # factorBooleanoBuiltin
+    | AMBIENTE                                                              # factorAmbiente
     ;
 
 arrowBody

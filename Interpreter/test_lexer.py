@@ -38,4 +38,4 @@ def test_parser(filepath):
         # Imprimir el árbol
         print(tree.toStringTree(recog=parser))
 
-test_parser('./TestCases/05.in')  # empieza solo con el primero
+test_parser('./TestCases/02.in')  # empieza solo con el primero
